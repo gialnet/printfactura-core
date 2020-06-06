@@ -9,7 +9,7 @@ import java.util.List;
 public interface Bill {
 
 
-    TuplasFactura getHeadFact(int id);
+    List<TuplasFactura> getHeadFact(int id);
     List<TuplasLineasFactura> getLineasFactLocale(int id);
     List<TuplasTotalFactura> getPieFact(int id);
 }

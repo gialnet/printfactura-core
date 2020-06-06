@@ -18,8 +18,6 @@ import java.awt.*;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.sql.CallableStatement;
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.text.NumberFormat;
 import java.util.List;
@@ -49,7 +47,7 @@ public class createPDF {
 
     public createPDF() {
         dp = MySelf.builder().iva(BigDecimal.valueOf(20)).Nombre("Vivaldi-Spring LTD").build();
-        myBill = new BillImp();
+        myBill = new BillImp(jdbc);
     }
 
 
@@ -273,7 +271,7 @@ public class createPDF {
         table.addCell(h3);
 
 
-        h3 = new PdfPCell(new Paragraph(dp.getBIC(),FUENTE_GRIS_OSCURO));
+        /*h3 = new PdfPCell(new Paragraph(dp.getBIC(),FUENTE_GRIS_OSCURO));
 
         h3.setColspan(2);
 
@@ -281,7 +279,7 @@ public class createPDF {
         h3.setBackgroundColor(gris);
         h3.setHorizontalAlignment(Element.ALIGN_RIGHT);
 
-        table.addCell(h3);
+        table.addCell(h3);*/
 
         // línea en blanco
         h1 = new PdfPCell(new Paragraph(" ",FUENTE_ENCABEZADO));
@@ -579,7 +577,8 @@ public class createPDF {
     {
 
         // Imprimir el nombre de la empresa y el nif
-        PdfPCell h6 = new PdfPCell(new Paragraph(dp.getNombre()+" NIF/CIF "+dp.getNif()+" - "+dp.getUrl_web(),FUENTE_DIRECCION_POSTAL));
+        //PdfPCell h6 = new PdfPCell(new Paragraph(dp.getNombre()+" NIF/CIF "+dp.getNif()+" - "+dp.getUrl_web(),FUENTE_DIRECCION_POSTAL));
+        PdfPCell h6 = new PdfPCell(new Paragraph(dp.getNombre()+" NIF/CIF "+dp.getNif(),FUENTE_DIRECCION_POSTAL));
         //h6.setGrayFill(0.7f);
         h6.setColspan(4);
         h6.setBorder(Rectangle.NO_BORDER);
@@ -596,13 +595,13 @@ public class createPDF {
 
         table.addCell(h6);
 
-        h6 = new PdfPCell(new Paragraph(dp.getMail()+" "+dp.getMovil()+" "+dp.getFax(),FUENTE_DIRECCION_POSTAL));
+       /* h6 = new PdfPCell(new Paragraph(dp.getMail()+" "+dp.getMovil()+" "+dp.getFax(),FUENTE_DIRECCION_POSTAL));
         //h6.setGrayFill(0.7f);
         h6.setColspan(4);
         h6.setBorder(Rectangle.NO_BORDER);
         h6.setHorizontalAlignment(Element.ALIGN_LEFT);
 
-        table.addCell(h6);
+        table.addCell(h6);*/
 
     }
 }

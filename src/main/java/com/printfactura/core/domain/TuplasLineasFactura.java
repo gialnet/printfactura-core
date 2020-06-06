@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.util.Locale;
 
-public enum TuplasLineasFactura {
+public class TuplasLineasFactura {
 
     private final String id;
     private final String id_bill;
