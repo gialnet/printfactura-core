@@ -1,4 +1,5 @@
 
+CREATE SEQUENCE cont_facturas;
 
 CREATE TABLE datosper
 (

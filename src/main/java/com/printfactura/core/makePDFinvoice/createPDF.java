@@ -11,7 +11,6 @@ import com.printfactura.core.domain.TuplasFactura;
 import com.printfactura.core.domain.TuplasLineasFactura;
 import com.printfactura.core.domain.TuplasTotalFactura;
 import com.printfactura.core.repositories.Bill;
-import com.printfactura.core.repositories.BillImp;
 
 import javax.naming.NamingException;
 import java.awt.*;
@@ -43,11 +42,12 @@ public class createPDF {
 
     private int id_fact;
     private MySelf dp;
-    private Bill myBill;
+    private final Bill myBill;
 
-    public createPDF() {
+    public createPDF(Bill myBill) {
+        this.myBill = myBill;
         dp = MySelf.builder().iva(BigDecimal.valueOf(20)).Nombre("Vivaldi-Spring LTD").build();
-        myBill = new BillImp(jdbc);
+
     }
 
 
