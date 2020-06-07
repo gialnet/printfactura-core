@@ -2,8 +2,8 @@ package com.printfactura.core;
 
 import com.printfactura.core.domain.MySelf;
 import com.printfactura.core.domain.SalesCount;
-import com.printfactura.core.repositories.Bill;
-import com.printfactura.core.repositories.DatosPerRepoImpl;
+import com.printfactura.core.repositories.GetDataSellBill;
+import com.printfactura.core.repositories.GetDataDatosPerRepoImpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,10 +16,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class DatosPerTest {
 
     @Autowired
-    DatosPerRepoImpl datosPerRepo;
+    GetDataDatosPerRepoImpl datosPerRepo;
 
     @Autowired
-    Bill bill;
+    GetDataSellBill getDataSellBill;
 
     @Test
     public void getDatosPerTest(){
@@ -31,7 +31,7 @@ public class DatosPerTest {
 
     @Test
     public void getSaleCountTest(){
-       SalesCount salesCount = bill.getSaleCount();
+       SalesCount salesCount = getDataSellBill.getSaleCount();
        System.out.println(salesCount.getYear());
     }
 }

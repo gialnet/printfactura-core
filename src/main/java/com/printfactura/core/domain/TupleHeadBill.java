@@ -1,6 +1,6 @@
 package com.printfactura.core.domain;
 
-public class TuplasFactura {
+public class TupleHeadBill {
 
     private final int id;
     private final int id_cliente;
@@ -132,7 +132,7 @@ public class TuplasFactura {
     public static class Builder {
 
         // vista SQL vwhead_bill
-        private final int id;
+        private int id;
         private int id_cliente=0;
         private int id_customers_type=0;
         private String fecha="";
@@ -156,8 +156,13 @@ public class TuplasFactura {
         private int id_remesa=0;
         private String ConceptoRemesa="Cuota Comunidad de Propietarios"; // 140
 
-        public Builder(int id) {
+        public Builder() {
+            super();
+        }
+
+        public Builder id(int id) {
             this.id = id;
+            return this;
         }
 
         public Builder Id_cliente(int id_cliente) {
@@ -269,12 +274,12 @@ public class TuplasFactura {
             return this;
         }
 
-        public TuplasFactura build() {
-            return new TuplasFactura(this);
+        public TupleHeadBill build() {
+            return new TupleHeadBill(this);
         }
     }
 
-    private TuplasFactura(Builder builder)
+    private TupleHeadBill(Builder builder)
     {
         this.id=builder.id;
         this.id_cliente=builder.id_cliente;

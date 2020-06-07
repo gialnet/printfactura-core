@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.util.Locale;
 
-public class TuplasTotalFactura {
+public class TupleTotalBill {
     private final BigDecimal base;
     private final BigDecimal iva;
     private final BigDecimal total;
@@ -52,10 +52,15 @@ public class TuplasTotalFactura {
 
         private BigDecimal base;
         private BigDecimal iva;
-        private final int id;
+        private int id;
 
-        public Builder(int id) {
+        public Builder() {
+            super();
+        }
+
+        public Builder id(int id) {
             this.id = id;
+            return this;
         }
 
 
@@ -69,12 +74,12 @@ public class TuplasTotalFactura {
             return this;
         }
 
-        public TuplasTotalFactura build() {
-            return new TuplasTotalFactura(this);
+        public TupleTotalBill build() {
+            return new TupleTotalBill(this);
         }
     }
 
-    private TuplasTotalFactura(Builder builder)
+    private TupleTotalBill(Builder builder)
     {
 
         base=builder.base;
@@ -104,8 +109,6 @@ public class TuplasTotalFactura {
         }
         else
             total=base;
-
-
 
         stIVA=NumberFormat.getCurrencyInstance(Locale.GERMANY).format(bg1);
         stTotal=NumberFormat.getCurrencyInstance(Locale.GERMANY).format(total);

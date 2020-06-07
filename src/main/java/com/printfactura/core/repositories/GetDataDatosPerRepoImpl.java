@@ -8,11 +8,11 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public class DatosPerRepoImpl implements DatosPerRepo {
+public class GetDataDatosPerRepoImpl implements GetDataDatosPerRepo {
 
     private final JdbcTemplate jdbc;
 
-    public DatosPerRepoImpl(JdbcTemplate jdbc) {
+    public GetDataDatosPerRepoImpl(JdbcTemplate jdbc) {
         this.jdbc = jdbc;
     }
 

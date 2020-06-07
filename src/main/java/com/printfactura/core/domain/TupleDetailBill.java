@@ -4,9 +4,9 @@ import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.util.Locale;
 
-public class TuplasLineasFactura {
+public class TupleDetailBill {
 
-    private final String id;
+    private final int id;
     private final String id_bill;
     private final String id_item;
     private final String id_store;
@@ -18,7 +18,7 @@ public class TuplasLineasFactura {
     private final String por_req;
     private final String total;
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
@@ -66,7 +66,7 @@ public class TuplasLineasFactura {
 
     public static class Builder {
 
-        private final String id;
+        private int id;
         private String id_bill="0";
         private String id_item="0";
         private String id_store="0";
@@ -78,10 +78,13 @@ public class TuplasLineasFactura {
         private String por_req="0";
         private String total="0";
 
-        public Builder(String id)
-        {
-            this.id=id;
+        public Builder() {
+            super();
+        }
 
+        public Builder id(int id) {
+            this.id = id;
+            return this;
         }
 
         public Builder id_bill(String valor)
@@ -137,18 +140,18 @@ public class TuplasLineasFactura {
             return this;
         }
 
-        public TuplasLineasFactura build() {
+        public TupleDetailBill build() {
 
-            return new TuplasLineasFactura(this);
+            return new TupleDetailBill(this);
         }
 
-        public TuplasLineasFactura build(Locale formato) {
+        public TupleDetailBill build(Locale formato) {
 
-            return new TuplasLineasFactura(this, formato);
+            return new TupleDetailBill(this, formato);
         }
     }
 
-    private TuplasLineasFactura(Builder builder) {
+    private TupleDetailBill(Builder builder) {
         this.id=builder.id;
         this.id_bill=builder.id_bill;
         this.id_item=builder.id_item;
@@ -162,7 +165,7 @@ public class TuplasLineasFactura {
         this.total=builder.total;        //
     }
 
-    private TuplasLineasFactura(Builder builder, Locale formato) {
+    private TupleDetailBill(Builder builder, Locale formato) {
 
         this.id=builder.id;
         this.id_bill=builder.id_bill;

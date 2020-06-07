@@ -6,11 +6,7 @@ import com.lowagie.text.Rectangle;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
-import com.printfactura.core.domain.MySelf;
-import com.printfactura.core.domain.TuplasFactura;
-import com.printfactura.core.domain.TuplasLineasFactura;
-import com.printfactura.core.domain.TuplasTotalFactura;
-import com.printfactura.core.repositories.Bill;
+import com.printfactura.core.domain.*;
 
 import javax.naming.NamingException;
 import java.awt.*;
@@ -22,7 +18,7 @@ import java.text.NumberFormat;
 import java.util.List;
 import java.util.Locale;
 
-public class createPDF {
+public class CreatePDF {
 
     private static final Font FUENTE_ENCABEZADO = FontFactory.getFont(FontFactory.HELVETICA, 14, Font.BOLD, Color.WHITE);
     private static final Font FUENTE_GRIS_OSCURO = FontFactory.getFont(FontFactory.HELVETICA, 12, Font.BOLD, new Color(98, 98, 98));
@@ -41,13 +37,10 @@ public class createPDF {
     private Paragraph p;
 
     private int id_fact;
-    private MySelf dp;
-    private final Bill myBill;
+    private final DataOneSellBill dataOneSellBill;
 
-    public createPDF(Bill myBill) {
-        this.myBill = myBill;
-        dp = MySelf.builder().iva(BigDecimal.valueOf(20)).Nombre("Vivaldi-Spring LTD").build();
-
+    public CreatePDF(DataOneSellBill dataOneSellBill) {
+        this.dataOneSellBill = dataOneSellBill;
     }
 
 
@@ -57,13 +50,13 @@ public class createPDF {
         this.id_fact = id_factura;
 
         // Crear el PDF en memoria
-        CreatePDF();
+        //CreatePDF();
 
         // Crear la tabla
         MakeTable(documento);
 
         // Lineas de detalle
-        int lineas = printLineasDetalle();
+        int lineas = printDetailBill();
 
         lineas = 23 - lineas;
 
@@ -123,6 +116,11 @@ public class createPDF {
 
     }
 
+    /**
+     *
+     * @param documento
+     * @throws SQLException
+     */
     private void MakeTable(String documento) throws SQLException
     {
         Color azul_oscuro = new Color(39, 83, 146);
@@ -135,7 +133,8 @@ public class createPDF {
         table.setWidthPercentage(100);
         table.setHeaderRows(10);
 
-        PdfPCell h1 = new PdfPCell(new Paragraph(dp.getNombre(),FUENTE_ENCABEZADO));
+
+        PdfPCell h1 = new PdfPCell(new Paragraph(dataOneSellBill.getMySelf().getNombre(),FUENTE_ENCABEZADO));
         //h1.setGrayFill(0.7f);
         h1.setColspan(4);
         h1.setBorder(Rectangle.NO_BORDER);
@@ -165,7 +164,6 @@ public class createPDF {
         table.addCell(h1);
 
         // número de factura
-        TuplasFactura tFact = myBill.getHeadFact(id_fact);
 
         documento=(documento.equals("cuota")) ? "Recibo" : "Factura";
         PdfPCell h2 = new PdfPCell(new Paragraph(documento+" núm.: ",FUENTE_GRIS_OSCURO));
@@ -180,8 +178,8 @@ public class createPDF {
         table.addCell(h2);
 
 
-        //tFact.getNumero().trim()
-        h2 = new PdfPCell(new Paragraph(tFact.getNumero().trim(),FUENTE_GRIS_OSCURO));
+        //tFact.getNumero().trim() numero de factura
+        h2 = new PdfPCell(new Paragraph(dataOneSellBill.getTupleHeadBill().getNumero().trim(),FUENTE_GRIS_OSCURO));
         //h2.setGrayFill(0.7f);
         h2.setColspan(2);
 
@@ -210,7 +208,7 @@ public class createPDF {
         table.addCell(h3);
 
 
-        h3 = new PdfPCell(new Paragraph(tFact.getFecha(),FUENTE_GRIS_OSCURO));
+        h3 = new PdfPCell(new Paragraph(dataOneSellBill.getTupleHeadBill().getFecha(),FUENTE_GRIS_OSCURO));
         //h3.setGrayFill(0.7f);
         h3.setColspan(2);
 
@@ -241,7 +239,7 @@ public class createPDF {
         table.addCell(h3);
 
         //dp.getIBAN()
-        h3 = new PdfPCell(new Paragraph(dp.getIBAN(),FUENTE_GRIS_OSCURO));
+        h3 = new PdfPCell(new Paragraph(dataOneSellBill.getMySelf().getIBAN(),FUENTE_GRIS_OSCURO));
         //h3.setGrayFill(0.7f);
         h3.setColspan(2);
 
@@ -301,7 +299,7 @@ public class createPDF {
         table.addCell(h4);
 
         // Nombre o razón social
-        PdfPCell h5 = new PdfPCell(new Paragraph(tFact.getNombre(),FUENTE_DIRECCION_POSTAL));
+        PdfPCell h5 = new PdfPCell(new Paragraph(dataOneSellBill.getTupleHeadBill().getNombre(),FUENTE_DIRECCION_POSTAL));
         //h5.setGrayFill(0.7f);
         h5.setColspan(4);
         h5.setBorder(Rectangle.NO_BORDER);
@@ -314,7 +312,7 @@ public class createPDF {
         //
 
         // Calle y número
-        PdfPCell h6 = new PdfPCell(new Paragraph(tFact.getDireccion(),FUENTE_DIRECCION_POSTAL));
+        PdfPCell h6 = new PdfPCell(new Paragraph(dataOneSellBill.getTupleHeadBill().getDireccion(),FUENTE_DIRECCION_POSTAL));
         //h6.setGrayFill(0.7f);
         h6.setColspan(4);
         h6.setBorder(Rectangle.NO_BORDER);
@@ -323,7 +321,7 @@ public class createPDF {
         table.addCell(h6);
 
         // Objeto
-        PdfPCell h7 = new PdfPCell(new Paragraph(tFact.getObjeto(),FUENTE_DIRECCION_POSTAL));
+        PdfPCell h7 = new PdfPCell(new Paragraph(dataOneSellBill.getTupleHeadBill().getObjeto(),FUENTE_DIRECCION_POSTAL));
         //h7.setGrayFill(0.7f);
         h7.setColspan(4);
         h7.setBorder(Rectangle.NO_BORDER);
@@ -332,7 +330,7 @@ public class createPDF {
         table.addCell(h7);
 
         // Código postal poblacion
-        PdfPCell h8 = new PdfPCell(new Paragraph(tFact.getPoblacion(),FUENTE_DIRECCION_POSTAL));
+        PdfPCell h8 = new PdfPCell(new Paragraph(dataOneSellBill.getTupleHeadBill().getPoblacion(),FUENTE_DIRECCION_POSTAL));
         //h8.setGrayFill(0.7f);
         h8.setColspan(4);
         h8.setBorder(Rectangle.NO_BORDER);
@@ -357,7 +355,7 @@ public class createPDF {
      * @throws SQLException
      * @throws DocumentException
      */
-    private int printLineasDetalle() throws SQLException, DocumentException
+    private int printDetailBill() throws SQLException, DocumentException
     {
 
         Color gris = new Color(237,237,237);
@@ -405,10 +403,11 @@ public class createPDF {
         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
         table.addCell(cell);
 
-        List<TuplasLineasFactura> LineasFactura = myBill.getLineasFactLocale(id_fact);
+        List<TupleDetailBill> LineasFactura = dataOneSellBill.getTupleDetailBill();
+
         int j=1;
 
-        for (TuplasLineasFactura lineasFact : LineasFactura) {
+        for (TupleDetailBill lineasFact : LineasFactura) {
 
             j++;
             // Linea de Concepto
@@ -458,7 +457,7 @@ public class createPDF {
     private void printTotales() throws SQLException, DocumentException
     {
 
-        List<TuplasTotalFactura> TotalesFactura = myBill.getPieFact(id_fact);
+        //TupleTotalBill TotalesFactura = myGetDataSellBill.getPieFact(id_fact);
 
         BigDecimal TotalAPagar = BigDecimal.ZERO;
         Color azul_oscuro = new Color(39, 83, 146);
@@ -466,10 +465,10 @@ public class createPDF {
         //int cuantos = TotalesFactura.size();
         //System.out.println(cuantos);
 
-        for (TuplasTotalFactura TotalFact : TotalesFactura) {
+
 
             // añadir los totales
-            PdfPCell pie = new PdfPCell(new Paragraph("Base al "+TotalFact.getIva()+"% IVA",FUENTE_CUERPO));
+            PdfPCell pie = new PdfPCell(new Paragraph("Base al "+dataOneSellBill.getTupleTotalBill().getIva()+"% IVA",FUENTE_CUERPO));
             //pie.setColspan(2);
             //pie.setGrayFill(0.7f);
             pie.setHorizontalAlignment(Element.ALIGN_RIGHT);
@@ -477,7 +476,7 @@ public class createPDF {
             table.addCell(pie);
 
             // base imponible
-            p = new Paragraph(TotalFact.getStBase(),FUENTE_CUERPO);
+            p = new Paragraph(dataOneSellBill.getTupleTotalBill().getStBase(),FUENTE_CUERPO);
             p.setAlignment(Element.ALIGN_RIGHT);
             cell = new PdfPCell();
             cell.setBorder(Rectangle.NO_BORDER);
@@ -486,7 +485,7 @@ public class createPDF {
 
 
             // IVA
-            p = new Paragraph(TotalFact.getStIVA(),FUENTE_CUERPO);
+            p = new Paragraph(dataOneSellBill.getTupleTotalBill().getStIVA(),FUENTE_CUERPO);
             p.setAlignment(Element.ALIGN_RIGHT);
             cell = new PdfPCell();
             cell.setBorder(Rectangle.NO_BORDER);
@@ -495,23 +494,23 @@ public class createPDF {
 
 
             // Total Factura
-            p = new Paragraph(TotalFact.getStTotal(),FUENTE_CUERPO);
+            p = new Paragraph(dataOneSellBill.getTupleTotalBill().getStTotal(),FUENTE_CUERPO);
             p.setAlignment(Element.ALIGN_RIGHT);
             cell = new PdfPCell();
             cell.setBorder(Rectangle.NO_BORDER);
             cell.addElement(p);
             table.addCell(cell);
 
-            TotalAPagar=TotalAPagar.add(TotalFact.getTotal());
-        }
+            TotalAPagar=TotalAPagar.add(dataOneSellBill.getTupleTotalBill().getTotal());
+
 
         // añadir el total general
-        PdfPCell pie = new PdfPCell(new Paragraph("Total a pagar ", FUENTE_PIE_TABLA));
-        pie.setColspan(3);
-        pie.setBackgroundColor(azul_oscuro);
-        pie.setHorizontalAlignment(Element.ALIGN_RIGHT);
-        pie.setBorder(Rectangle.NO_BORDER);
-        table.addCell(pie);
+        PdfPCell pie2 = new PdfPCell(new Paragraph("Total a pagar ", FUENTE_PIE_TABLA));
+        pie2.setColspan(3);
+        pie2.setBackgroundColor(azul_oscuro);
+        pie2.setHorizontalAlignment(Element.ALIGN_RIGHT);
+        pie2.setBorder(Rectangle.NO_BORDER);
+        table.addCell(pie2);
 
         p = new Paragraph(NumberFormat.getCurrencyInstance(Locale.GERMANY).format(TotalAPagar),FUENTE_PIE_TABLA);
         p.setAlignment(Element.ALIGN_RIGHT);
@@ -578,7 +577,7 @@ public class createPDF {
 
         // Imprimir el nombre de la empresa y el nif
         //PdfPCell h6 = new PdfPCell(new Paragraph(dp.getNombre()+" NIF/CIF "+dp.getNif()+" - "+dp.getUrl_web(),FUENTE_DIRECCION_POSTAL));
-        PdfPCell h6 = new PdfPCell(new Paragraph(dp.getNombre()+" NIF/CIF "+dp.getNif(),FUENTE_DIRECCION_POSTAL));
+        PdfPCell h6 = new PdfPCell(new Paragraph(dataOneSellBill.getMySelf().getNombre()+" NIF/CIF "+dataOneSellBill.getMySelf().getNif(),FUENTE_DIRECCION_POSTAL));
         //h6.setGrayFill(0.7f);
         h6.setColspan(4);
         h6.setBorder(Rectangle.NO_BORDER);
@@ -587,7 +586,7 @@ public class createPDF {
         table.addCell(h6);
 
         // Imprimir la dirección de la empresa
-        h6 = new PdfPCell(new Paragraph(dp.getDireccion()+" "+dp.getObjeto()+" "+dp.getPoblacion(),FUENTE_DIRECCION_POSTAL));
+        h6 = new PdfPCell(new Paragraph(dataOneSellBill.getMySelf().getDireccion()+" "+dataOneSellBill.getMySelf().getObjeto()+" "+dataOneSellBill.getMySelf().getPoblacion(),FUENTE_DIRECCION_POSTAL));
         //h6.setGrayFill(0.7f);
         h6.setColspan(4);
         h6.setBorder(Rectangle.NO_BORDER);
