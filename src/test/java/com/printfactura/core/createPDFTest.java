@@ -1,46 +1,91 @@
 package com.printfactura.core;
 
 import com.google.gson.Gson;
+import com.lowagie.text.DocumentException;
 import com.printfactura.core.domain.*;
 import com.printfactura.core.makePDFinvoice.CreatePDF;
 import com.printfactura.core.repositories.GetDataSellBill;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.naming.NamingException;
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class createPDFTest {
 
 
-    @Autowired
+  /*  @Autowired
     GetDataSellBill getDataSellBill;
-
+*/
     @Test
-    public void makePDFTestOne(){
+    public void makePDFTestOne() throws SQLException, NamingException, DocumentException, IOException {
 
         CreatePDF createPDF = new CreatePDF(MakeDataOneSellBill());
-        
+        byte[] myPDF = createPDF.doit();
+        SaveToFile(myPDF,"myFact.pdf");
+
+
+    }
+
+    public void SaveToFile(byte[] bFile, String fileDest){
+        try {
+            Path path = Paths.get(fileDest);
+            Files.write(path, bFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     public DataOneSellBill MakeDataOneSellBill(){
 
         List<TupleDetailBill> tupleDetailBills = new ArrayList<>();
         tupleDetailBills.add(
-                new TupleDetailBill.Builder().concepto("160 hours work").importe("€11,520.00").build());
+                new TupleDetailBill.Builder().concepto("160 hours work").
+                        unidades("160").
+                        importe("€60.00").
+                        total("€9,600.00").build());
 
         return DataOneSellBill.builder().
-                mySelf(MySelf.builder().iva(BigDecimal.valueOf(20)).
-                        Nombre("Vivaldi-Spring LTD").
-                        Direccion("Suite 38, Temple Chambers, 3-7 Temple Avenue").
-                        Nif("VAT number: GB 292 4881 67").
+                mySelf(MySelf.builder().
+                        CompanyName("Vivaldi-Spring LTD").
+                        Address("Suite 38, Temple Chambers, 3-7 Temple Avenue").
+                        City("London").
+                        PostCode("EC4Y 0HP").
+                        Country("United Kingdom").
+                        Identification("VAT number: GB 292 4881 67").
+                        Vat(BigDecimal.valueOf(20)).
+                        IBAN("GB50 ABBY 0901 2938 4122 40").
+                        BankAccount("SORT CODE 09-01-29 ACCOUNT NUMBER 38412240").
+                        BankName("Santander United Kingdom").
+                        fiscal_year("2020").
+                        TaxPeriod("Q2").
                         build()).
-                tupleHeadBill(new TupleHeadBill.Builder().Nombre("Trilateral-IT Ltd.").build()).
+                customerDetail(CustomerDetail.builder().
+                        CompanyName("Trilateral-IT LTD").
+                        Address("Onega House, 112 Main Road").
+                        City("Kent").
+                        PostCode("DA14 6NE Sidcup").
+                        Country("United Kingdom").
+                        Identification("VAT Registration Number 928465196").
+                        build()).
+                tupleHeadBill(new TupleHeadBill.Builder().
+                        Nombre("Trilateral-IT Ltd.").
+                        Numero("2020/04/002").
+                        IBAN("GB50 ABBY 0901 2938 4122 40").
+                        Fecha("30 April 2020").
+                        build()).
                 tupleDetailBill(tupleDetailBills).
                 tupleTotalBill(new TupleTotalBill.Builder().
                         Base(BigDecimal.valueOf(9600)).
-                        Iva(BigDecimal.valueOf(1768.28)).build()).
+                        Iva(BigDecimal.valueOf(20)).build()).
                 build();
     }
 
@@ -53,10 +98,7 @@ public class createPDFTest {
                 new TupleDetailBill.Builder().concepto("160 hours work").importe("€11,520.00").build());
 
         DataOneSellBill dataOneSellBill = DataOneSellBill.builder().
-                mySelf(MySelf.builder().iva(BigDecimal.valueOf(20)).
-                        Nombre("Vivaldi-Spring LTD").
-                        Direccion("Suite 38, Temple Chambers, 3-7 Temple Avenue").
-                        Nif("VAT number: GB 292 4881 67").
+                mySelf(MySelf.builder().fiscal_year("2020").TaxPeriod("Q2").
                         build()).
                 tupleHeadBill(new TupleHeadBill.Builder().Nombre("Trilateral-IT Ltd.").build()).
                 tupleDetailBill(tupleDetailBills).
@@ -65,7 +107,7 @@ public class createPDFTest {
                         Iva(BigDecimal.valueOf(1768.28)).build()).
                 build();
 
-        System.out.println(dataOneSellBill.getMySelf().getNombre());
+        System.out.println(dataOneSellBill.getMySelf().getCompanyName());
         System.out.println(gson.toJson(dataOneSellBill));
         //createPDF mkpdf = new createPDF(getDataSellBill);
 

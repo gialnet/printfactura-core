@@ -21,6 +21,7 @@ import java.util.Locale;
 public class CreatePDF {
 
     private static final Font FUENTE_ENCABEZADO = FontFactory.getFont(FontFactory.HELVETICA, 14, Font.BOLD, Color.WHITE);
+    private static final Font FUENTE_MYSELF = FontFactory.getFont(FontFactory.COURIER_BOLDOBLIQUE, 10, Font.NORMAL, Color.BLACK);
     private static final Font FUENTE_GRIS_OSCURO = FontFactory.getFont(FontFactory.HELVETICA, 12, Font.BOLD, new Color(98, 98, 98));
     private static final Font FUENTE_TITULO = FontFactory.getFont(FontFactory.HELVETICA, 12, Font.BOLD, Color.BLACK);
     private static final Font FUENTE_TITULO_TABLA = FontFactory.getFont(FontFactory.HELVETICA, 12, Font.BOLD, new Color(98, 98, 98));
@@ -28,6 +29,8 @@ public class CreatePDF {
     private static final Font FUENTE_CUERPO = FontFactory.getFont(FontFactory.HELVETICA, 10, Font.NORMAL, Color.BLACK);
     private static final Font FUENTE_DIRECCION_POSTAL = FontFactory.getFont(FontFactory.HELVETICA, 10, Font.NORMAL, Color.DARK_GRAY);
 
+    private static Color BLUE_DARK = new Color(39, 83, 146);
+    private static Color GRAY = new Color(237,237,237);
 
     private PdfWriter writer;
     private Document document;
@@ -36,7 +39,6 @@ public class CreatePDF {
     private PdfPCell cell;
     private Paragraph p;
 
-    private int id_fact;
     private final DataOneSellBill dataOneSellBill;
 
     public CreatePDF(DataOneSellBill dataOneSellBill) {
@@ -44,21 +46,21 @@ public class CreatePDF {
     }
 
 
-    public byte[] doit(int id_factura, String documento) throws DocumentException, SQLException, IOException, NamingException
+    public byte[] doit() throws DocumentException, SQLException, IOException, NamingException
     {
-
-        this.id_fact = id_factura;
-
         // Crear el PDF en memoria
-        //CreatePDF();
+        CreatePDFInMemory();
+
+        // Config Table
+        ConfigTable();
 
         // Crear la tabla
-        MakeTable(documento);
+        MakeTable();
 
         // Lineas de detalle
         int lineas = printDetailBill();
 
-        lineas = 23 - lineas;
+        lineas = 22 - lineas;
 
         // Lineas en blanco de relleno
         for (int i = 0; i < lineas; i++) {
@@ -76,8 +78,8 @@ public class CreatePDF {
 
         // Salvar en la BBDD en caso de factura pro forma
         // no la grabamos
-        if (!documento.equals("PRO-FORMA"))
-            Save();
+        /*if (!documento.equals("PRO-FORMA"))
+            Save();*/
 
         return PDFenMemoria.toByteArray();
     }
@@ -105,7 +107,7 @@ public class CreatePDF {
 
     }
 
-    private void CreatePDF() throws DocumentException
+    private void CreatePDFInMemory() throws DocumentException
     {
 
         this.document = new Document(PageSize.A4);
@@ -116,15 +118,7 @@ public class CreatePDF {
 
     }
 
-    /**
-     *
-     * @param documento
-     * @throws SQLException
-     */
-    private void MakeTable(String documento) throws SQLException
-    {
-        Color azul_oscuro = new Color(39, 83, 146);
-        Color gris = new Color(237,237,237);
+    private PdfPTable ConfigTable(){
 
         float[] widths1 = { 3f, 1f, 1f, 1f};
 
@@ -133,220 +127,149 @@ public class CreatePDF {
         table.setWidthPercentage(100);
         table.setHeaderRows(10);
 
+        return table;
+    }
 
-        PdfPCell h1 = new PdfPCell(new Paragraph(dataOneSellBill.getMySelf().getNombre(),FUENTE_ENCABEZADO));
+    private void DocHead(){
+
+        PdfPCell h1 = new PdfPCell(new Paragraph(dataOneSellBill.getMySelf().getCompanyName(), FUENTE_ENCABEZADO));
         //h1.setGrayFill(0.7f);
         h1.setColspan(4);
         h1.setBorder(Rectangle.NO_BORDER);
         h1.setHorizontalAlignment(Element.ALIGN_LEFT);
-        h1.setBackgroundColor(azul_oscuro);
-        h1.setFixedHeight(50);
+        h1.setBackgroundColor(BLUE_DARK);
+        h1.setMinimumHeight(40);
         h1.setVerticalAlignment(Element.ALIGN_MIDDLE);
         h1.setPaddingLeft(10);
 
         table.addCell(h1);
 
         // línea en blanco
-        h1 = new PdfPCell(new Paragraph(" ",FUENTE_ENCABEZADO));
+        BlankLine();
+        /*h1 = new PdfPCell(new Paragraph(" ",FUENTE_ENCABEZADO));
         h1.setColspan(4);
         h1.setBorder(Rectangle.NO_BORDER);
         h1.setFixedHeight(5);
 
+        table.addCell(h1);*/
+    }
+
+    private void PhysicalAddress(){
+
+        // Address street
+        PdfPCell address1 = new PdfPCell(new Paragraph(dataOneSellBill.getMySelf().getAddress(), FUENTE_MYSELF));
+        address1.setColspan(4);
+        address1.setBorder(Rectangle.NO_BORDER);
+        address1.setHorizontalAlignment(Element.ALIGN_LEFT);
+        table.addCell(address1);
+
+        // Address city and post code
+        address1 = new PdfPCell(new Paragraph(dataOneSellBill.getMySelf().getCity()+
+                ", "+dataOneSellBill.getMySelf().getPostCode(), FUENTE_MYSELF));
+        address1.setColspan(4);
+        address1.setBorder(Rectangle.NO_BORDER);
+        address1.setHorizontalAlignment(Element.ALIGN_LEFT);
+        table.addCell(address1);
+
+        // Address country
+        address1 = new PdfPCell(new Paragraph(dataOneSellBill.getMySelf().getCountry(), FUENTE_MYSELF));
+        address1.setColspan(4);
+        address1.setBorder(Rectangle.NO_BORDER);
+        address1.setHorizontalAlignment(Element.ALIGN_LEFT);
+        table.addCell(address1);
+
+        // Company identification
+        address1 = new PdfPCell(new Paragraph(dataOneSellBill.getMySelf().getIdentification(), FUENTE_MYSELF));
+        address1.setColspan(4);
+        address1.setBorder(Rectangle.NO_BORDER);
+        address1.setHorizontalAlignment(Element.ALIGN_LEFT);
+        table.addCell(address1);
+    }
+
+    private void BlankLine(){
+        PdfPCell h1 = new PdfPCell(new Paragraph(" ",FUENTE_ENCABEZADO));
+        h1.setColspan(4);
+        h1.setBorder(Rectangle.NO_BORDER);
+        h1.setHorizontalAlignment(Element.ALIGN_LEFT);
         table.addCell(h1);
+    }
+    /**
+     *
+     * @throws SQLException
+     */
+    private void MakeTable() throws SQLException
+    {
+
+        DocHead();
+
+        //PdfPCell h1;
+
+        PhysicalAddress();
 
         // línea en blanco
-        h1 = new PdfPCell(new Paragraph(" ",FUENTE_ENCABEZADO));
+        BlankLine();
+        /*h1 = new PdfPCell(new Paragraph(" ",FUENTE_ENCABEZADO));
         //h1.setGrayFill(0.7f);
-        h1.setColspan(1);
+        h1.setColspan(4);
         h1.setBorder(Rectangle.NO_BORDER);
-        h1.setHorizontalAlignment(Element.ALIGN_CENTER);
+        h1.setHorizontalAlignment(Element.ALIGN_LEFT);
+        h1.setPaddingLeft(10);
 
-        table.addCell(h1);
+        table.addCell(h1);*/
 
-        // número de factura
-
-        documento=(documento.equals("cuota")) ? "Recibo" : "Factura";
-        PdfPCell h2 = new PdfPCell(new Paragraph(documento+" núm.: ",FUENTE_GRIS_OSCURO));
+        // Invoice number
+        PdfPCell h2 = new PdfPCell(new Paragraph("Invoice nº: "+dataOneSellBill.getTupleHeadBill().getNumero().trim()
+                +"     Date: "
+                +dataOneSellBill.getTupleHeadBill().getFecha(),FUENTE_GRIS_OSCURO));
         //h2.setGrayFill(0.7f);
         h2.setColspan(1);
-
         h2.setBorder(Rectangle.NO_BORDER);
-        h2.setBackgroundColor(gris);
+        h2.setBackgroundColor(GRAY);
         h2.setHorizontalAlignment(Element.ALIGN_LEFT);
-        h2.setVerticalAlignment(Element.ALIGN_MIDDLE);
-
         table.addCell(h2);
-
-
-        //tFact.getNumero().trim() numero de factura
-        h2 = new PdfPCell(new Paragraph(dataOneSellBill.getTupleHeadBill().getNumero().trim(),FUENTE_GRIS_OSCURO));
-        //h2.setGrayFill(0.7f);
-        h2.setColspan(2);
-
-        h2.setBorder(Rectangle.NO_BORDER);
-        h2.setBackgroundColor(gris);
-        h2.setHorizontalAlignment(Element.ALIGN_RIGHT);
-
-        table.addCell(h2);
-
-        // línea en blanco
-        h1 = new PdfPCell(new Paragraph(" ",FUENTE_ENCABEZADO));
-        h1.setColspan(1);
-        h1.setBorder(Rectangle.NO_BORDER);
-        h1.setHorizontalAlignment(Element.ALIGN_CENTER);
-        table.addCell(h1);
-
-        //Titulo fecha
-        PdfPCell h3 = new PdfPCell(new Paragraph("Fecha: ",FUENTE_GRIS_OSCURO));
-        //h3.setGrayFill(0.7f);
-        h3.setColspan(1);
-
-        h3.setBorder(Rectangle.NO_BORDER);
-        h3.setBackgroundColor(gris);
-        h3.setHorizontalAlignment(Element.ALIGN_LEFT);
-        h3.setVerticalAlignment(Element.ALIGN_MIDDLE);
-        table.addCell(h3);
-
-
-        h3 = new PdfPCell(new Paragraph(dataOneSellBill.getTupleHeadBill().getFecha(),FUENTE_GRIS_OSCURO));
-        //h3.setGrayFill(0.7f);
-        h3.setColspan(2);
-
-        h3.setBorder(Rectangle.NO_BORDER);
-        h3.setBackgroundColor(gris);
-        h3.setHorizontalAlignment(Element.ALIGN_RIGHT);
-
-        table.addCell(h3);
-
-        // línea en blanco
-        h1 = new PdfPCell(new Paragraph(" ",FUENTE_ENCABEZADO));
-        //h1.setGrayFill(0.7f);
-        h1.setColspan(1);
-        h1.setBorder(Rectangle.NO_BORDER);
-        h1.setHorizontalAlignment(Element.ALIGN_CENTER);
-        table.addCell(h1);
-
-        // IBAN
-        h3 = new PdfPCell(new Paragraph("IBAN: ",FUENTE_GRIS_OSCURO));
-        //h3.setGrayFill(0.7f);
-        h3.setColspan(1);
-
-        h3.setBorder(Rectangle.NO_BORDER);
-        h3.setBackgroundColor(gris);
-        h3.setHorizontalAlignment(Element.ALIGN_LEFT);
-        h3.setVerticalAlignment(Element.ALIGN_MIDDLE);
-        h3.setPaddingBottom(7);
-        table.addCell(h3);
-
-        //dp.getIBAN()
-        h3 = new PdfPCell(new Paragraph(dataOneSellBill.getMySelf().getIBAN(),FUENTE_GRIS_OSCURO));
-        //h3.setGrayFill(0.7f);
-        h3.setColspan(2);
-
-        h3.setBorder(Rectangle.NO_BORDER);
-        h3.setBackgroundColor(gris);
-        h3.setHorizontalAlignment(Element.ALIGN_RIGHT);
-
-        table.addCell(h3);
 
         // Linea en blanco *************************************
-        h1 = new PdfPCell(new Paragraph(" ",FUENTE_ENCABEZADO));
-        h1.setColspan(1);
-        h1.setBorder(Rectangle.NO_BORDER);
-        h1.setHorizontalAlignment(Element.ALIGN_CENTER);
-        table.addCell(h1);
-
-        // BIC-swift **********************************************
-        h3 = new PdfPCell(new Paragraph("BIC:",FUENTE_GRIS_OSCURO));
-        //h3.setGrayFill(0.7f);
-        h3.setColspan(1);
-
-        h3.setBorder(Rectangle.NO_BORDER);
-        h3.setBackgroundColor(gris);
-        h3.setHorizontalAlignment(Element.ALIGN_LEFT);
-        h3.setVerticalAlignment(Element.ALIGN_MIDDLE);
-        h3.setPaddingBottom(7);
-        table.addCell(h3);
-
-
-        /*h3 = new PdfPCell(new Paragraph(dp.getBIC(),FUENTE_GRIS_OSCURO));
-
-        h3.setColspan(2);
-
-        h3.setBorder(Rectangle.NO_BORDER);
-        h3.setBackgroundColor(gris);
-        h3.setHorizontalAlignment(Element.ALIGN_RIGHT);
-
-        table.addCell(h3);*/
+        BlankLine();
 
         // línea en blanco
-        h1 = new PdfPCell(new Paragraph(" ",FUENTE_ENCABEZADO));
-        //h1.setGrayFill(0.7f);
-        h1.setColspan(4);
-        h1.setBorder(Rectangle.NO_BORDER);
-        h1.setHorizontalAlignment(Element.ALIGN_CENTER);
+        BlankLine();
 
 
-        table.addCell(h1);
+       /* h2 = new PdfPCell(new Paragraph("Caja ",FUENTE_GRIS_OSCURO));
+        //h2.setGrayFill(0.7f);
+        h2.setColspan(2);
+        h2.setBorder(Rectangle.BOX);
+        h2.setBackgroundColor(GRAY);
+        h2.setHorizontalAlignment(Element.ALIGN_LEFT);
+        table.addCell(h2);*/
 
         // Datos del cliente
-        PdfPCell h4 = new PdfPCell(new Paragraph("Datos del cliente",FUENTE_TITULO));
+        PdfPCell h4 = new PdfPCell(new Paragraph("-Client details-\n"+
+                dataOneSellBill.getCustomerDetail().getCompanyName()+
+                "\n"+dataOneSellBill.getCustomerDetail().getAddress()+
+                "\n"+dataOneSellBill.getCustomerDetail().getPostCode()+" "+
+                dataOneSellBill.getCustomerDetail().getCity()+
+                "\n"+dataOneSellBill.getCustomerDetail().getCountry()+
+                "\n"+dataOneSellBill.getCustomerDetail().getIdentification()
+                , FUENTE_MYSELF));
         //h4.setGrayFill(0.7f);
         h4.setColspan(4);
-        h4.setBorder(Rectangle.NO_BORDER);
+        h4.setFixedHeight(72f);
+        h4.setBorder(Rectangle.BOX);
+        h2.setBackgroundColor(GRAY);
         h4.setHorizontalAlignment(Element.ALIGN_LEFT);
-
         table.addCell(h4);
 
-        // Nombre o razón social
-        PdfPCell h5 = new PdfPCell(new Paragraph(dataOneSellBill.getTupleHeadBill().getNombre(),FUENTE_DIRECCION_POSTAL));
-        //h5.setGrayFill(0.7f);
-        h5.setColspan(4);
-        h5.setBorder(Rectangle.NO_BORDER);
-        h5.setHorizontalAlignment(Element.ALIGN_LEFT);
-
-        table.addCell(h5);
-
-        //
-        // Dirección postal
-        //
-
-        // Calle y número
-        PdfPCell h6 = new PdfPCell(new Paragraph(dataOneSellBill.getTupleHeadBill().getDireccion(),FUENTE_DIRECCION_POSTAL));
-        //h6.setGrayFill(0.7f);
-        h6.setColspan(4);
-        h6.setBorder(Rectangle.NO_BORDER);
-        h6.setHorizontalAlignment(Element.ALIGN_LEFT);
-
-        table.addCell(h6);
-
-        // Objeto
-        PdfPCell h7 = new PdfPCell(new Paragraph(dataOneSellBill.getTupleHeadBill().getObjeto(),FUENTE_DIRECCION_POSTAL));
-        //h7.setGrayFill(0.7f);
-        h7.setColspan(4);
-        h7.setBorder(Rectangle.NO_BORDER);
-        h7.setHorizontalAlignment(Element.ALIGN_LEFT);
-
-        table.addCell(h7);
-
-        // Código postal poblacion
-        PdfPCell h8 = new PdfPCell(new Paragraph(dataOneSellBill.getTupleHeadBill().getPoblacion(),FUENTE_DIRECCION_POSTAL));
-        //h8.setGrayFill(0.7f);
-        h8.setColspan(4);
-        h8.setBorder(Rectangle.NO_BORDER);
-        h8.setHorizontalAlignment(Element.ALIGN_LEFT);
-
-        table.addCell(h8);
 
         // línea en blanco
-        h1 = new PdfPCell(new Paragraph(" ",FUENTE_ENCABEZADO));
+        BlankLine();
+       /* h1 = new PdfPCell(new Paragraph(" ",FUENTE_ENCABEZADO));
         //h1.setGrayFill(0.7f);
         h1.setColspan(4);
         h1.setBorder(Rectangle.NO_BORDER);
         h1.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table.addCell(h1);*/
 
-
-        table.addCell(h1);
     }
 
     /**
@@ -361,7 +284,7 @@ public class CreatePDF {
         Color gris = new Color(237,237,237);
         Color borde = new Color(204,204,204);
         // Linea de Concepto
-        p = new Paragraph("Concepto",FUENTE_TITULO_TABLA);
+        p = new Paragraph("Concept",FUENTE_TITULO_TABLA);
         p.setAlignment(Element.ALIGN_LEFT);
 
         cell = new PdfPCell();
@@ -373,7 +296,7 @@ public class CreatePDF {
 
 
         // Linea cantidad
-        p = new Paragraph("Unidades",FUENTE_TITULO_TABLA);
+        p = new Paragraph("Unit",FUENTE_TITULO_TABLA);
         p.setAlignment(Element.ALIGN_RIGHT);
         cell = new PdfPCell();
         cell.setBackgroundColor(gris);
@@ -384,7 +307,7 @@ public class CreatePDF {
 
 
         // Linea precio 1
-        p = new Paragraph("Importe",FUENTE_TITULO_TABLA);
+        p = new Paragraph("Price",FUENTE_TITULO_TABLA);
         p.setAlignment(Element.ALIGN_RIGHT);
         cell = new PdfPCell();
         cell.setBackgroundColor(gris);
@@ -462,13 +385,8 @@ public class CreatePDF {
         BigDecimal TotalAPagar = BigDecimal.ZERO;
         Color azul_oscuro = new Color(39, 83, 146);
 
-        //int cuantos = TotalesFactura.size();
-        //System.out.println(cuantos);
-
-
-
             // añadir los totales
-            PdfPCell pie = new PdfPCell(new Paragraph("Base al "+dataOneSellBill.getTupleTotalBill().getIva()+"% IVA",FUENTE_CUERPO));
+            PdfPCell pie = new PdfPCell(new Paragraph("Base amount "+dataOneSellBill.getTupleTotalBill().getIva()+"% VAT",FUENTE_CUERPO));
             //pie.setColspan(2);
             //pie.setGrayFill(0.7f);
             pie.setHorizontalAlignment(Element.ALIGN_RIGHT);
@@ -484,8 +402,8 @@ public class CreatePDF {
             table.addCell(cell);
 
 
-            // IVA
-            p = new Paragraph(dataOneSellBill.getTupleTotalBill().getStIVA(),FUENTE_CUERPO);
+            // VAT
+            p = new Paragraph(dataOneSellBill.getTupleTotalBill().getStIVA(), FUENTE_CUERPO);
             p.setAlignment(Element.ALIGN_RIGHT);
             cell = new PdfPCell();
             cell.setBorder(Rectangle.NO_BORDER);
@@ -493,19 +411,19 @@ public class CreatePDF {
             table.addCell(cell);
 
 
-            // Total Factura
-            p = new Paragraph(dataOneSellBill.getTupleTotalBill().getStTotal(),FUENTE_CUERPO);
+            // Total
+            p = new Paragraph(dataOneSellBill.getTupleTotalBill().getStTotal(), FUENTE_CUERPO);
             p.setAlignment(Element.ALIGN_RIGHT);
             cell = new PdfPCell();
             cell.setBorder(Rectangle.NO_BORDER);
             cell.addElement(p);
             table.addCell(cell);
 
-            TotalAPagar=TotalAPagar.add(dataOneSellBill.getTupleTotalBill().getTotal());
+            TotalAPagar = TotalAPagar.add(dataOneSellBill.getTupleTotalBill().getTotal());
 
 
-        // añadir el total general
-        PdfPCell pie2 = new PdfPCell(new Paragraph("Total a pagar ", FUENTE_PIE_TABLA));
+        // Total general
+        PdfPCell pie2 = new PdfPCell(new Paragraph("Total bill ", FUENTE_PIE_TABLA));
         pie2.setColspan(3);
         pie2.setBackgroundColor(azul_oscuro);
         pie2.setHorizontalAlignment(Element.ALIGN_RIGHT);
@@ -575,9 +493,9 @@ public class CreatePDF {
     private void pintPie() throws SQLException, NamingException
     {
 
-        // Imprimir el nombre de la empresa y el nif
-        //PdfPCell h6 = new PdfPCell(new Paragraph(dp.getNombre()+" NIF/CIF "+dp.getNif()+" - "+dp.getUrl_web(),FUENTE_DIRECCION_POSTAL));
-        PdfPCell h6 = new PdfPCell(new Paragraph(dataOneSellBill.getMySelf().getNombre()+" NIF/CIF "+dataOneSellBill.getMySelf().getNif(),FUENTE_DIRECCION_POSTAL));
+        PdfPCell h6 = new PdfPCell(new Paragraph(
+                dataOneSellBill.getMySelf().getBankName()+"\n"+
+                dataOneSellBill.getMySelf().getBankAccount(),FUENTE_DIRECCION_POSTAL));
         //h6.setGrayFill(0.7f);
         h6.setColspan(4);
         h6.setBorder(Rectangle.NO_BORDER);
@@ -586,21 +504,13 @@ public class CreatePDF {
         table.addCell(h6);
 
         // Imprimir la dirección de la empresa
-        h6 = new PdfPCell(new Paragraph(dataOneSellBill.getMySelf().getDireccion()+" "+dataOneSellBill.getMySelf().getObjeto()+" "+dataOneSellBill.getMySelf().getPoblacion(),FUENTE_DIRECCION_POSTAL));
+        h6 = new PdfPCell(new Paragraph(dataOneSellBill.getMySelf().getIBAN(),FUENTE_DIRECCION_POSTAL));
         //h6.setGrayFill(0.7f);
         h6.setColspan(4);
         h6.setBorder(Rectangle.NO_BORDER);
         h6.setHorizontalAlignment(Element.ALIGN_LEFT);
 
         table.addCell(h6);
-
-       /* h6 = new PdfPCell(new Paragraph(dp.getMail()+" "+dp.getMovil()+" "+dp.getFax(),FUENTE_DIRECCION_POSTAL));
-        //h6.setGrayFill(0.7f);
-        h6.setColspan(4);
-        h6.setBorder(Rectangle.NO_BORDER);
-        h6.setHorizontalAlignment(Element.ALIGN_LEFT);
-
-        table.addCell(h6);*/
 
     }
 }

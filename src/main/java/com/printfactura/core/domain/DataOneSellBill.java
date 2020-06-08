@@ -13,6 +13,7 @@ import java.util.List;
 public class DataOneSellBill {
 
     MySelf mySelf;
+    CustomerDetail customerDetail;
     TupleCustomer tupleCustomer;
     SalesCount salesCount;
     TupleHeadBill tupleHeadBill;
