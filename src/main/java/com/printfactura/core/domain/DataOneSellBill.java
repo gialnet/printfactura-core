@@ -19,4 +19,5 @@ public class DataOneSellBill {
     TupleHeadBill tupleHeadBill;
     List<TupleDetailBill> tupleDetailBill;
     TupleTotalBill tupleTotalBill;
+    TotalsBill totalsBill;
 }

@@ -1,0 +1,11 @@
+<!-- https://mvnrepository.com/artifact/com.lowagie/itext -->
+<dependency>
+    <groupId>com.lowagie</groupId>
+    <artifactId>itext</artifactId>
+    <version>2.1.7</version>
+</dependency>
+
+mvn spring-boot:build-image
+
+mvn deploy:deploy-file -DgroupId=eu.europa.ec.markt.dss -DartifactId=dss-itext -Dversion=1.00 -Durl=file:local-maven-repo/ -DrepositoryId=local-
+maven-repo -DupdateReleaseInfo=true -Dfile=local-maven-repo/dss-itext-1.00.jar

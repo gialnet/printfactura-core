@@ -83,6 +83,15 @@ public class createPDFTest {
                         Fecha("30 April 2020").
                         build()).
                 tupleDetailBill(tupleDetailBills).
+                totalsBill(TotalsBill.builder().
+                        BaseEuros(BigDecimal.valueOf(9600)).
+                        VATEuros(BigDecimal.valueOf(1920)).
+                        TotalEuros(BigDecimal.valueOf(11520)).
+                        HMRC_ExchangeRates(BigDecimal.valueOf(1.1162)).
+                        BasePound(BigDecimal.valueOf(9600/1.1162)).
+                        VATPound(BigDecimal.valueOf(1920/1.1162)).
+                        TotalPound(BigDecimal.valueOf(11520/1.1162)).
+                        build()).
                 tupleTotalBill(new TupleTotalBill.Builder().
                         Base(BigDecimal.valueOf(9600)).
                         Iva(BigDecimal.valueOf(20)).build()).

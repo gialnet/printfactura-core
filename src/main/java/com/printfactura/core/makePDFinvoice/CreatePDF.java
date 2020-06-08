@@ -60,7 +60,7 @@ public class CreatePDF {
         // Lineas de detalle
         int lineas = printDetailBill();
 
-        lineas = 22 - lineas;
+        lineas = 21 - lineas;
 
         // Lineas en blanco de relleno
         for (int i = 0; i < lineas; i++) {
@@ -385,16 +385,33 @@ public class CreatePDF {
         BigDecimal TotalAPagar = BigDecimal.ZERO;
         Color azul_oscuro = new Color(39, 83, 146);
 
-            // añadir los totales
-            PdfPCell pie = new PdfPCell(new Paragraph("Base amount "+dataOneSellBill.getTupleTotalBill().getIva()+"% VAT",FUENTE_CUERPO));
-            //pie.setColspan(2);
-            //pie.setGrayFill(0.7f);
-            pie.setHorizontalAlignment(Element.ALIGN_RIGHT);
-            pie.setBorder(Rectangle.NO_BORDER);
-            table.addCell(pie);
+        // añadir los totales
+        PdfPCell pie = new PdfPCell(new Paragraph("Base amount "+
+                NumberFormat.getCurrencyInstance(Locale.GERMANY).format(dataOneSellBill.getTotalsBill().getBaseEuros())+
+                " VAT 20% "+ NumberFormat.getCurrencyInstance(Locale.GERMANY).format(dataOneSellBill.getTotalsBill().getVATEuros())+
+                " Total "+NumberFormat.getCurrencyInstance(Locale.GERMANY).format(dataOneSellBill.getTotalsBill().getTotalEuros())
+                ,FUENTE_CUERPO));
+        pie.setColspan(4);
+        //pie.setGrayFill(0.7f);
+        pie.setHorizontalAlignment(Element.ALIGN_RIGHT);
+        pie.setBorder(Rectangle.NO_BORDER);
+        table.addCell(pie);
 
+        pie = new PdfPCell(new Paragraph("Oficial HRMC exchange rates "+
+                dataOneSellBill.getTotalsBill().getHMRC_ExchangeRates()+
+                " Base amount "+
+                NumberFormat.getCurrencyInstance(Locale.UK).format(dataOneSellBill.getTotalsBill().getBasePound())+
+                " VAT 20% "+ NumberFormat.getCurrencyInstance(Locale.UK).format(dataOneSellBill.getTotalsBill().getVATPound())+
+                " Total "+NumberFormat.getCurrencyInstance(Locale.UK).format(dataOneSellBill.getTotalsBill().getTotalPound())
+                ,FUENTE_CUERPO));
+        pie.setColspan(4);
+
+        //pie.setGrayFill(0.7f);
+        pie.setHorizontalAlignment(Element.ALIGN_RIGHT);
+        pie.setBorder(Rectangle.NO_BORDER);
+        table.addCell(pie);
             // base imponible
-            p = new Paragraph(dataOneSellBill.getTupleTotalBill().getStBase(),FUENTE_CUERPO);
+           /* p = new Paragraph(dataOneSellBill.getTupleTotalBill().getStBase(),FUENTE_CUERPO);
             p.setAlignment(Element.ALIGN_RIGHT);
             cell = new PdfPCell();
             cell.setBorder(Rectangle.NO_BORDER);
@@ -417,9 +434,13 @@ public class CreatePDF {
             cell = new PdfPCell();
             cell.setBorder(Rectangle.NO_BORDER);
             cell.addElement(p);
-            table.addCell(cell);
+            table.addCell(cell);*/
 
-            TotalAPagar = TotalAPagar.add(dataOneSellBill.getTupleTotalBill().getTotal());
+
+
+
+
+        TotalAPagar = TotalAPagar.add(dataOneSellBill.getTupleTotalBill().getTotal());
 
 
         // Total general
