@@ -13,4 +13,8 @@ public class SalesCount {
     int number;
     String year;
     String month;
+
+    public String getFormatBillNumber(){
+        return year+"/"+month+"/"+String.valueOf(number);
+    }
 }
