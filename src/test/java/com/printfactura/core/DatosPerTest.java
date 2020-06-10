@@ -1,7 +1,7 @@
 package com.printfactura.core;
 
 import com.printfactura.core.domain.MySelf;
-import com.printfactura.core.domain.SalesCount;
+import com.printfactura.core.domain.sales.SalesCount;
 import com.printfactura.core.repositories.GetDataSellBill;
 import com.printfactura.core.repositories.GetDataDatosPerRepoImpl;
 import org.junit.jupiter.api.Test;

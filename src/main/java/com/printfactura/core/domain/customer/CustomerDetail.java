@@ -1,4 +1,4 @@
-package com.printfactura.core.domain;
+package com.printfactura.core.domain.customer;
 
 import lombok.*;
 

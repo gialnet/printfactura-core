@@ -1,4 +1,4 @@
-package com.printfactura.core.domain;
+package com.printfactura.core.domain.sales;
 
 import lombok.*;
 
@@ -10,11 +10,11 @@ import lombok.*;
 @Getter
 public class SalesCount {
 
-    int number;
-    String year;
-    String month;
+    int Number;
+    String Year;
+    String Month;
 
     public String getFormatBillNumber(){
-        return year+"/"+month+"/"+String.valueOf(number);
+        return Year +"/"+ Month +"/"+String.valueOf(Number);
     }
 }

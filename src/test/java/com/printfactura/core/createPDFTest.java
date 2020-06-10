@@ -3,10 +3,11 @@ package com.printfactura.core;
 import com.google.gson.Gson;
 import com.lowagie.text.DocumentException;
 import com.printfactura.core.domain.*;
+import com.printfactura.core.domain.customer.CustomerDetail;
+import com.printfactura.core.domain.sales.SalesBill;
+import com.printfactura.core.domain.sales.TotalSalesBill;
 import com.printfactura.core.makePDFinvoice.CreatePDF;
-import com.printfactura.core.repositories.GetDataSellBill;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.naming.NamingException;
 import java.io.IOException;
@@ -24,7 +25,7 @@ public class createPDFTest {
   /*  @Autowired
     GetDataSellBill getDataSellBill;
 */
-    @Test
+    /*@Test
     public void makePDFTestOne() throws SQLException, NamingException, DocumentException, IOException {
 
         CreatePDF createPDF = new CreatePDF(MakeDataOneSellBill());
@@ -32,7 +33,7 @@ public class createPDFTest {
         SaveToFile(myPDF,"myFact.pdf");
 
 
-    }
+    }*/
 
     public void SaveToFile(byte[] bFile, String fileDest){
         try {
@@ -44,7 +45,7 @@ public class createPDFTest {
 
     }
 
-    public DataOneSellBill MakeDataOneSellBill(){
+   /* public SalesBill MakeDataOneSellBill(){
 
         List<TupleDetailBill> tupleDetailBills = new ArrayList<>();
         tupleDetailBills.add(
@@ -53,7 +54,7 @@ public class createPDFTest {
                         importe("€60.00").
                         total("€9,600.00").build());
 
-        return DataOneSellBill.builder().
+        return SalesBill.builder().
                 mySelf(MySelf.builder().
                         CompanyName("Vivaldi-Spring LTD").
                         Address("Suite 38, Temple Chambers, 3-7 Temple Avenue").
@@ -83,7 +84,7 @@ public class createPDFTest {
                         Fecha("30 April 2020").
                         build()).
                 tupleDetailBill(tupleDetailBills).
-                totalsBill(TotalsBill.builder().
+                totalSalesBill(TotalSalesBill.builder().
                         BaseEuros(BigDecimal.valueOf(9600)).
                         VATEuros(BigDecimal.valueOf(1920)).
                         TotalEuros(BigDecimal.valueOf(11520)).
@@ -97,8 +98,8 @@ public class createPDFTest {
                         Iva(BigDecimal.valueOf(20)).build()).
                 build();
     }
-
-    @Test
+*/
+   /* @Test
     public void DataOneSellBillTest(){
 
         Gson gson = new Gson();
@@ -106,7 +107,7 @@ public class createPDFTest {
         tupleDetailBills.add(
                 new TupleDetailBill.Builder().concepto("160 hours work").importe("€11,520.00").build());
 
-        DataOneSellBill dataOneSellBill = DataOneSellBill.builder().
+        SalesBill salesBill = SalesBill.builder().
                 mySelf(MySelf.builder().fiscal_year("2020").TaxPeriod("Q2").
                         build()).
                 tupleHeadBill(new TupleHeadBill.Builder().Nombre("Trilateral-IT Ltd.").build()).
@@ -116,11 +117,11 @@ public class createPDFTest {
                         Iva(BigDecimal.valueOf(1768.28)).build()).
                 build();
 
-        System.out.println(dataOneSellBill.getMySelf().getCompanyName());
-        System.out.println(gson.toJson(dataOneSellBill));
+        System.out.println(salesBill.getMySelf().getCompanyName());
+        System.out.println(gson.toJson(salesBill));
         //createPDF mkpdf = new createPDF(getDataSellBill);
 
-    }
+    }*/
 
 
 }

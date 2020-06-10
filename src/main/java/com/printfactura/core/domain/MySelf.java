@@ -21,8 +21,8 @@ public class MySelf {
     private String PostCode ="EC4Y 0HP";
     private String Country ="United Kingdom";
 
-    private String TaxPeriod;
-    private String fiscal_year;
+    private String TaxPeriod="Q1";
+    private String fiscal_year="2020";
 
     private BigDecimal Vat = BigDecimal.valueOf(20);
     private String IBAN ="GB50 ABBY 0901 2938 4122 40";

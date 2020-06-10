@@ -7,6 +7,8 @@ import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
 import com.printfactura.core.domain.*;
+import com.printfactura.core.domain.sales.DetailSalesBill;
+import com.printfactura.core.domain.sales.SalesBill;
 
 import javax.naming.NamingException;
 import java.awt.*;
@@ -39,10 +41,10 @@ public class CreatePDF {
     private PdfPCell cell;
     private Paragraph p;
 
-    private final DataOneSellBill dataOneSellBill;
+    private final SalesBill salesBill;
 
-    public CreatePDF(DataOneSellBill dataOneSellBill) {
-        this.dataOneSellBill = dataOneSellBill;
+    public CreatePDF(SalesBill salesBill) {
+        this.salesBill = salesBill;
     }
 
 
@@ -132,7 +134,7 @@ public class CreatePDF {
 
     private void DocHead(){
 
-        PdfPCell h1 = new PdfPCell(new Paragraph(dataOneSellBill.getMySelf().getCompanyName(), FUENTE_ENCABEZADO));
+        PdfPCell h1 = new PdfPCell(new Paragraph(salesBill.getMySelf().getCompanyName(), FUENTE_ENCABEZADO));
         //h1.setGrayFill(0.7f);
         h1.setColspan(4);
         h1.setBorder(Rectangle.NO_BORDER);
@@ -157,29 +159,29 @@ public class CreatePDF {
     private void PhysicalAddress(){
 
         // Address street
-        PdfPCell address1 = new PdfPCell(new Paragraph(dataOneSellBill.getMySelf().getAddress(), FUENTE_MYSELF));
+        PdfPCell address1 = new PdfPCell(new Paragraph(salesBill.getMySelf().getAddress(), FUENTE_MYSELF));
         address1.setColspan(4);
         address1.setBorder(Rectangle.NO_BORDER);
         address1.setHorizontalAlignment(Element.ALIGN_LEFT);
         table.addCell(address1);
 
         // Address city and post code
-        address1 = new PdfPCell(new Paragraph(dataOneSellBill.getMySelf().getCity()+
-                ", "+dataOneSellBill.getMySelf().getPostCode(), FUENTE_MYSELF));
+        address1 = new PdfPCell(new Paragraph(salesBill.getMySelf().getCity()+
+                ", "+ salesBill.getMySelf().getPostCode(), FUENTE_MYSELF));
         address1.setColspan(4);
         address1.setBorder(Rectangle.NO_BORDER);
         address1.setHorizontalAlignment(Element.ALIGN_LEFT);
         table.addCell(address1);
 
         // Address country
-        address1 = new PdfPCell(new Paragraph(dataOneSellBill.getMySelf().getCountry(), FUENTE_MYSELF));
+        address1 = new PdfPCell(new Paragraph(salesBill.getMySelf().getCountry(), FUENTE_MYSELF));
         address1.setColspan(4);
         address1.setBorder(Rectangle.NO_BORDER);
         address1.setHorizontalAlignment(Element.ALIGN_LEFT);
         table.addCell(address1);
 
         // Company identification
-        address1 = new PdfPCell(new Paragraph(dataOneSellBill.getMySelf().getIdentification(), FUENTE_MYSELF));
+        address1 = new PdfPCell(new Paragraph(salesBill.getMySelf().getIdentification(), FUENTE_MYSELF));
         address1.setColspan(4);
         address1.setBorder(Rectangle.NO_BORDER);
         address1.setHorizontalAlignment(Element.ALIGN_LEFT);
@@ -218,9 +220,9 @@ public class CreatePDF {
         table.addCell(h1);*/
 
         // Invoice number
-        PdfPCell h2 = new PdfPCell(new Paragraph("Invoice nº: "+dataOneSellBill.getTupleHeadBill().getNumero().trim()
+        PdfPCell h2 = new PdfPCell(new Paragraph("Invoice nº: "+ salesBill.getHeadSalesBill().getBillNumber().trim()
                 +"     Date: "
-                +dataOneSellBill.getTupleHeadBill().getFecha(),FUENTE_GRIS_OSCURO));
+                + salesBill.getHeadSalesBill().getDate(), FUENTE_GRIS_OSCURO));
         //h2.setGrayFill(0.7f);
         h2.setColspan(1);
         h2.setBorder(Rectangle.NO_BORDER);
@@ -245,12 +247,12 @@ public class CreatePDF {
 
         // Datos del cliente
         PdfPCell h4 = new PdfPCell(new Paragraph("-Client details-\n"+
-                dataOneSellBill.getCustomerDetail().getCompanyName()+
-                "\n"+dataOneSellBill.getCustomerDetail().getAddress()+
-                "\n"+dataOneSellBill.getCustomerDetail().getPostCode()+" "+
-                dataOneSellBill.getCustomerDetail().getCity()+
-                "\n"+dataOneSellBill.getCustomerDetail().getCountry()+
-                "\n"+dataOneSellBill.getCustomerDetail().getIdentification()
+                salesBill.getCustomerDetail().getCompanyName()+
+                "\n"+ salesBill.getCustomerDetail().getAddress()+
+                "\n"+ salesBill.getCustomerDetail().getPostCode()+" "+
+                salesBill.getCustomerDetail().getCity()+
+                "\n"+ salesBill.getCustomerDetail().getCountry()+
+                "\n"+ salesBill.getCustomerDetail().getIdentification()
                 , FUENTE_MYSELF));
         //h4.setGrayFill(0.7f);
         h4.setColspan(4);
@@ -326,15 +328,15 @@ public class CreatePDF {
         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
         table.addCell(cell);
 
-        List<TupleDetailBill> LineasFactura = dataOneSellBill.getTupleDetailBill();
+        List<DetailSalesBill> LineasFactura = salesBill.getDetailSalesBill();
 
         int j=1;
 
-        for (TupleDetailBill lineasFact : LineasFactura) {
+        for (DetailSalesBill lineasFact : LineasFactura) {
 
             j++;
             // Linea de Concepto
-            p = new Paragraph(lineasFact.getConcepto(),FUENTE_CUERPO);
+            p = new Paragraph(lineasFact.getConcept(),FUENTE_CUERPO);
             p.setAlignment(Element.ALIGN_LEFT);
             cell = new PdfPCell();
             cell.setBorder(Rectangle.NO_BORDER);
@@ -343,7 +345,7 @@ public class CreatePDF {
 
 
             // Linea cantidad
-            p = new Paragraph(lineasFact.getUnidades(),FUENTE_CUERPO);
+            p = new Paragraph(String.valueOf(lineasFact.getUnit()),FUENTE_CUERPO);
             p.setAlignment(Element.ALIGN_RIGHT);
             cell = new PdfPCell();
             cell.setBorder(Rectangle.NO_BORDER);
@@ -352,7 +354,7 @@ public class CreatePDF {
 
 
             // Linea precio 1
-            p = new Paragraph(lineasFact.getImporte(),FUENTE_CUERPO);
+            p = new Paragraph(String.valueOf(lineasFact.getPrice()),FUENTE_CUERPO);
             p.setAlignment(Element.ALIGN_RIGHT);
             cell = new PdfPCell();
             cell.setBorder(Rectangle.NO_BORDER);
@@ -360,7 +362,7 @@ public class CreatePDF {
             table.addCell(cell);
 
             // Linea Importe 1
-            p = new Paragraph(lineasFact.getTotal(),FUENTE_CUERPO);
+            p = new Paragraph(String.valueOf(lineasFact.getAmount()),FUENTE_CUERPO);
             p.setAlignment(Element.ALIGN_RIGHT);
             cell = new PdfPCell();
             cell.setBorder(Rectangle.NO_BORDER);
@@ -387,9 +389,9 @@ public class CreatePDF {
 
         // añadir los totales
         PdfPCell pie = new PdfPCell(new Paragraph("Base  "+
-                NumberFormat.getCurrencyInstance(Locale.GERMANY).format(dataOneSellBill.getTotalsBill().getBaseEuros())+
-                " VAT 20% "+ NumberFormat.getCurrencyInstance(Locale.GERMANY).format(dataOneSellBill.getTotalsBill().getVATEuros())+
-                " Total "+NumberFormat.getCurrencyInstance(Locale.GERMANY).format(dataOneSellBill.getTotalsBill().getTotalEuros())
+                NumberFormat.getCurrencyInstance(Locale.GERMANY).format(salesBill.getTotalSalesBill().getBaseEuros())+
+                " VAT 20% "+ NumberFormat.getCurrencyInstance(Locale.GERMANY).format(salesBill.getTotalSalesBill().getVATEuros())+
+                " Total "+NumberFormat.getCurrencyInstance(Locale.GERMANY).format(salesBill.getTotalSalesBill().getTotalEuros())
                 ,FUENTE_TITULO));
         pie.setColspan(4);
         //pie.setGrayFill(0.7f);
@@ -399,11 +401,11 @@ public class CreatePDF {
         table.addCell(pie);
 
         pie = new PdfPCell(new Paragraph("HRMC exchange rates "+
-                dataOneSellBill.getTotalsBill().getHMRC_ExchangeRates()+
+                salesBill.getTotalSalesBill().getHMRC_ExchangeRates()+
                 " Base "+
-                NumberFormat.getCurrencyInstance(Locale.UK).format(dataOneSellBill.getTotalsBill().getBasePound())+
-                " VAT 20% "+ NumberFormat.getCurrencyInstance(Locale.UK).format(dataOneSellBill.getTotalsBill().getVATPound())+
-                " Total "+NumberFormat.getCurrencyInstance(Locale.UK).format(dataOneSellBill.getTotalsBill().getTotalPound())
+                NumberFormat.getCurrencyInstance(Locale.UK).format(salesBill.getTotalSalesBill().getBasePound())+
+                " VAT 20% "+ NumberFormat.getCurrencyInstance(Locale.UK).format(salesBill.getTotalSalesBill().getVATPound())+
+                " Total "+NumberFormat.getCurrencyInstance(Locale.UK).format(salesBill.getTotalSalesBill().getTotalPound())
                 ,FUENTE_TITULO));
         pie.setColspan(4);
 
@@ -441,7 +443,7 @@ public class CreatePDF {
 
 
 
-        TotalAPagar = TotalAPagar.add(dataOneSellBill.getTupleTotalBill().getTotal());
+        TotalAPagar = TotalAPagar.add(salesBill.getTotalSalesBill().getTotalEuros());
 
 
         // Total general
@@ -453,7 +455,7 @@ public class CreatePDF {
         table.addCell(pie2);*/
 
         p = new Paragraph(
-                "VAT "+NumberFormat.getCurrencyInstance(Locale.UK).format(dataOneSellBill.getTotalsBill().getVATPound())+
+                "VAT "+NumberFormat.getCurrencyInstance(Locale.UK).format(salesBill.getTotalSalesBill().getVATPound())+
                 "   Total bill " + NumberFormat.getCurrencyInstance(Locale.GERMANY).format(TotalAPagar), FUENTE_PIE_TABLA);
         p.setAlignment(Element.ALIGN_RIGHT);
         cell = new PdfPCell();
@@ -519,8 +521,8 @@ public class CreatePDF {
     {
 
         PdfPCell h6 = new PdfPCell(new Paragraph(
-                dataOneSellBill.getMySelf().getBankName()+"\n"+
-                dataOneSellBill.getMySelf().getBankAccount(),FUENTE_DIRECCION_POSTAL));
+                salesBill.getMySelf().getBankName()+"\n"+
+                salesBill.getMySelf().getBankAccount(),FUENTE_DIRECCION_POSTAL));
         //h6.setGrayFill(0.7f);
         h6.setColspan(4);
         h6.setBorder(Rectangle.NO_BORDER);
@@ -529,7 +531,7 @@ public class CreatePDF {
         table.addCell(h6);
 
         // Imprimir la dirección de la empresa
-        h6 = new PdfPCell(new Paragraph("IBAN "+dataOneSellBill.getMySelf().getIBAN(),FUENTE_TITULO));
+        h6 = new PdfPCell(new Paragraph("IBAN "+ salesBill.getMySelf().getIBAN(),FUENTE_TITULO));
         //h6.setGrayFill(0.7f);
         h6.setColspan(4);
         h6.setBorder(Rectangle.NO_BORDER);
