@@ -8,7 +8,6 @@ import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
 import com.printfactura.core.domain.sales.DetailSalesBill;
 import com.printfactura.core.domain.sales.SalesBill;
-import com.printfactura.core.domain.TupleDetailBill;
 
 import javax.naming.NamingException;
 import java.awt.*;
@@ -48,7 +47,7 @@ public class CreatePDFDoubleCurrency {
     }
 
 
-    public byte[] doit() throws DocumentException, SQLException, IOException, NamingException
+    public byte[] doit() throws DocumentException, IOException, NamingException
     {
         // Crear el PDF en memoria
         CreatePDFInMemory();
@@ -99,7 +98,7 @@ public class CreatePDFDoubleCurrency {
      * @throws IOException
      * @throws SQLException
      */
-    private void Save() throws DocumentException, IOException, SQLException
+    private void Save() throws DocumentException, IOException
     {
 
         /*Connection conn = PGconectar();
@@ -199,7 +198,7 @@ public class CreatePDFDoubleCurrency {
      *
      * @throws SQLException
      */
-    private void MakeTable() throws SQLException
+    private void MakeTable()
     {
 
         DocHead();
@@ -258,7 +257,7 @@ public class CreatePDFDoubleCurrency {
      * @throws SQLException
      * @throws DocumentException
      */
-    private int printDetailBill() throws SQLException, DocumentException
+    private int printDetailBill() throws DocumentException
     {
 
         Color gris = new Color(237,237,237);
@@ -357,7 +356,8 @@ public class CreatePDFDoubleCurrency {
      * @throws SQLException
      * @throws DocumentException
      */
-    private void printTotales() throws SQLException, DocumentException
+    private void printTotales() throws
+            DocumentException
     {
 
         //TupleTotalBill TotalesFactura = myGetDataSellBill.getPieFact(id_fact);
@@ -413,7 +413,7 @@ public class CreatePDFDoubleCurrency {
      * @throws DocumentException
      */
 
-    private void printLineasBlancos() throws SQLException, DocumentException
+    private void printLineasBlancos() throws DocumentException
     {
 
         // Linea de Concepto
@@ -457,7 +457,7 @@ public class CreatePDFDoubleCurrency {
      * @throws SQLException
      * @throws NamingException
      */
-    private void pintPie() throws SQLException, NamingException
+    private void pintPie() throws NamingException
     {
 
         PdfPCell h6 = new PdfPCell(new Paragraph(
