@@ -159,7 +159,7 @@ public class CreatePDF {
     private void PhysicalAddress(){
 
         // Address street
-        PdfPCell address1 = new PdfPCell(new Paragraph(salesBill.getMySelf().getAddress(), FUENTE_MYSELF));
+        var address1 = new PdfPCell(new Paragraph(salesBill.getMySelf().getAddress(), FUENTE_MYSELF));
         address1.setColspan(4);
         address1.setBorder(Rectangle.NO_BORDER);
         address1.setHorizontalAlignment(Element.ALIGN_LEFT);
@@ -362,7 +362,7 @@ public class CreatePDF {
             table.addCell(cell);
 
             // Linea Importe 1
-            p = new Paragraph(String.valueOf(lineasFact.getAmount()),FUENTE_CUERPO);
+            p = new Paragraph(String.valueOf(lineasFact.getTotalAmount()),FUENTE_CUERPO);
             p.setAlignment(Element.ALIGN_RIGHT);
             cell = new PdfPCell();
             cell.setBorder(Rectangle.NO_BORDER);

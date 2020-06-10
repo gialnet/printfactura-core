@@ -11,11 +11,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class DetailSalesBillTest {
 
-    static DetailSalesBill detailSalesBill;
+    private static DetailSalesBill detailSalesBill;
 
     @Test
     public void DetailSalesBillOneRowTest(){
-        
+
         detailSalesBill = DetailSalesBill.builder().Concept("Hours work March").
                 Unit(BigDecimal.valueOf(160)).
                 Price(BigDecimal.valueOf(60)).

@@ -2,23 +2,37 @@ package com.printfactura.core.domain;
 
 import com.printfactura.core.domain.customer.CustomerDetail;
 import com.printfactura.core.domain.sales.DetailSalesBill;
+import com.printfactura.core.domain.sales.HeadSalesBill;
 import com.printfactura.core.domain.sales.SalesBill;
 import com.printfactura.core.domain.sales.TotalSalesBill;
+import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 public class SalesBillTest {
 
+    @Test
+    public void SalesBillBuilderTest(){
 
-    public SalesBill MakeDataOneSellBill(){
+        var mySalesBill = SalesBillBuilder();
+
+        System.err.println(mySalesBill.getClass().getName());
+        assertEquals(mySalesBill.getClass().getName(),"com.printfactura.core.domain.sales.SalesBill");
+    }
+
+    public static SalesBill SalesBillBuilder(){
 
         List<DetailSalesBill> detailSalesBills = new ArrayList<>();
         detailSalesBills.add(
                 DetailSalesBill.builder().Concept("160 hours work").
                         Unit(BigDecimal.valueOf(160)).
-                        Amount(BigDecimal.valueOf(60)).
+                        Price(BigDecimal.valueOf(60)).
                         PorVAT(BigDecimal.valueOf(20)).build());
 
         return SalesBill.builder().
@@ -44,8 +58,9 @@ public class SalesBillTest {
                         Country("United Kingdom").
                         Identification("VAT Registration Number 928465196").
                         build()).
-                customerDetail(CustomerDetail.builder().
-                        CompanyName("Trilateral-IT Ltd.").
+                headSalesBill(HeadSalesBill.builder().
+                        BillNumber("2020/03/01").
+                        Date(ZonedDateTime.now().format(DateTimeFormatter.RFC_1123_DATE_TIME)).
                         build()).
                 detailSalesBill(detailSalesBills).
                 totalSalesBill(TotalSalesBill.builder().
