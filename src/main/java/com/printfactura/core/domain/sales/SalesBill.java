@@ -1,7 +1,7 @@
 package com.printfactura.core.domain.sales;
 
 import com.printfactura.core.domain.*;
-import com.printfactura.core.domain.customer.CustomerDetail;
+import com.printfactura.core.domain.customer.Customer;
 import lombok.*;
 
 import java.util.List;
@@ -15,7 +15,7 @@ import java.util.List;
 public class SalesBill {
 
     MySelf mySelf;
-    CustomerDetail customerDetail;
+    Customer customer;
     HeadSalesBill headSalesBill;
     List<DetailSalesBill> detailSalesBill;
     TotalSalesBill totalSalesBill;

@@ -10,7 +10,7 @@ import java.util.PrimitiveIterator;
 @NoArgsConstructor
 @Setter
 @Getter
-public class ElectronicAddress {
+public class CustomerElectronicAddress {
 
     // Reference James dto Sales Type= mobile Value= +447593690244
     // Reference Pamela dto. Accounting Type=email  Value= yourAddress@provider.com

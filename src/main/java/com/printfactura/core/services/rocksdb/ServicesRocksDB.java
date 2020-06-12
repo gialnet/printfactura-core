@@ -1,7 +1,7 @@
 package com.printfactura.core.services.rocksdb;
 
 import com.google.gson.Gson;
-import com.printfactura.core.domain.customer.CustomerDetail;
+import com.printfactura.core.domain.customer.Customer;
 import com.printfactura.core.repositories.rocksdb.KVRepository;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +19,7 @@ public class ServicesRocksDB {
 
     public void SaveCustomer(){
 
-        var customer = CustomerDetail.builder().
+        var customer = Customer.builder().
                 CompanyName("Super Company").
                 Identification("La madre superiora").
                 Address("His home").

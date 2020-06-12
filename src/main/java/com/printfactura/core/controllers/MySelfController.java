@@ -18,8 +18,8 @@ public class MySelfController {
     @GetMapping("/register")
     public String showForm(Model model) {
 
-        MySelf user = new MySelf();
-        model.addAttribute("user", user);
+        MySelf mySelf = new MySelf();
+        model.addAttribute("mySelf", mySelf);
 
         List<String> listProfession = Arrays.asList("Developer", "Tester", "Architect");
         model.addAttribute("listProfession", listProfession);
@@ -28,9 +28,21 @@ public class MySelfController {
     }
 
     @PostMapping("/register")
-    public String submitForm(@ModelAttribute("user") MySelf user) {
-        System.out.println(user);
-        log.info("saving value '{}'", user);
+    public String submitForm(@ModelAttribute("mySelf") MySelf mySelf) {
+        System.out.println(mySelf);
+        log.info("saving value '{}'", mySelf);
         return "register_success";
+    }
+
+    @GetMapping("/login")
+    public String showFormLogin(Model model) {
+
+        /*MySelf mySelf = new MySelf();
+        model.addAttribute("mySelf", mySelf);
+
+        List<String> listProfession = Arrays.asList("Developer", "Tester", "Architect");
+        model.addAttribute("listProfession", listProfession);*/
+
+        return "login";
     }
 }

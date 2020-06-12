@@ -230,12 +230,12 @@ public class CreatePDFDoubleCurrency {
 
         // Datos del cliente
         PdfPCell h4 = new PdfPCell(new Paragraph("-Client details-\n"+
-                salesBill.getCustomerDetail().getCompanyName()+
-                "\n"+ salesBill.getCustomerDetail().getAddress()+
-                "\n"+ salesBill.getCustomerDetail().getPostCode()+" "+
-                salesBill.getCustomerDetail().getCity()+
-                "\n"+ salesBill.getCustomerDetail().getCountry()+
-                "\n"+ salesBill.getCustomerDetail().getIdentification()
+                salesBill.getCustomer().getCompanyName()+
+                "\n"+ salesBill.getCustomer().getAddress()+
+                "\n"+ salesBill.getCustomer().getPostCode()+" "+
+                salesBill.getCustomer().getCity()+
+                "\n"+ salesBill.getCustomer().getCountry()+
+                "\n"+ salesBill.getCustomer().getIdentification()
                 , FUENTE_MYSELF));
         //h4.setGrayFill(0.7f);
         h4.setColspan(4);

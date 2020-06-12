@@ -1,7 +1,7 @@
 package com.printfactura.core.domain.sales;
 
 
-import com.printfactura.core.domain.customer.CustomerDetail;
+import com.printfactura.core.domain.customer.Customer;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -24,7 +24,7 @@ public class HeadSalesBill {
     private String State;
 
     // Customer information
-    private CustomerDetail customerDetail;
+    private Customer customer;
 
     // Direct debit information (optional)
     private DirectDebits directDebits;

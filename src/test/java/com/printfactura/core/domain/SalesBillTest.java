@@ -1,6 +1,8 @@
 package com.printfactura.core.domain;
 
-import com.printfactura.core.domain.customer.CustomerDetail;
+import com.google.gson.Gson;
+import com.printfactura.core.domain.customer.Customer;
+import com.printfactura.core.domain.customer.CustomerElectronicAddress;
 import com.printfactura.core.domain.sales.DetailSalesBill;
 import com.printfactura.core.domain.sales.HeadSalesBill;
 import com.printfactura.core.domain.sales.SalesBill;
@@ -17,6 +19,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class SalesBillTest {
 
+    private Gson gson = new Gson();
+
     @Test
     public void SalesBillBuilderTest(){
 
@@ -24,6 +28,7 @@ public class SalesBillTest {
 
         System.err.println(mySalesBill.getClass().getName());
         assertEquals(mySalesBill.getClass().getName(),"com.printfactura.core.domain.sales.SalesBill");
+        System.err.println(gson.toJson(mySalesBill));
     }
 
     public static SalesBill SalesBillBuilder(){
@@ -34,6 +39,18 @@ public class SalesBillTest {
                         Unit(BigDecimal.valueOf(160)).
                         Price(BigDecimal.valueOf(60)).
                         PorVAT(BigDecimal.valueOf(20)).build());
+
+        List<CustomerElectronicAddress> customerElectronicAddresses = new ArrayList<>();
+
+        customerElectronicAddresses.add(CustomerElectronicAddress.builder().
+                Reference("James Brennan, sales").
+                Type("email").
+                Value("James@trilateral-it.com").build());
+
+        customerElectronicAddresses.add(CustomerElectronicAddress.builder().
+                Reference("Pamela Perfitt, payments").
+                Type("email").
+                Value("Pamela@trilateral-it.com").build());
 
         return SalesBill.builder().
                 mySelf(MySelf.builder().
@@ -50,13 +67,14 @@ public class SalesBillTest {
                         fiscal_year("2020").
                         TaxPeriod("Q2").
                         build()).
-                customerDetail(CustomerDetail.builder().
+                customer(Customer.builder().
                         CompanyName("Trilateral-IT LTD").
                         Address("Onega House, 112 Main Road").
                         City("Kent").
                         PostCode("DA14 6NE Sidcup").
                         Country("United Kingdom").
                         Identification("VAT Registration Number 928465196").
+                        customerElectronicAddresses(customerElectronicAddresses).
                         build()).
                 headSalesBill(HeadSalesBill.builder().
                         BillNumber("2020/03/01").

@@ -10,7 +10,7 @@ import java.util.List;
 @NoArgsConstructor
 @Setter
 @Getter
-public class CustomerDetail {
+public class Customer {
 
     /*
     Trilateral-IT Ltd.
@@ -27,5 +27,5 @@ public class CustomerDetail {
     private String City =" Kent";
     private String PostCode ="DA14 6NE Sidcup";
     private String Country ="United Kingdom";
-    private List<ElectronicAddress> electronicAddresses;
+    private List<CustomerElectronicAddress> customerElectronicAddresses;
 }
