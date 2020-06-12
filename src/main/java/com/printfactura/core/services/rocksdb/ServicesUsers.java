@@ -23,10 +23,10 @@ public class ServicesUsers {
      *
      * @param appUser
      */
-    public void SaveUser(AppUser appUser){
+    public boolean SaveUser(AppUser appUser){
 
         // save IdUser usually email address antonio@gmial.com
-        repository.save(appUser.getIdUser(), gson.toJson(appUser));
+        return repository.save(appUser.getIdUser(), gson.toJson(appUser));
 
     }
 
@@ -34,10 +34,9 @@ public class ServicesUsers {
      * Search for an user
      * @param IdUser
      */
-    public void FindUser(String IdUser){
+    public Optional<Object> FindUser(String IdUser){
 
-        Optional<Object> appUser = repository.find(IdUser);
-        
+        return repository.find(IdUser);
 
     }
 }
