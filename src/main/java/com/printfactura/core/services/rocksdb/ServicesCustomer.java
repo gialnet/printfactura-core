@@ -11,11 +11,11 @@ import java.util.List;
 public class ServicesCustomer {
 
     private Gson gson = new Gson();
-
-    List<Customer> customers = new ArrayList<>();
+    private List<Customer> customers = new ArrayList<>();
 
     public List<Customer> MakeListCustomers() {
 
+        customers.clear();
         // Add customer
         customers.add(Customer.builder().
                 CompanyName("Trilateral IT").

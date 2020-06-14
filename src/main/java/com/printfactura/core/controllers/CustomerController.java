@@ -23,7 +23,8 @@ public class CustomerController {
     public String showForm(Model model) {
 
         List<Customer> lc = servicesCustomer.MakeListCustomers();
-        log.info("' company name{}'",lc.get(0).getCompanyName());
+        log.info("company name '{}'",lc.get(0).getCompanyName());
+        log.info("number of records '{}'",lc.size());
         model.addAttribute("customers", lc);
 
         return "customergrid";
