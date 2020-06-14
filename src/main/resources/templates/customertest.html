@@ -1,0 +1,36 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>All Books</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h1> Books </h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th> Title </th>
+                    <th> Author </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${customers.empty}">
+                    <td colspan="2"> No Books Available </td>
+                </tr>
+                <tr th:each="customer , stat : ${customers}">
+                    <td><span th:text="${customer.getCompanyName()}"> Title </span></td>
+                        <td><span th:text="${customer.getAddress()}"> Author </span></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

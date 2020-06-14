@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Print Factura, home</title>
+    <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="flex flex-col">
+  <div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
+    <div class="align-middle inline-block min-w-full shadow overflow-hidden sm:rounded-lg border-b border-gray-200">
+      <!-- Table -->
+      <table class="min-w-full">
+        <!-- Table head -->
+        <thead>
+          <tr>
+            <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+              Name
+            </th>
+            <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+              Address
+            </th>
+            <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+              City
+            </th>
+            <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+              Post Code
+            </th>
+            <th class="px-6 py-3 border-b border-gray-200 bg-gray-50"></th>
+          </tr>
+        </thead>
+
+        <!-- Table body -->
+
+        <tbody class="bg-white">
+          <!--/*@thymesVar id="customers" type="java"*/-->
+          <tr th:each="customer , stat : ${customers}">
+
+            <!-- Primera fila, primera columna -->
+
+            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+              <div class="flex items-center">
+                <div class="ml-4">
+                  <div class="text-sm leading-5 font-medium text-gray-900">
+                    <span th:text="${customer.getCompanyName()}">
+                </div>
+              </div>
+            </td>
+
+            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+              <div class="text-sm leading-5 text-gray-900">
+                <span th:text="${customer.getAddress()}">
+              </div>
+             <!--  <div class="text-sm leading-5 text-gray-500">Human Resources
+              </div> -->
+            </td>
+
+            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+              <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                London
+              </span>
+            </td>
+
+            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500">
+              EC4Y 0HP
+            </td>
+
+            <td class="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium">
+              <a href="#" class="text-indigo-600 hover:text-indigo-900">Edit
+              </a>
+            </td>
+
+          </tr>
+          
+          
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+</body>

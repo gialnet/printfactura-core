@@ -9,3 +9,9 @@ mvn spring-boot:build-image
 
 mvn deploy:deploy-file -DgroupId=eu.europa.ec.markt.dss -DartifactId=dss-itext -Dversion=1.00 -Durl=file:local-maven-repo/ -DrepositoryId=local-
 maven-repo -DupdateReleaseInfo=true -Dfile=local-maven-repo/dss-itext-1.00.jar
+
+
+docker run -p 6379:6379 --name turedis -d redis redis-server --appendonly yes
+
+-- doesn't work
+docker run -it --network localhost --rm redis redis-cli -h turedis
