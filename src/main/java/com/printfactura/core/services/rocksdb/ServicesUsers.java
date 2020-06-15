@@ -21,9 +21,17 @@ public class ServicesUsers {
      *  Save IdUser usually email address antonio@gmial.com
      *  the value the object AppUser in JSON
      *
+     *  Create two fields for customer sequence and invoice sequence
+     *  sequence.customer.antonio@gmial.com    => 0
+     *  sequence.invoice.antonio@gmial.com     => 0
+     *
      * @param appUser
      */
     public boolean SaveUser(AppUser appUser){
+
+        // Create two fields for customer sequence and invoice sequence
+        repository.save("sequence.customer." + appUser.getIdUser(), 0);
+        repository.save("sequence.invoice." +  appUser.getIdUser(), 0);
 
         // save IdUser usually email address antonio@gmial.com
         return repository.save(appUser.getIdUser(), gson.toJson(appUser));
