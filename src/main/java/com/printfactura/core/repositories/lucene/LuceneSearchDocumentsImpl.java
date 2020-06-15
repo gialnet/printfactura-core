@@ -21,20 +21,25 @@ import java.nio.file.Paths;
 @Repository
 public class LuceneSearchDocumentsImpl implements LuceneSearchDocuments {
 
-    private final String INDEX_DIR = "c:/temp/lucene6index";
+    private final String INDEX_DIR = "c:/temp/lucene8index/";
 
-    public IndexSearcher createSearcher() throws IOException {
+    @Override
+    public String CreateIndexFolder(String suuid) {
+        return null;
+    }
 
-        Directory dir = FSDirectory.open(Paths.get(INDEX_DIR));
+    public IndexSearcher createSearcher(String folder) throws IOException {
+
+        Directory dir = FSDirectory.open(Paths.get(INDEX_DIR + folder));
         IndexReader reader = DirectoryReader.open(dir);
         IndexSearcher searcher = new IndexSearcher(reader);
 
         return searcher;
     }
 
-    private void LuceneReadIndex() throws Exception {
+    private void LuceneReadIndex(String suuid) throws Exception {
 
-        IndexSearcher searcher = createSearcher();
+        IndexSearcher searcher = createSearcher("customer/" + suuid);
 
         //Search by ID
         TopDocs foundDocs = searchById("1", searcher);
@@ -75,4 +80,6 @@ public class LuceneSearchDocumentsImpl implements LuceneSearchDocuments {
         TopDocs hits = searcher.search(firstNameQuery, 10);
         return hits;
     }
+
+
 }

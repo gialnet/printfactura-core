@@ -6,6 +6,7 @@ import com.printfactura.core.repositories.rocksdb.KVRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class ServicesUsers {
@@ -25,6 +26,11 @@ public class ServicesUsers {
      *  sequence.customer.antonio@gmial.com    => 0
      *  sequence.invoice.antonio@gmial.com     => 0
      *
+     *  Create an UUID version 4 for each user this number it is use for Lucene Index
+     *  to create a different folder to contain the index
+     *  /lucene8/customers/880d6dd3-9e6e-4c6a-8791-8c0d682e6d19
+     *  /lucene8/invoices/880d6dd3-9e6e-4c6a-8791-8c0d682e6d19
+     *
      * @param appUser
      */
     public boolean SaveUser(AppUser appUser){
@@ -32,6 +38,9 @@ public class ServicesUsers {
         // Create two fields for customer sequence and invoice sequence
         repository.save("sequence.customer." + appUser.getIdUser(), 0);
         repository.save("sequence.invoice." +  appUser.getIdUser(), 0);
+
+        // Create an UUID version 4 for each user
+        repository.save("user.uuid." +  appUser.getIdUser(), UUID.randomUUID());
 
         // save IdUser usually email address antonio@gmial.com
         return repository.save(appUser.getIdUser(), gson.toJson(appUser));

@@ -16,6 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class LuceneWriteDocumentsImplTest {
 
 
+    // max docs 2.147.483.519
     LuceneWriteDocumentsImpl luceneWriteDocuments = new LuceneWriteDocumentsImpl();
     LuceneSearchDocumentsImpl luceneSearchDocuments = new LuceneSearchDocumentsImpl();
 

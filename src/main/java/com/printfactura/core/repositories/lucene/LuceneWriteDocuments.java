@@ -7,7 +7,7 @@ import java.io.IOException;
 
 public interface LuceneWriteDocuments {
 
-    boolean WriteCustomerDocument(Customer customer) throws IOException;
+    boolean WriteCustomerDocument(Customer customer, String suuid) throws IOException;
 
-    boolean WriteInvoiceDocument(InvoiceSalesUI invoiceSalesUI) throws IOException;
+    boolean WriteInvoiceDocument(InvoiceSalesUI invoiceSalesUI, String suuid) throws IOException;
 }

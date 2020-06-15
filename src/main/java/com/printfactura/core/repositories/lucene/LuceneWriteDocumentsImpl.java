@@ -10,7 +10,9 @@ import org.apache.lucene.document.StringField;
 import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.index.memory.MemoryIndex;
 import org.apache.lucene.store.FSDirectory;
+
 import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
@@ -20,23 +22,25 @@ import java.nio.file.Paths;
 @Repository
 public class LuceneWriteDocumentsImpl implements LuceneWriteDocuments {
 
-    private final String INDEX_DIR = "c:/temp/lucene6index";
+    private final String INDEX_DIR = "c:/temp/lucene8index/";
 
     public LuceneWriteDocumentsImpl() {
     }
 
-    private IndexWriter createWriter() throws IOException
+    private IndexWriter createWriter(String suuid) throws IOException
     {
-        FSDirectory dir = FSDirectory.open(Paths.get(INDEX_DIR));
+        FSDirectory dir = FSDirectory.open(Paths.get(INDEX_DIR + suuid));
         IndexWriterConfig config = new IndexWriterConfig(new StandardAnalyzer());
+        // Create index in Memory RAM
+        // MemoryIndex index = new MemoryIndex();
         IndexWriter writer = new IndexWriter(dir, config);
         return writer;
     }
 
     @Override
-    public boolean WriteCustomerDocument(Customer customer) throws IOException {
+    public boolean WriteCustomerDocument(Customer customer, String suuid) throws IOException {
 
-        IndexWriter writer = createWriter();
+        IndexWriter writer = createWriter("customer/" + suuid);
 
         Document customerDoc = CreateCustomerDocument(customer);
 
@@ -73,8 +77,9 @@ public class LuceneWriteDocumentsImpl implements LuceneWriteDocuments {
 
 
     @Override
-    public boolean WriteInvoiceDocument(InvoiceSalesUI invoiceSalesUI) throws IOException {
-        IndexWriter writer = createWriter();
+    public boolean WriteInvoiceDocument(InvoiceSalesUI invoiceSalesUI, String suuid) throws IOException {
+
+        IndexWriter writer = createWriter("invoice/" + suuid);
 
         Document invoiceDoc = CreateInvoiceDocument(invoiceSalesUI);
 
