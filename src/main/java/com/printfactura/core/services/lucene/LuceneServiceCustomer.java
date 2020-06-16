@@ -16,9 +16,6 @@ import java.util.List;
 @Service
 public class LuceneServiceCustomer {
 
-    // lo pasara el controller
-    private AppUser appUser;
-
     private List<Customer> customers = new ArrayList<>();
     private final LuceneSearchDocuments<CustomerSearch> customerSearch;
 
@@ -26,11 +23,13 @@ public class LuceneServiceCustomer {
         this.customerSearch = customerSearch;
     }
 
-    public List<Customer> searchByIdCode(String IdCode) throws Exception {
+    public List<Customer> searchByIdCode(String IdCode, AppUser appUser) throws Exception {
 
+        // Select Index by AppUser UserUUID
         IndexSearcher searcher = customerSearch.CustomerSearch().CreateSearcherCustomer(appUser);
         customers.clear();
 
+        // search by customer code
         TopDocs docFound = customerSearch.CustomerSearch().searchByIdCode(IdCode);
 
         for (ScoreDoc sd : docFound.scoreDocs)
