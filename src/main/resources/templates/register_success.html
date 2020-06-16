@@ -15,8 +15,8 @@
 <div align="center">
     <h2>Registration Succeeded!</h2>
     <span>Full name:</span><!--/*@thymesVar id="mySelf" type="java"*/-->
-    <span th:text="${mySelf.CompanyName}"></span><br/>
-    <span>E-mail:</span><span th:text="${mySelf.Address}"></span><br/>
+    <span th:text="${AppUser.getIdUser()}"></span><br/>
+    <span>E-mail:</span><span th:text="${AppUser.getUserUUID()}"></span><br/>
 </div>
 </body>
 </html>

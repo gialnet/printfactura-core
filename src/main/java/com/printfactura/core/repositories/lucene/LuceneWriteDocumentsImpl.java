@@ -1,5 +1,6 @@
 package com.printfactura.core.repositories.lucene;
 
+import com.printfactura.core.domain.appusers.AppUser;
 import com.printfactura.core.domain.customer.Customer;
 import com.printfactura.core.domain.sales.ui.InvoiceSalesUI;
 import lombok.extern.slf4j.Slf4j;
@@ -96,6 +97,7 @@ public class LuceneWriteDocumentsImpl implements LuceneWriteDocuments {
         return true;
     }
 
+
     private Document CreateInvoiceDocument(InvoiceSalesUI invoiceSalesUI){
 
         Document document = new Document();
@@ -106,6 +108,38 @@ public class LuceneWriteDocumentsImpl implements LuceneWriteDocuments {
         document.add(new StringField("NumberInvoice", invoiceSalesUI.getNumberInvoice() , Field.Store.YES));
         document.add(new StringField("TotalAmount", invoiceSalesUI.getTotalAmount() , Field.Store.YES));
         document.add(new StringField("VAT", invoiceSalesUI.getVAT() , Field.Store.YES));
+
+        return document;
+    }
+
+    /* *************  AppUser  ******************* */
+    @Override
+    public boolean WriteAppUserDocument(AppUser appUser) throws IOException {
+
+        IndexWriter writer = createWriter("AppUsers");
+
+        Document customerDoc = CreateAppUserDocument(appUser);
+
+        //Let's clean everything first
+        writer.deleteAll();
+
+        writer.addDocument(customerDoc);
+
+        // List<Document>
+        //writer.addDocuments(documents);
+        writer.commit();
+        writer.close();
+
+        return true;
+    }
+
+    private Document CreateAppUserDocument(AppUser appUser) {
+        Document document = new Document();
+
+
+        document.add(new StringField("IdUser", appUser.getIdUser() , Field.Store.YES));
+        document.add(new StringField("UserUUID", appUser.getUserUUID() , Field.Store.YES));
+        document.add(new StringField("Status", appUser.getStatus() , Field.Store.YES));
 
         return document;
     }

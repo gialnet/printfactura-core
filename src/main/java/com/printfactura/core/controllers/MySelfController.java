@@ -38,17 +38,7 @@ public class MySelfController {
         return "menu";
     }
 
-    @GetMapping("/register")
-    public String showForm(Model model) {
 
-        MySelf mySelf = new MySelf();
-        model.addAttribute("mySelf", mySelf);
-
-        List<String> listProfession = Arrays.asList("Developer", "Tester", "Architect");
-        model.addAttribute("listProfession", listProfession);
-
-        return "register_form";
-    }
 
     @GetMapping("/myself")
     public String showFormMySelf(Model model) {
@@ -59,12 +49,6 @@ public class MySelfController {
         return "myself";
     }
 
-    @PostMapping("/register")
-    public String submitForm(@ModelAttribute("mySelf") MySelf mySelf) {
-        System.out.println(mySelf);
-        log.info("saving value '{}'", mySelf);
-        return "register_success";
-    }
 
     @GetMapping("/login")
     public String showFormLogin(Model model, HttpSession session) {
