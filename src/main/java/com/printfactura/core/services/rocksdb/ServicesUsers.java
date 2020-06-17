@@ -18,6 +18,7 @@ public class ServicesUsers {
     private final KVRepository<String, Object> repository;
     private final LuceneWriteRepository luceneWriteRepository;
     private Optional<Object> user;
+    private AppUser appUser;
 
     public ServicesUsers(KVRepository<String, Object> repository, LuceneWriteRepository luceneWriteRepository) {
         this.repository = repository;
@@ -72,6 +73,41 @@ public class ServicesUsers {
 
         return repository.find(IdUser);
 
+    }
+
+    /**
+     *
+     * @param user
+     * @param password
+     * @return
+     */
+    public boolean UserAuthByUserAndPassword(String user, String password){
+
+        var userdata = FindUser(user);
+        if (userdata.isEmpty()){
+
+            log.info("User doesn't exist");
+            return false;
+        }
+        else {
+            String value = (String) userdata.get();
+            appUser=gson.fromJson(value, AppUser.class);
+            if (appUser.getIdUser().equals(user)) {
+                if (appUser.getPassword().equals(password)) {
+                    log.info("User and password match");
+                    return true;
+                }
+                else {
+                    log.info("Password doesn't match match");
+                    return false;
+                }
+            }
+            else {
+                log.info("User doesn't match match");
+                return false;
+            }
+
+        }
     }
 
     /**

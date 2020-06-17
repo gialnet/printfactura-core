@@ -47,7 +47,6 @@ class ServicesUsersTest {
            System.out.println(value);
 
             // From JSON to Object
-            AppUser appUser;
 
             // Don't matter if value it is String or JSON
             appUser=gson.fromJson(value, AppUser.class);
@@ -92,6 +91,33 @@ class ServicesUsersTest {
             System.out.println(value);
         }
 
+
+    }
+
+    @Test
+    public void UserAuthByUserAndPassword(){
+
+        String user = "antonio@gmail.comh";
+        String pass = "a1b";
+        var userdata = servicesUsers.FindUser(user);
+        if (userdata.isEmpty()){
+
+            System.out.println("User doesn't exist");
+        }
+        else {
+            String value = (String) userdata.get();
+            appUser=gson.fromJson(value, AppUser.class);
+            if (appUser.getIdUser().equals(user)) {
+                if (appUser.getPassword().equals(pass))
+                    System.out.println("User and password match");
+                else
+                    System.out.println("Password doesn't match match");
+            }
+            else {
+                System.out.println("User doesn't match match");
+            }
+
+        }
 
     }
 }

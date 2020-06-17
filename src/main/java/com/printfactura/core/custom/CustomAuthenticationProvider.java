@@ -8,10 +8,14 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 
-import static com.printfactura.core.custom.ShouldAuthenticateAgainstThirdPartySystem.shouldAuthenticateAgainstThirdPartySystem;
-
 @Component
 public class CustomAuthenticationProvider implements AuthenticationProvider {
+
+    private final ShouldAuthenticateAgainstThirdPartySystem shouldAuth;
+
+    public CustomAuthenticationProvider(ShouldAuthenticateAgainstThirdPartySystem shouldAuth) {
+        this.shouldAuth = shouldAuth;
+    }
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
@@ -19,7 +23,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         String name = authentication.getName();
         String password = authentication.getCredentials().toString();
 
-        if (shouldAuthenticateAgainstThirdPartySystem(name, password)) {
+        if (shouldAuth.AuthenticateAgainstThirdPartySystem(name, password)) {
 
             // use the credentials
             // and authenticate against the third-party system

@@ -11,8 +11,12 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.Optional;
+import java.util.UUID;
 
 @Slf4j
 @Controller
@@ -25,6 +29,45 @@ public class UserController {
     public UserController(LuceneServiceAppUser luceneServiceAppUser, ServicesUsers servicesUsers) {
         this.luceneServiceAppUser = luceneServiceAppUser;
         this.servicesUsers = servicesUsers;
+    }
+
+    @GetMapping(value = "/login")
+    public String showFormLogin(Model model,
+                                HttpSession session) {
+
+        log.info("error value '{}'", model.getAttribute("error"));
+        if (model.getAttribute("error")!=null)
+                model.addAttribute("message", " user or password wrong");
+        else
+            model.addAttribute("message", " write your email");
+
+
+        //session.setAttribute("id",uuid.toString());
+        /*var appUser = AppUser.builder().build();
+        model.addAttribute("AppUser",appUser);*/
+
+        log.info("Login");
+        return "login";
+    }
+
+    @PostMapping("/login")
+    public String submitFormUser(@ModelAttribute("AppUser") AppUser appUser, @RequestParam("status") String error) {
+
+        log.info("saving value '{}' '{}'", appUser, error);
+
+       /* Optional result = servicesUsers.FindUser(appUser.getIdUser());
+        if (result.isEmpty())
+            return "AlertMessage";*/
+
+        log.info("Post Login");
+
+        return "menu";
+    }
+
+    @GetMapping("/access-denied")
+    public String accessDenied() {
+        log.info("error/access-denied");
+        return "error/access-denied";
     }
 
     @GetMapping("/register")
@@ -68,7 +111,7 @@ public class UserController {
         else{
             log.info("AppUser for new user '{}'", appUser);
             model.addAttribute("AppUser", appUser);
-            model.addAttribute("message", "Error message");
+            model.addAttribute("message", " already exist");
             return "/register";
         }
 
