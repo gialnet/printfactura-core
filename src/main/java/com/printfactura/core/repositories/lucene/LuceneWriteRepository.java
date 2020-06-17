@@ -14,6 +14,7 @@ import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.memory.MemoryIndex;
 import org.apache.lucene.store.FSDirectory;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
@@ -24,13 +25,15 @@ import java.nio.file.Paths;
 public class LuceneWriteRepository implements LuceneWriteDocuments {
 
     private final String INDEX_DIR = "c:/temp/lucene8index/";
+    @Value("${lucene-path}")
+    private String lucene_path;
 
     public LuceneWriteRepository() {
     }
 
     private IndexWriter createWriter(String suuid) throws IOException
     {
-        FSDirectory dir = FSDirectory.open(Paths.get(INDEX_DIR + suuid));
+        FSDirectory dir = FSDirectory.open(Paths.get(lucene_path + suuid));
         IndexWriterConfig config = new IndexWriterConfig(new StandardAnalyzer());
         // Create index in Memory RAM
         // MemoryIndex index = new MemoryIndex();

@@ -12,6 +12,7 @@ import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -22,6 +23,8 @@ public class CustomerSearch extends SearchDocument {
         super(folder);
     }*/
 
+    @Value("${lucene-path}")
+    private String lucene_path;
 
     //@Override
     public TopDocs searchByIdCode(String IdCode) throws ParseException, IOException {
@@ -43,7 +46,7 @@ public class CustomerSearch extends SearchDocument {
     public IndexSearcher CreateSearcherCustomer(AppUser appUser) throws IOException {
 
         //indexSearcher=createSearcher("c:/temp/lucene8index/AppUsers");
-        Directory dir = FSDirectory.open(Paths.get( "c:/temp/lucene8index/customer/"+appUser.getUserUUID()));
+        Directory dir = FSDirectory.open(Paths.get( lucene_path+"customer/"+appUser.getUserUUID()));
         IndexReader reader = DirectoryReader.open(dir);
         // IndexSearcher searcher = new IndexSearcher(reader);
 
