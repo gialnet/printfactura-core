@@ -8,8 +8,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.util.Date;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -21,14 +23,14 @@ class ServicesUsersTest {
 
     Gson gson= new Gson();
 
-    @Test
-    void saveUser() {
+    AppUser appUser;
 
-        AppUser appUser = AppUser.builder().
+    @Test
+    void saveUser() throws IOException {
+
+        appUser = AppUser.builder().
                 IdUser("antonio@gmail.com".toLowerCase()).
                 Password("a1").
-                SignDate(new Date()).
-                Status("newUser").
                 build();
 
         assertEquals(servicesUsers.SaveUser(appUser), true);
@@ -39,17 +41,57 @@ class ServicesUsersTest {
 
        var user = servicesUsers.FindUser("antonio@gmail.com");
 
-       System.err.println(user.toString());
-       String value = (String) user.get();
-       System.out.println(value);
+       if (user.isPresent()){
+           System.err.println(user.toString());
+           String value = (String) user.get();
+           System.out.println(value);
 
-        // From JSON to Object
-        AppUser appUser;
+            // From JSON to Object
+            AppUser appUser;
 
-        // Don't matter if value it is String or JSON
-        appUser=gson.fromJson(value, AppUser.class);
-        System.out.println(appUser.getIdUser());
-        System.out.println(appUser.getPassword());
+            // Don't matter if value it is String or JSON
+            appUser=gson.fromJson(value, AppUser.class);
+            System.out.println(appUser.getIdUser());
+            System.out.println(appUser.getPassword());
+
+       }
+       assertNotEquals(user, Optional.empty());
+    }
+
+    @Test
+    void NotFindUser() {
+
+        var user = servicesUsers.FindUser("antonioXX@gmail.com");
+        assertEquals(user, Optional.empty());
+    }
+
+    @Test
+    void registerUserExist() {
+
+        var user = servicesUsers.FindUser("antonio@gmail.com");
+        if (user.isPresent())
+            System.out.println("Send alert signal");
+
+        assertNotEquals(user, Optional.empty());
+    }
+
+    @Test
+    void registerUserNotExist() throws IOException {
+
+        appUser = AppUser.builder().
+                IdUser("newuser2@gmail.com".toLowerCase()).
+                Password("a1").
+                build();
+
+        var user = servicesUsers.FindUser(appUser.getIdUser());
+
+        if (user.isEmpty()){
+            servicesUsers.SaveUser(appUser);
+            var valueFind = servicesUsers.FindKey("sequence.customer."+appUser.getIdUser());
+            Integer value = (Integer) valueFind.get();
+            System.out.println(value);
+        }
+
 
     }
 }

@@ -3,12 +3,7 @@ package com.printfactura.core.repositories.lucene;
 import com.printfactura.core.domain.appusers.AppUser;
 import com.printfactura.core.domain.customer.Customer;
 import com.printfactura.core.services.lucene.LuceneServiceAppUser;
-import com.printfactura.core.services.lucene.LuceneServiceCustomer;
 import com.printfactura.core.testutils.BuildCustomerObject;
-import org.apache.lucene.document.Document;
-import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.ScoreDoc;
-import org.apache.lucene.search.TopDocs;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,17 +11,15 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.io.IOException;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @SpringBootTest
-class LuceneWriteDocumentsImplTest {
+class LuceneWriteRepositoryTest {
 
 
     @Autowired
     private LuceneServiceAppUser luceneServiceAppUser;
 
     // max docs 2.147.483.519
-    LuceneWriteDocumentsImpl luceneWriteDocuments = new LuceneWriteDocumentsImpl();
+    LuceneWriteRepository luceneWriteDocuments = new LuceneWriteRepository();
     //LuceneSearchDocumentsImpl luceneSearchDocuments = new LuceneSearchDocumentsImpl();
 
     @Test
@@ -43,7 +36,7 @@ class LuceneWriteDocumentsImplTest {
 
     @Test
     public void ServiceSearchAppUser() throws Exception {
-        AppUser appUser = luceneServiceAppUser.searchByIdUser("antonio.gialnet@gmail.com");
+        AppUser appUser = luceneServiceAppUser.searchByIdUser("antonio@gmail.com");
         System.out.println(appUser.getUserUUID());
         System.out.println(appUser.getIdUser());
     }

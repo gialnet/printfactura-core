@@ -21,11 +21,11 @@ import java.nio.file.Paths;
 
 @Slf4j
 @Repository
-public class LuceneWriteDocumentsImpl implements LuceneWriteDocuments {
+public class LuceneWriteRepository implements LuceneWriteDocuments {
 
     private final String INDEX_DIR = "c:/temp/lucene8index/";
 
-    public LuceneWriteDocumentsImpl() {
+    public LuceneWriteRepository() {
     }
 
     private IndexWriter createWriter(String suuid) throws IOException

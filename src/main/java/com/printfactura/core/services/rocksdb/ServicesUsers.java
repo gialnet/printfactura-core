@@ -2,20 +2,26 @@ package com.printfactura.core.services.rocksdb;
 
 import com.google.gson.Gson;
 import com.printfactura.core.domain.appusers.AppUser;
+import com.printfactura.core.repositories.lucene.LuceneWriteRepository;
 import com.printfactura.core.repositories.rocksdb.KVRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.Optional;
-import java.util.UUID;
 
+@Slf4j
 @Service
 public class ServicesUsers {
 
     private Gson gson = new Gson();
     private final KVRepository<String, Object> repository;
+    private final LuceneWriteRepository luceneWriteRepository;
+    private Optional<Object> user;
 
-    public ServicesUsers(KVRepository<String, Object> repository) {
+    public ServicesUsers(KVRepository<String, Object> repository, LuceneWriteRepository luceneWriteRepository) {
         this.repository = repository;
+        this.luceneWriteRepository = luceneWriteRepository;
     }
 
     /**
@@ -33,17 +39,28 @@ public class ServicesUsers {
      *
      * @param appUser
      */
-    public boolean SaveUser(AppUser appUser){
+    public boolean SaveUser(AppUser appUser) throws IOException {
 
         // Create two fields for customer sequence and invoice sequence
         repository.save("sequence.customer." + appUser.getIdUser(), 0);
         repository.save("sequence.invoice." +  appUser.getIdUser(), 0);
 
-        // Create an UUID version 4 for each user
-        repository.save("user.uuid." +  appUser.getIdUser(), UUID.randomUUID());
+        // Write Lucene Index only for internal use purpose
+        luceneWriteRepository.WriteAppUserDocument(appUser);
 
         // save IdUser usually email address antonio@gmial.com
         return repository.save(appUser.getIdUser(), gson.toJson(appUser));
+
+    }
+
+    /**
+     *
+     * @param KeyToFind
+     * @return
+     */
+    public Optional<Object> FindKey(String KeyToFind){
+
+        return repository.find(KeyToFind);
 
     }
 
@@ -55,5 +72,46 @@ public class ServicesUsers {
 
         return repository.find(IdUser);
 
+    }
+
+    /**
+     * Exist true send an alert
+     * 0 Ok
+     * 1 email empty
+     * 2 password empty
+     * 3 fails RocksDB save
+     * 5 user already exist
+     *
+     * @param appUser
+     * @return int
+     */
+    public int RegisterUserIfNotAlreadyExist(AppUser appUser) throws IOException {
+
+        // Not allow empty email user
+        if (appUser.getIdUser().isEmpty())
+            return 1;
+
+        // Not allow empty password
+        if (appUser.getPassword().isEmpty())
+            return 2;
+
+        user = FindUser(appUser.getIdUser());
+
+        if (user.isEmpty()){
+
+            if(SaveUser(appUser))
+            {
+                return 0;
+            }
+            else {
+                log.info("SaveUser function fails RocksDB for '{}'", appUser);
+                return 3;
+            }
+
+        }
+        else {
+            log.info("RegisterUserExist RocksDB said user already exist '{}'", appUser.getIdUser());
+            return 5;
+        }
     }
 }
