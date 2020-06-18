@@ -74,7 +74,7 @@ public class SalesBillTest {
                         PostCode("DA14 6NE Sidcup").
                         Country("United Kingdom").
                         Identification("VAT Registration Number 928465196").
-                        customerElectronicAddresses(customerElectronicAddresses).
+                        //customerElectronicAddresses(customerElectronicAddresses).
                         build()).
                 headSalesBill(HeadSalesBill.builder().
                         BillNumber("2020/03/01").

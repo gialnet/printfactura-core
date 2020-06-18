@@ -2,16 +2,24 @@ package com.printfactura.core.services.rocksdb;
 
 import com.google.gson.Gson;
 import com.printfactura.core.domain.customer.Customer;
+import com.printfactura.core.repositories.rocksdb.KVRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Service
 public class ServicesCustomer {
 
+    private final KVRepository<String, Object> repository;
     private Gson gson = new Gson();
     private List<Customer> customers = new ArrayList<>();
+
+    public ServicesCustomer(KVRepository<String, Object> repository) {
+        this.repository = repository;
+    }
 
     public List<Customer> MakeListCustomers() {
 
@@ -44,6 +52,38 @@ public class ServicesCustomer {
                 build()
         );
         return customers;
+    }
+
+    public Customer Find(){
+        return null;
+    }
+
+    private String IncreaseOneSeqCustomer(String email)
+    {
+
+        // find sequence
+        var sequence = repository.find("sequence.customer."+email);
+        int seq = (int) sequence.get();
+        // increment sequence
+        seq++;
+        // save sequence
+        repository.save("sequence.customer."+email, seq);
+
+        return String.valueOf(seq);
+    }
+
+    public boolean SaveCustomer(Customer customer, String email){
+
+        log.info("SaveCustomer-> customer object '{}'",customer);
+        customer.setIdCode(IncreaseOneSeqCustomer(email));
+        /*String customer_key ="customer." + email.toLowerCase() + "."+ customer.getIdCode();
+        log.info("SaveCustomer-> key customer '{}'",customer_key);*/
+        repository.save("customer." +
+                email.toLowerCase() +
+                "."+
+                customer.getIdCode(), gson.toJson(customer));
+
+        return true;
     }
 
 }

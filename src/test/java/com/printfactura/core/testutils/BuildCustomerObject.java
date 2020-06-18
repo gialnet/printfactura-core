@@ -32,7 +32,7 @@ public class BuildCustomerObject {
                 PostCode("DA14 6NE Sidcup").
                 Country("United Kingdom").
                 Identification("VAT Registration Number 928465196").
-                customerElectronicAddresses(customerElectronicAddresses).
+                //customerElectronicAddresses(customerElectronicAddresses).
                 build();
 
         return customer;
