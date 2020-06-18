@@ -43,14 +43,14 @@ public class ServicesUsers {
     public boolean SaveUser(AppUser appUser) throws IOException {
 
         // Create two fields for customer sequence and invoice sequence
-        repository.save("sequence.customer." + appUser.getIdUser(), 0);
-        repository.save("sequence.invoice." +  appUser.getIdUser(), 0);
+        repository.save("sequence.customer." + appUser.getIdUser().toLowerCase(), 0);
+        repository.save("sequence.invoice." +  appUser.getIdUser().toLowerCase(), 0);
 
         // Write Lucene Index only for internal use purpose
         luceneWriteRepository.WriteAppUserDocument(appUser);
 
         // save IdUser usually email address antonio@gmial.com
-        return repository.save(appUser.getIdUser(), gson.toJson(appUser));
+        return repository.save(appUser.getIdUser().toLowerCase(), gson.toJson(appUser));
 
     }
 
@@ -71,7 +71,7 @@ public class ServicesUsers {
      */
     public Optional<Object> FindUser(String IdUser){
 
-        return repository.find(IdUser);
+        return repository.find(IdUser.toLowerCase());
 
     }
 
