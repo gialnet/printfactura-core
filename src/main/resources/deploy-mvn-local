@@ -15,3 +15,5 @@ docker run -p 6379:6379 --name turedis -d redis redis-server --appendonly yes
 
 -- doesn't work
 docker run -it --network localhost --rm redis redis-cli -h turedis
+
+diego uuid 2168839c-3d08-4411-8127-db678f89d055

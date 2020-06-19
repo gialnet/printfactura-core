@@ -5,15 +5,13 @@ import com.printfactura.core.domain.customer.Customer;
 import com.printfactura.core.domain.sales.ui.InvoiceSalesUI;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
-import org.apache.lucene.document.Document;
-import org.apache.lucene.document.Field;
-import org.apache.lucene.document.StringField;
-import org.apache.lucene.document.TextField;
+import org.apache.lucene.document.*;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.memory.MemoryIndex;
 import org.apache.lucene.store.FSDirectory;
 
+import org.apache.lucene.util.BytesRef;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
@@ -67,7 +65,8 @@ public class LuceneWriteRepository implements LuceneWriteDocuments {
 
         Document document = new Document();
 
-        document.add(new StringField("IdCode", customer.getIdCode() , Field.Store.YES));
+        //document.add(new StringField("IdCode", customer.getIdCode() , Field.Store.YES));
+        document.add(new SortedDocValuesField("IdCode", new BytesRef(customer.getIdCode())));
         document.add(new TextField("Identification", customer.getIdentification() , Field.Store.YES));
         document.add(new TextField("CompanyName", customer.getCompanyName() , Field.Store.YES));
         document.add(new TextField("Address", customer.getAddress() , Field.Store.YES));

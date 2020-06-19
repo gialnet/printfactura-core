@@ -11,13 +11,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class CustomerGrid {
 
 
-    List<Customer> customers = new ArrayList<>();
+    static List<Customer> customers = new ArrayList<>();
 
-    public List<Customer> MakeListCustomers(){
+    public static List<Customer> MakeListCustomers(){
 
         // Add customer
-        customers.add( Customer.builder().
-                CompanyName("Customer 1").
+        customers.add(Customer.builder().
+                IdCode("1").Identification("VAT 1").
+                CompanyName("Trilateral IT").
                 Address("Street 1 number 1").
                 City("Milton Keynes").
                 PostCode("MK5 6LG").
@@ -25,7 +26,18 @@ public class CustomerGrid {
                 build()
         );
 
-        customers.add( Customer.builder().
+        customers.add(Customer.builder().
+                IdCode("2").Identification("VAT 2").
+                CompanyName("May Bussines Company").
+                Address("Somerset street").
+                City("Milton Keynes").
+                PostCode("MK5 6LG").
+                Country("United Kingdom").
+                build()
+        );
+
+        customers.add(Customer.builder().
+                IdCode("3").Identification("VAT 3").
                 CompanyName("Vivaldi-Spring LTD").
                 Address("Suite 38, Temple Chambers, 3-7 Temple Avenue").
                 City("London").
@@ -33,13 +45,12 @@ public class CustomerGrid {
                 Country("United Kingdom").
                 build()
         );
-
         return customers;
     }
 
     @Test
     public void CheckMakeListCustomers(){
 
-        assertEquals(MakeListCustomers().size(), 2);
+        assertEquals(MakeListCustomers().size(), 3);
     }
 }

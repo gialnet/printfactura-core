@@ -1,7 +1,6 @@
 package com.printfactura.core.repositories.lucene.document;
 
 import com.printfactura.core.domain.appusers.AppUser;
-import com.printfactura.core.repositories.lucene.document.SearchDocument;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
@@ -9,6 +8,7 @@ import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
+import org.apache.lucene.search.Sort;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
@@ -31,6 +31,17 @@ public class CustomerSearch extends SearchDocument {
         QueryParser qp = new QueryParser("IdCode", new StandardAnalyzer());
         Query idQuery = qp.parse(IdCode);
         TopDocs hits = indexSearcher.search(idQuery, 10);
+
+        return hits;
+    }
+
+    public TopDocs orderByIdCodeFromTo(String FromIdCode, String ToIdCode) throws ParseException, IOException {
+
+        //SortField sortField = new SortedSetSortField("IdCode",true);
+
+        QueryParser qp = new QueryParser("IdCode", new StandardAnalyzer());
+        Query idQuery = qp.parse(FromIdCode);
+        TopDocs hits = indexSearcher.search(idQuery, 10, Sort.INDEXORDER, true);
 
         return hits;
     }
