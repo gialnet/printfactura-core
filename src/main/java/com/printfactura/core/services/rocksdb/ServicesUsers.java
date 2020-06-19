@@ -75,6 +75,9 @@ public class ServicesUsers {
 
     }
 
+    public AppUser getAppUser(){
+        return this.appUser;
+    }
     /**
      *
      * @param user

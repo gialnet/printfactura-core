@@ -2,10 +2,12 @@ package com.printfactura.core.services.rocksdb;
 
 import com.google.gson.Gson;
 import com.printfactura.core.domain.customer.Customer;
+import com.printfactura.core.repositories.lucene.LuceneWriteRepository;
 import com.printfactura.core.repositories.rocksdb.KVRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,11 +16,13 @@ import java.util.List;
 public class ServicesCustomer {
 
     private final KVRepository<String, Object> repository;
+    private final LuceneWriteRepository luceneWriteRepository;
     private Gson gson = new Gson();
     private List<Customer> customers = new ArrayList<>();
 
-    public ServicesCustomer(KVRepository<String, Object> repository) {
+    public ServicesCustomer(KVRepository<String, Object> repository, LuceneWriteRepository luceneWriteRepository) {
         this.repository = repository;
+        this.luceneWriteRepository = luceneWriteRepository;
     }
 
     public List<Customer> MakeListCustomers() {
@@ -72,18 +76,21 @@ public class ServicesCustomer {
         return String.valueOf(seq);
     }
 
-    public boolean SaveCustomer(Customer customer, String email){
+    public boolean SaveCustomer(Customer customer, String email, String uuid) throws IOException {
 
         log.info("SaveCustomer-> customer object '{}'",customer);
+        boolean saveOK=false;
+
         customer.setIdCode(IncreaseOneSeqCustomer(email));
         /*String customer_key ="customer." + email.toLowerCase() + "."+ customer.getIdCode();
         log.info("SaveCustomer-> key customer '{}'",customer_key);*/
-        repository.save("customer." +
+        if (repository.save("customer." +
                 email.toLowerCase() +
                 "."+
-                customer.getIdCode(), gson.toJson(customer));
+                customer.getIdCode(), gson.toJson(customer)) )
+            saveOK = luceneWriteRepository.WriteCustomerDocument(customer,uuid);
 
-        return true;
+        return saveOK;
     }
 
 }

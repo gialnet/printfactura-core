@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.util.List;
 
 @Slf4j
@@ -36,7 +38,7 @@ public class CustomerController {
     }
 
     @GetMapping("/customer/new")
-    public String UpdateCustomer(Model model, Authentication a){
+    public String UpdateCustomer(Model model, Authentication a, HttpSession session){
 
         if (a!=null) {
             log.info(" /customer/new -> authenticate user '{}'", a.getName());
@@ -53,17 +55,19 @@ public class CustomerController {
     }
 
     @PostMapping("/customer/new")
-    public String SaveCustomer(@ModelAttribute("Customer") Customer myCustomerform, Authentication a){
+    public String SaveCustomer(@ModelAttribute("Customer") Customer myCustomerform,
+                               Authentication a, HttpSession session) throws IOException {
 
         log.info("Post /customer/new");
         log.info("/customer/new-> Authentication user '{}'",a.getName());
         log.info("V-> myCustomerform object user '{}'", myCustomerform);
         //log.info("mySelfController object user '{}'", mySelfController);
+        //session.getAttribute("uuid")
 
         if (myCustomerform==null)
             return "customer";
 
-        if (servicesCustomer.SaveCustomer(myCustomerform,a.getName()) )
+        if (servicesCustomer.SaveCustomer(myCustomerform, a.getName(), (String) session.getAttribute("uuid") ))
         {
             log.info("/customer/new-> update data '{}'", myCustomerform);
         }

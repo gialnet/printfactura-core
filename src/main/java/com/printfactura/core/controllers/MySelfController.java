@@ -37,8 +37,11 @@ public class MySelfController {
     @GetMapping("/menu")
     public String MenuPage(HttpSession session, Authentication a) {
 
-        if (a!=null)
+        if (a!=null){
             log.info("authenticate user '{}'",a.getName());
+            log.info("menu -> session uuid user '{}'",session.getAttribute("uuid"));
+        }
+
 
         return "menu";
     }
