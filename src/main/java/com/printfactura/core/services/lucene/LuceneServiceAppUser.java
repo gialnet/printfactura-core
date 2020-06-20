@@ -1,8 +1,7 @@
 package com.printfactura.core.services.lucene;
 
 import com.printfactura.core.domain.appusers.AppUser;
-import com.printfactura.core.repositories.lucene.LuceneSearchDocuments;
-import com.printfactura.core.repositories.lucene.document.AppUserSearch;
+import com.printfactura.core.repositories.lucene.AppUserLucene;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.search.IndexSearcher;
@@ -15,21 +14,22 @@ import java.io.IOException;
 @Service
 public class LuceneServiceAppUser {
 
-    private final LuceneSearchDocuments<AppUserSearch> luceneSD;
+    private final AppUserLucene appUserLucene;
+
     //private AppUserSearchDocument appUserSearchDocument;
     private AppUser appUser;
 
-    public LuceneServiceAppUser(LuceneSearchDocuments<AppUserSearch> luceneSD) {
-        this.luceneSD = luceneSD;
+    public LuceneServiceAppUser(AppUserLucene appUserLucene) {
+        this.appUserLucene = appUserLucene;
     }
 
 
     public AppUser searchByIdUser(String IdUser) throws IOException, ParseException {
 
 
-        IndexSearcher searcher = luceneSD.AppUserSearch().CreateSearcherAppUsr();
+        IndexSearcher searcher = appUserLucene.CreateSearcher();
 
-        TopDocs docFound = luceneSD.AppUserSearch().searchByIdUser(IdUser, searcher);
+        TopDocs docFound = appUserLucene.searchByIdUser(IdUser, searcher);
 
 
         for (ScoreDoc sd : docFound.scoreDocs) {

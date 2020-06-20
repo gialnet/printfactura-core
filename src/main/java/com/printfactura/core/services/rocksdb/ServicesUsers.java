@@ -46,7 +46,7 @@ public class ServicesUsers {
         repository.save("sequence.customer." + appUser.getIdUser().toLowerCase(), 0);
         repository.save("sequence.invoice." +  appUser.getIdUser().toLowerCase(), 0);
 
-        // Write Lucene Index only for internal use purpose
+        // Write Lucene Index only for internal purpose use
         luceneWriteRepository.WriteAppUserDocument(appUser);
 
         // save IdUser usually email address antonio@gmial.com

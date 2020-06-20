@@ -1,5 +1,6 @@
-package com.printfactura.core.repositories.lucene.document;
+package com.printfactura.core.repositories.lucene;
 
+import com.printfactura.core.domain.appusers.AppUser;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.core.KeywordAnalyzer;
 import org.apache.lucene.analysis.miscellaneous.PerFieldAnalyzerWrapper;
@@ -14,21 +15,31 @@ import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
-public class AppUserSearch extends SearchDocument {
-
-   /* public AppUserSearchDocument() throws IOException {
-        super("c:/temp/lucene8index/AppUsers");
-    }*/
+@Repository
+public class AppUserLuceneRepository implements AppUserLucene {
 
     @Value("${lucene-path}")
     private String lucene_path;
 
+    @Override
+    public IndexSearcher CreateSearcher() throws IOException {
+
+        //indexSearcher=createSearcher("c:/temp/lucene8index/AppUsers");
+        Directory dir = FSDirectory.open(Paths.get( lucene_path+"AppUsers"));
+        IndexReader reader = DirectoryReader.open(dir);
+        // IndexSearcher searcher = new IndexSearcher(reader);
+
+        return new IndexSearcher(reader);
+    }
+
+    @Override
     public TopDocs searchByIdUser(String IdUser, IndexSearcher indexSearcher) throws ParseException, IOException {
 
         Map<String, Analyzer> analyzerPerField = new HashMap<>();
@@ -43,17 +54,4 @@ public class AppUserSearch extends SearchDocument {
 
         return hits;
     }
-
-
-    public IndexSearcher CreateSearcherAppUsr() throws IOException {
-
-        //indexSearcher=createSearcher("c:/temp/lucene8index/AppUsers");
-        Directory dir = FSDirectory.open(Paths.get( lucene_path+"AppUsers"));
-        IndexReader reader = DirectoryReader.open(dir);
-        // IndexSearcher searcher = new IndexSearcher(reader);
-
-        return indexSearcher = new IndexSearcher(reader);
-    }
-
-
 }

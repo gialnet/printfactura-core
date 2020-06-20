@@ -2,29 +2,32 @@ package com.printfactura.core.services.rocksdb;
 
 import com.printfactura.core.domain.appusers.AppUser;
 import com.printfactura.core.domain.customer.Customer;
-import com.printfactura.core.repositories.lucene.document.CustomerSearch;
+import com.printfactura.core.services.lucene.LuceneServiceCustomer;
 import com.printfactura.core.ui.grid.CustomerGrid;
-import org.apache.lucene.document.Document;
 import org.apache.lucene.queryparser.classic.ParseException;
-import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.test.context.TestPropertySource;
 
 import java.io.IOException;
+import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@PropertySource(value = "classpath:application.properties")
+@TestPropertySource(locations="classpath:application-test.properties")
+@EnableConfigurationProperties
 @SpringBootTest
 class ServicesCustomerTest {
 
     @Autowired
     ServicesCustomer servicesCustomer;
+
+    @Autowired
+    LuceneServiceCustomer luceneServiceCustomer;
 
     @Test
     void saveCustomer() throws IOException {
@@ -34,7 +37,7 @@ class ServicesCustomerTest {
 
         for (Customer  cl: CustomerGrid.MakeListCustomers())
         {
-            saveOK=servicesCustomer.SaveCustomer(cl,"diego@gmail.com","2168839c-3d08-4411-8127-db678f89d055");
+            saveOK=servicesCustomer.SaveCustomer(cl,"luis@gmail.com","4a236c52-ea42-40c2-ba5e-23a2bb9522ba");
             if (saveOK)
                 i++;
         }
@@ -46,27 +49,37 @@ class ServicesCustomerTest {
     @DisplayName("index customer order by id")
     void orderByIdCodeFromTo() throws IOException, ParseException {
 
-        CustomerSearch customerSearch = new CustomerSearch();
-
         AppUser appUser = AppUser.builder().
-                IdUser("diego@gmail.com").
+                IdUser("luis@gmail.com").
                 Password("a1").
-                UserUUID("2168839c-3d08-4411-8127-db678f89d055").
+                UserUUID("4a236c52-ea42-40c2-ba5e-23a2bb9522ba").
                 build();
 
-        customerSearch.CreateSearcherCustomer(appUser);
-        IndexSearcher searcher = customerSearch.getIndexSearcher();
 
-        TopDocs topDocs = customerSearch.orderByIdCodeFromTo("2","4");
+        TopDocs topDocs = luceneServiceCustomer.orderByIdCodeFromTo(19,20,appUser.getUserUUID());
 
         System.out.println(topDocs.totalHits);
 
-        for (ScoreDoc sd : topDocs.scoreDocs) {
+        // IndexSearcher searcher =
+        /*for (ScoreDoc sd : topDocs.scoreDocs) {
 
             Document d = searcher.doc(sd.doc);
             //System.out.println(d.get("IdCode"));
             System.out.println(d.get("CompanyName"));
-        }
+        }*/
 
+    }
+
+    @Test
+    public void searchByName() throws Exception {
+
+       List<Customer> lc = luceneServiceCustomer.searchByName("Trilateral","4a236c52-ea42-40c2-ba5e-23a2bb9522ba");
+       System.out.println(lc.size());
+    }
+
+    @Test
+    public void searchByIdCode() throws Exception {
+        List<Customer> lc = luceneServiceCustomer.searchByIdCode(19,"4a236c52-ea42-40c2-ba5e-23a2bb9522ba");
+        System.out.println(lc.size());
     }
 }

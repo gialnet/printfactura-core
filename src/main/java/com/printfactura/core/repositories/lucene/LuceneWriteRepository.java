@@ -29,9 +29,9 @@ public class LuceneWriteRepository implements LuceneWriteDocuments {
     public LuceneWriteRepository() {
     }
 
-    private IndexWriter createWriter(String suuid) throws IOException
+    private IndexWriter createWriter(String userPath) throws IOException
     {
-        FSDirectory dir = FSDirectory.open(Paths.get(lucene_path + suuid));
+        FSDirectory dir = FSDirectory.open(Paths.get(lucene_path + userPath));
         IndexWriterConfig config = new IndexWriterConfig(new StandardAnalyzer());
         // Create index in Memory RAM
         // MemoryIndex index = new MemoryIndex();
@@ -45,9 +45,6 @@ public class LuceneWriteRepository implements LuceneWriteDocuments {
         IndexWriter writer = createWriter("customer/" + suuid);
 
         Document customerDoc = CreateCustomerDocument(customer);
-
-        //Let's clean everything first
-        writer.deleteAll();
 
         writer.addDocument(customerDoc);
 
@@ -66,7 +63,7 @@ public class LuceneWriteRepository implements LuceneWriteDocuments {
         Document document = new Document();
 
         //document.add(new StringField("IdCode", customer.getIdCode() , Field.Store.YES));
-        document.add(new SortedDocValuesField("IdCode", new BytesRef(customer.getIdCode())));
+        document.add(new IntPoint("IdCode", Integer.parseInt(customer.getIdCode())));
         document.add(new TextField("Identification", customer.getIdentification() , Field.Store.YES));
         document.add(new TextField("CompanyName", customer.getCompanyName() , Field.Store.YES));
         document.add(new TextField("Address", customer.getAddress() , Field.Store.YES));
@@ -85,9 +82,6 @@ public class LuceneWriteRepository implements LuceneWriteDocuments {
         IndexWriter writer = createWriter("invoice/" + suuid);
 
         Document invoiceDoc = CreateInvoiceDocument(invoiceSalesUI);
-
-        //Let's clean everything first
-        writer.deleteAll();
 
         writer.addDocument(invoiceDoc);
 
@@ -121,9 +115,6 @@ public class LuceneWriteRepository implements LuceneWriteDocuments {
         IndexWriter writer = createWriter("AppUsers");
 
         Document customerDoc = CreateAppUserDocument(appUser);
-
-        //Let's clean everything first
-        writer.deleteAll();
 
         writer.addDocument(customerDoc);
 
