@@ -27,7 +27,7 @@ public class ShouldAuthenticateAgainstThirdPartySystem {
             httpSession.setAttribute("uuid",servicesUsers.getAppUser().getUserUUID());
         }
         
-        return true;
+        return user_auth;
 
     }
 

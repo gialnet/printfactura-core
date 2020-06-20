@@ -27,5 +27,5 @@ public class Customer {
     private String City =" Kent";
     private String PostCode ="DA14 6NE Sidcup";
     private String Country ="United Kingdom";
-    //private List<CustomerElectronicAddress> customerElectronicAddresses;
+    private List<CustomerElectronicAddress> customerElectronicAddresses;
 }

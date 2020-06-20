@@ -36,6 +36,58 @@ public class LuceneServiceCustomer {
         return customerSearch.orderByIdCodeFromTo(searcher, FromIdCode, ToIdCode);
     }
 
+    /**
+     *
+     * @param page page of data 1,2,3,...
+     * @param size amount of rows per page 10,22, whatever
+     * @param uuid
+     * @return
+     * @throws IOException
+     * @throws ParseException
+     */
+    public List<Customer> CustomerByPages(int page, int size, String uuid) throws IOException, ParseException {
+
+        IndexSearcher searcher = customerSearch.CreateSearcher(uuid);
+
+        int from = size * (page -1) + page;
+        int to = page * size;
+        return ListOfCustomer(customerSearch.
+                        orderByIdCodeFromTo(searcher, from, to),
+                        searcher);
+    }
+    /**
+     *
+     * @param hits
+     * @param searcher
+     * @return
+     * @throws IOException
+     */
+    public List<Customer> ListOfCustomer(TopDocs hits, IndexSearcher searcher) throws IOException {
+
+        customers.clear();
+        
+        for (ScoreDoc sd : hits.scoreDocs)
+        {
+            Document d = searcher.doc(sd.doc);
+            // System.out.println(String.format(d.get("CompanyName")));
+
+            // Add customer
+            customers.add(Customer.builder().
+                    IdCode(d.get("IdCode")).
+                    Identification(d.get("Identification")).
+                    CompanyName(d.get("CompanyName")).
+                    Address(d.get("Address")).
+                    City(d.get("City")).
+                    PostCode(d.get("PostCode")).
+                    Country(d.get("Country")).
+                    build()
+            );
+        }
+
+        return customers;
+
+    }
+
     public List<Customer> searchByName(String name, String uuid) throws IOException, ParseException {
 
         IndexSearcher searcher = customerSearch.CreateSearcher(uuid);

@@ -1,9 +1,10 @@
 package com.printfactura.core.controllers;
 
-import com.printfactura.core.domain.MySelf;
 import com.printfactura.core.domain.customer.Customer;
+import com.printfactura.core.services.lucene.LuceneServiceCustomer;
 import com.printfactura.core.services.rocksdb.ServicesCustomer;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.lucene.queryparser.classic.ParseException;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,17 +21,21 @@ import java.util.List;
 public class CustomerController {
 
     private final ServicesCustomer servicesCustomer;
+    private final LuceneServiceCustomer luceneServiceCustomer;
     private Customer customer;
 
-    public CustomerController(ServicesCustomer servicesCustomer) {
+    public CustomerController(ServicesCustomer servicesCustomer, LuceneServiceCustomer luceneServiceCustomer) {
         this.servicesCustomer = servicesCustomer;
+        this.luceneServiceCustomer = luceneServiceCustomer;
     }
 
     @GetMapping("/customer/grid")
-    public String showForm(Model model) {
+    public String showForm(Model model, HttpSession session) throws IOException, ParseException {
 
-        List<Customer> lc = servicesCustomer.MakeListCustomers();
-        log.info("company name '{}'",lc.get(0).getCompanyName());
+        List<Customer> lc = luceneServiceCustomer.
+                CustomerByPages(1,5,(String)session.getAttribute("uuid"));
+
+        //log.info("company name '{}'",lc.get(0).getCompanyName());
         log.info("number of records '{}'",lc.size());
         model.addAttribute("customers", lc);
 

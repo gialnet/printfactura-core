@@ -29,6 +29,9 @@ class ServicesCustomerTest {
     @Autowired
     LuceneServiceCustomer luceneServiceCustomer;
 
+    private final String uuid="45c9dfca-997d-422e-9a41-781df30fc936";
+    private final String email="sara@gmail.com";
+
     @Test
     void saveCustomer() throws IOException {
 
@@ -37,7 +40,7 @@ class ServicesCustomerTest {
 
         for (Customer  cl: CustomerGrid.MakeListCustomers())
         {
-            saveOK=servicesCustomer.SaveCustomer(cl,"luis@gmail.com","4a236c52-ea42-40c2-ba5e-23a2bb9522ba");
+            saveOK=servicesCustomer.SaveCustomer(cl,email,uuid);
             if (saveOK)
                 i++;
         }
@@ -50,13 +53,13 @@ class ServicesCustomerTest {
     void orderByIdCodeFromTo() throws IOException, ParseException {
 
         AppUser appUser = AppUser.builder().
-                IdUser("luis@gmail.com").
+                IdUser(email).
                 Password("a1").
-                UserUUID("4a236c52-ea42-40c2-ba5e-23a2bb9522ba").
+                UserUUID(uuid).
                 build();
 
 
-        TopDocs topDocs = luceneServiceCustomer.orderByIdCodeFromTo(19,20,appUser.getUserUUID());
+        TopDocs topDocs = luceneServiceCustomer.orderByIdCodeFromTo(19,20,uuid);
 
         System.out.println(topDocs.totalHits);
 
@@ -73,13 +76,13 @@ class ServicesCustomerTest {
     @Test
     public void searchByName() throws Exception {
 
-       List<Customer> lc = luceneServiceCustomer.searchByName("Trilateral","4a236c52-ea42-40c2-ba5e-23a2bb9522ba");
+       List<Customer> lc = luceneServiceCustomer.searchByName("Trilateral",uuid);
        System.out.println(lc.size());
     }
 
     @Test
     public void searchByIdCode() throws Exception {
-        List<Customer> lc = luceneServiceCustomer.searchByIdCode(19,"4a236c52-ea42-40c2-ba5e-23a2bb9522ba");
+        List<Customer> lc = luceneServiceCustomer.searchByIdCode(19,uuid);
         System.out.println(lc.size());
     }
 }
