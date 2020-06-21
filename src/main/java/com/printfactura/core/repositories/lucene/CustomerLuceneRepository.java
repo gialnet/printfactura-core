@@ -4,14 +4,13 @@ import com.printfactura.core.domain.appusers.AppUser;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
+import org.apache.lucene.index.SortedDocValues;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
-import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.Query;
-import org.apache.lucene.search.Sort;
-import org.apache.lucene.search.TopDocs;
+import org.apache.lucene.search.*;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
+import org.apache.lucene.util.BytesRef;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
@@ -20,6 +19,8 @@ import java.nio.file.Paths;
 
 import static org.apache.lucene.document.IntPoint.newExactQuery;
 import static org.apache.lucene.document.IntPoint.newRangeQuery;
+import static org.apache.lucene.document.SortedSetDocValuesField.newSlowExactQuery;
+import static org.apache.lucene.document.SortedSetDocValuesField.newSlowRangeQuery;
 
 @Repository
 public class CustomerLuceneRepository implements CustomerLucene {
@@ -62,9 +63,24 @@ public class CustomerLuceneRepository implements CustomerLucene {
     @Override
     public TopDocs searchByCompanyName(IndexSearcher indexSearcher, String CompanyName) throws Exception {
 
+        //QueryParser qp = new QueryParser("CompanyName", new StandardAnalyzer());
+        //Query firstNameQuery = 	newSlowExactQuery("CompanyName", new BytesRef(CompanyName) );
+        //newSlowRangeQuery
+        Sort sort = new Sort(new SortField("CompanyName", SortField.Type.STRING));
+
+        Query firstNameQuery = 	newSlowRangeQuery("CompanyName", new BytesRef(CompanyName),null,true,true );
+        TopDocs hits = indexSearcher.search(firstNameQuery, 10, sort);
+        return hits;
+    }
+
+    @Override
+    public TopDocs searchByCompanyNameRelative(IndexSearcher indexSearcher, String CompanyName) throws Exception {
+
+        Sort sort = new Sort(new SortField("CompanyName", SortField.Type.STRING));
+
         QueryParser qp = new QueryParser("CompanyName", new StandardAnalyzer());
-        Query firstNameQuery = qp.parse(CompanyName);
-        TopDocs hits = indexSearcher.search(firstNameQuery, 10);
+        Query firstNameQuery = 	qp.parse(CompanyName);
+        TopDocs hits = indexSearcher.search(firstNameQuery, 10, sort);
         return hits;
     }
 }

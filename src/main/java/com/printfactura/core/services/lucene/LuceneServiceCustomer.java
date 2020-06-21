@@ -5,6 +5,7 @@ import com.printfactura.core.domain.customer.Customer;
 import com.printfactura.core.repositories.lucene.CustomerLucene;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
+import org.apache.lucene.index.IndexableField;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
@@ -71,9 +72,11 @@ public class LuceneServiceCustomer {
             Document d = searcher.doc(sd.doc);
             // System.out.println(String.format(d.get("CompanyName")));
 
+           /* IndexableField field = d.getField("IdCode");
+            String sv= field.stringValue();*/
             // Add customer
             customers.add(Customer.builder().
-                    IdCode(d.get("IdCode")).
+                    IdCode((Integer) d.getField("IdCode").numericValue()).
                     Identification(d.get("Identification")).
                     CompanyName(d.get("CompanyName")).
                     Address(d.get("Address")).
@@ -86,6 +89,41 @@ public class LuceneServiceCustomer {
 
         return customers;
 
+    }
+
+
+    /**
+     *
+     * @param name
+     * @param uuid
+     * @return
+     * @throws Exception
+     */
+    public List<Customer> searchByCompanyName(String name, String uuid) throws Exception {
+
+        IndexSearcher searcher = customerSearch.CreateSearcher(uuid);
+        customers.clear();
+
+        return ListOfCustomer(customerSearch.
+                        searchByCompanyName(searcher, name),
+                searcher);
+
+    }
+
+    /**
+     *
+     * @param name
+     * @param uuid
+     * @return
+     * @throws Exception
+     */
+    public List<Customer> searchByCompanyNameRelative(String name, String uuid) throws Exception {
+        IndexSearcher searcher = customerSearch.CreateSearcher(uuid);
+        customers.clear();
+
+        return ListOfCustomer(customerSearch.
+                        searchByCompanyNameRelative(searcher, name),
+                searcher);
     }
 
     public List<Customer> searchByName(String name, String uuid) throws IOException, ParseException {
@@ -104,7 +142,7 @@ public class LuceneServiceCustomer {
 
             // Add customer
             customers.add(Customer.builder().
-                    IdCode(d.get("IdCode")).
+                    IdCode(Integer.parseInt(d.get("IdCode"))).
                     Identification(d.get("Identification")).
                     CompanyName(d.get("CompanyName")).
                     Address(d.get("Address")).
@@ -135,7 +173,7 @@ public class LuceneServiceCustomer {
 
             // Add customer
             customers.add(Customer.builder().
-                    IdCode(d.get("IdCode")).
+                    IdCode(Integer.parseInt(d.get("IdCode"))).
                     Identification(d.get("Identification")).
                     CompanyName(d.get("CompanyName")).
                     Address(d.get("Address")).

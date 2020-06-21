@@ -25,14 +25,14 @@ public class BuildCustomerObject {
                 Value("Pamela@trilateral-it.com").build());
 
         Customer customer = Customer.builder().
-                IdCode("1").
+                IdCode(1).
                 CompanyName("Trilateral-IT LTD").
                 Address("Onega House, 112 Main Road").
                 City("Kent").
                 PostCode("DA14 6NE Sidcup").
                 Country("United Kingdom").
                 Identification("VAT Registration Number 928465196").
-                //customerElectronicAddresses(customerElectronicAddresses).
+                customerElectronicAddresses(customerElectronicAddresses).
                 build();
 
         return customer;

@@ -62,7 +62,7 @@ public class ServicesCustomer {
         return null;
     }
 
-    private String IncreaseOneSeqCustomer(String email)
+    private int IncreaseOneSeqCustomer(String email)
     {
 
         // find sequence
@@ -73,7 +73,7 @@ public class ServicesCustomer {
         // save sequence
         repository.save("sequence.customer."+email, seq);
 
-        return String.valueOf(seq);
+        return seq;
     }
 
     public boolean SaveCustomer(Customer customer, String email, String uuid) throws IOException {

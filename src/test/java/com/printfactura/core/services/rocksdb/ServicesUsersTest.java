@@ -17,7 +17,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-@Disabled("for demonstration purposes")
+//@Disabled("for demonstration purposes")
 class ServicesUsersTest {
 
     @Autowired
@@ -80,7 +80,7 @@ class ServicesUsersTest {
     void registerUserNotExist() throws IOException {
 
         appUser = AppUser.builder().
-                IdUser("newuser2@gmail.com".toLowerCase()).
+                IdUser("c1@gmail.com".toLowerCase()).
                 Password("a1").
                 build();
 

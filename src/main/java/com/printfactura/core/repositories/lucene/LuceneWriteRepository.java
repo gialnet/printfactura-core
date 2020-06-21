@@ -63,9 +63,17 @@ public class LuceneWriteRepository implements LuceneWriteDocuments {
         Document document = new Document();
 
         //document.add(new StringField("IdCode", customer.getIdCode() , Field.Store.YES));
-        document.add(new IntPoint("IdCode", Integer.parseInt(customer.getIdCode())));
+        document.add(new IntPoint("IdCode", customer.getIdCode()));
+        document.add(new StoredField("IdCode", customer.getIdCode()) );
+
+
         document.add(new TextField("Identification", customer.getIdentification() , Field.Store.YES));
-        document.add(new TextField("CompanyName", customer.getCompanyName() , Field.Store.YES));
+
+        //document.add(new TextField("CompanyName", customer.getCompanyName() , Field.Store.YES));
+        document.add(new StringField("CompanyName", customer.getCompanyName() , Field.Store.YES));
+        document.add(new SortedDocValuesField("CompanyName", new BytesRef(customer.getCompanyName()) ));
+
+
         document.add(new TextField("Address", customer.getAddress() , Field.Store.YES));
         document.add(new TextField("City", customer.getCity() , Field.Store.YES));
         document.add(new TextField("PostCode", customer.getPostCode() , Field.Store.YES));

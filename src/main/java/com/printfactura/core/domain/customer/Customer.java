@@ -20,7 +20,7 @@ public class Customer {
     Company registration Number 6473406
     VAT Registration Number 928465196
      */
-    private String IdCode;
+    private int IdCode;
     private String Identification ="VAT Registration Number 928465196";
     private String CompanyName = "Trilateral-IT LTD";
     private String Address = "Onega House, 112 Main Road";

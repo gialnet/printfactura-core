@@ -17,32 +17,45 @@ public class CustomerGrid {
 
         // Add customer
         customers.add(Customer.builder().
-                IdCode("1").Identification("VAT 1").
+                IdCode(1).
+                Identification("VAT Registration Number 928465196").
                 CompanyName("Trilateral IT").
-                Address("Street 1 number 1").
-                City("Milton Keynes").
-                PostCode("MK5 6LG").
+                Address("Onega House, 112 Main Road").
+                City("Kent").
+                PostCode("DA14 6NE Sidcup").
                 Country("United Kingdom").
                 build()
         );
 
         customers.add(Customer.builder().
-                IdCode("2").Identification("VAT 2").
-                CompanyName("May Bussines Company").
-                Address("Somerset street").
+                IdCode(2).
+                Identification("VAT 2").
+                CompanyName("May Business Consulting Ltd").
+                Address("The Pinnacle, 170 Midsummer Boulevard").
                 City("Milton Keynes").
-                PostCode("MK5 6LG").
+                PostCode("MK9 1FE").
                 Country("United Kingdom").
                 build()
         );
 
         customers.add(Customer.builder().
-                IdCode("3").Identification("VAT 3").
+                IdCode(3).
+                Identification("VAT number: GB 292 4881 67").
                 CompanyName("Vivaldi-Spring LTD").
                 Address("Suite 38, Temple Chambers, 3-7 Temple Avenue").
                 City("London").
                 PostCode("EC4Y 0HP").
                 Country("United Kingdom").
+                build()
+        );
+
+        customers.add(Customer.builder().
+                IdCode(4).Identification("VAT 4").
+                CompanyName("CodeControl LTD").
+                Address(" Kollwitzstraße 91").
+                City("Berlin").
+                PostCode("10435").
+                Country("Germany").
                 build()
         );
         return customers;
