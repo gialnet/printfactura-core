@@ -87,7 +87,7 @@ class ServicesCustomerTest {
     @Test
     public void CompanyNamePrefixQuery() throws Exception {
 
-        List<Customer> lc = luceneServiceCustomer.CompanyNamePrefixQuery("Tr",uuid);
+        List<Customer> lc = luceneServiceCustomer.CompanyNamePrefixQuery("TR",uuid);
         System.out.println(lc.size());
         for (Customer cm: lc) {
             System.out.println(cm.getCompanyName());

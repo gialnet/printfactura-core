@@ -74,14 +74,22 @@ public class CustomerLuceneRepository implements CustomerLucene {
         return hits;
     }
 
+    /**
+     * PrefixQuery
+     * Search in StringField only because is not tokenized distinguish between upper case and lower case characters
+     *
+     * Write the result in alphabet order
+     * @param indexSearcher
+     * @param StringSearch
+     * @return
+     * @throws Exception
+     */
     @Override
     public TopDocs CompanyNamePrefixQuery(IndexSearcher indexSearcher, String StringSearch) throws Exception {
 
-        Sort sort = new Sort(new SortField("CompanyName", SortField.Type.STRING));
+        // write the result in alphabet order
 
-        /*QueryParser qp = new QueryParser("CompanyName", new StandardAnalyzer());
-        Query firstNameQuery = 	qp.parse(CompanyName);
-        TopDocs hits = indexSearcher.search(firstNameQuery, 10, sort);*/
+        Sort sort = new Sort(new SortField("CompanyName", SortField.Type.STRING));
 
         PrefixQuery tq = new PrefixQuery(new Term("CompanyName", StringSearch));
 
