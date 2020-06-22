@@ -9,10 +9,10 @@ import java.io.IOException;
 
 public interface CustomerLucene {
 
-    IndexSearcher CreateSearcher(String uuid) throws IOException;
+    IndexSearcher OpenSearcher(String uuid) throws IOException;
     TopDocs searchByIdCode(IndexSearcher indexSearcher, int IdCode) throws ParseException, IOException;
     TopDocs orderByIdCodeFromTo(IndexSearcher indexSearcher, int FromIdCode, int ToIdCode) throws ParseException, IOException;
     TopDocs searchByCompanyName(IndexSearcher indexSearcher, String CompanyName) throws Exception;
-    TopDocs searchByCompanyNameRelative(IndexSearcher indexSearcher, String CompanyName) throws Exception;
+    TopDocs CompanyNamePrefixQuery(IndexSearcher indexSearcher, String StringSearch) throws Exception;
 
 }

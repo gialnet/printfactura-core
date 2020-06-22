@@ -58,6 +58,93 @@ public class CustomerGrid {
                 Country("Germany").
                 build()
         );
+
+        customers.add(Customer.builder().
+                IdCode(5).
+                Identification("VAT Registration Number 928465196").
+                CompanyName("Tripateral IT").
+                Address("Onega House, 112 Main Road").
+                City("Kent").
+                PostCode("DA14 6NE Sidcup").
+                Country("United Kingdom").
+                build()
+        );
+
+        customers.add(Customer.builder().
+                IdCode(6).
+                Identification("VAT Registration Number 928465196").
+                CompanyName("Tricornio IT").
+                Address("Onega House, 112 Main Road").
+                City("Kent").
+                PostCode("DA14 6NE Sidcup").
+                Country("United Kingdom").
+                build()
+        );
+
+        customers.add(Customer.builder().
+                IdCode(7).
+                Identification("VAT Registration Number 928465196").
+                CompanyName("Towueno IT").
+                Address("Onega House, 112 Main Road").
+                City("Kent").
+                PostCode("DA14 6NE Sidcup").
+                Country("United Kingdom").
+                build()
+        );
+
+        customers.add(Customer.builder().
+                IdCode(8).
+                Identification("VAT 2").
+                CompanyName("May Sevilla Consulting Ltd").
+                Address("The Pinnacle, 170 Midsummer Boulevard").
+                City("Milton Keynes").
+                PostCode("MK9 1FE").
+                Country("United Kingdom").
+                build()
+        );
+
+        customers.add(Customer.builder().
+                IdCode(9).
+                Identification("VAT 2").
+                CompanyName("May Madrid Consulting Ltd").
+                Address("The Pinnacle, 170 Midsummer Boulevard").
+                City("Milton Keynes").
+                PostCode("MK9 1FE").
+                Country("United Kingdom").
+                build()
+        );
+        customers.add(Customer.builder().
+                IdCode(10).
+                Identification("VAT 2").
+                CompanyName("May Milton Consulting Ltd").
+                Address("The Pinnacle, 170 Midsummer Boulevard").
+                City("Milton Keynes").
+                PostCode("MK9 1FE").
+                Country("United Kingdom").
+                build()
+        );
+
+        customers.add(Customer.builder().
+                IdCode(11).
+                Identification("VAT 4").
+                CompanyName("CodeMunich LTD").
+                Address(" Kollwitzstraße 91").
+                City("Berlin").
+                PostCode("10435").
+                Country("Germany").
+                build()
+        );
+
+        customers.add(Customer.builder().
+                IdCode(12).Identification("VAT 4").
+                CompanyName("Code Madrid LTD").
+                Address(" Kollwitzstraße 91").
+                City("Berlin").
+                PostCode("10435").
+                Country("Germany").
+                build()
+        );
+
         return customers;
     }
 

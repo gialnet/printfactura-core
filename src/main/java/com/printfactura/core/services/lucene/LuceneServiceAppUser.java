@@ -27,7 +27,7 @@ public class LuceneServiceAppUser {
     public AppUser searchByIdUser(String IdUser) throws IOException, ParseException {
 
 
-        IndexSearcher searcher = appUserLucene.CreateSearcher();
+        IndexSearcher searcher = appUserLucene.OpenSearcher();
 
         TopDocs docFound = appUserLucene.searchByIdUser(IdUser, searcher);
 

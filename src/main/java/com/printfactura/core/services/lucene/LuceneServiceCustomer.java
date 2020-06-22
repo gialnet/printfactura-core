@@ -1,11 +1,9 @@
 package com.printfactura.core.services.lucene;
 
-import com.printfactura.core.domain.appusers.AppUser;
 import com.printfactura.core.domain.customer.Customer;
 import com.printfactura.core.repositories.lucene.CustomerLucene;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
-import org.apache.lucene.index.IndexableField;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
@@ -31,7 +29,7 @@ public class LuceneServiceCustomer {
 
     public TopDocs orderByIdCodeFromTo(int FromIdCode, int ToIdCode, String uuid) throws IOException, ParseException {
 
-        IndexSearcher searcher = customerSearch.CreateSearcher(uuid);
+        IndexSearcher searcher = customerSearch.OpenSearcher(uuid);
         // Select Index by AppUser UserUUID
 
         return customerSearch.orderByIdCodeFromTo(searcher, FromIdCode, ToIdCode);
@@ -48,7 +46,7 @@ public class LuceneServiceCustomer {
      */
     public List<Customer> CustomerByPages(int page, int size, String uuid) throws IOException, ParseException {
 
-        IndexSearcher searcher = customerSearch.CreateSearcher(uuid);
+        IndexSearcher searcher = customerSearch.OpenSearcher(uuid);
 
         int from = size * (page -1) + page;
         int to = page * size;
@@ -101,7 +99,7 @@ public class LuceneServiceCustomer {
      */
     public List<Customer> searchByCompanyName(String name, String uuid) throws Exception {
 
-        IndexSearcher searcher = customerSearch.CreateSearcher(uuid);
+        IndexSearcher searcher = customerSearch.OpenSearcher(uuid);
         customers.clear();
 
         return ListOfCustomer(customerSearch.
@@ -117,18 +115,18 @@ public class LuceneServiceCustomer {
      * @return
      * @throws Exception
      */
-    public List<Customer> searchByCompanyNameRelative(String name, String uuid) throws Exception {
-        IndexSearcher searcher = customerSearch.CreateSearcher(uuid);
+    public List<Customer> CompanyNamePrefixQuery(String name, String uuid) throws Exception {
+        IndexSearcher searcher = customerSearch.OpenSearcher(uuid);
         customers.clear();
 
         return ListOfCustomer(customerSearch.
-                        searchByCompanyNameRelative(searcher, name),
+                        CompanyNamePrefixQuery(searcher, name),
                 searcher);
     }
 
     public List<Customer> searchByName(String name, String uuid) throws IOException, ParseException {
 
-        IndexSearcher searcher = customerSearch.CreateSearcher(uuid);
+        IndexSearcher searcher = customerSearch.OpenSearcher(uuid);
         customers.clear();
 
         QueryParser qp = new QueryParser("CompanyName", new StandardAnalyzer());
@@ -160,7 +158,7 @@ public class LuceneServiceCustomer {
     public List<Customer> searchByIdCode(int IdCode, String uuid) throws Exception {
 
         // Select Index by AppUser UserUUID
-        IndexSearcher searcher = customerSearch.CreateSearcher(uuid);
+        IndexSearcher searcher = customerSearch.OpenSearcher(uuid);
         customers.clear();
 
         // search by customer code

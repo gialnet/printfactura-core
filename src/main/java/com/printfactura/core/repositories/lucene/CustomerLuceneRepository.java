@@ -5,6 +5,7 @@ import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.SortedDocValues;
+import org.apache.lucene.index.Term;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.*;
@@ -29,7 +30,7 @@ public class CustomerLuceneRepository implements CustomerLucene {
     private String lucene_path;
 
     @Override
-    public IndexSearcher CreateSearcher(String uuid) throws IOException {
+    public IndexSearcher OpenSearcher(String uuid) throws IOException {
         //indexSearcher=createSearcher("c:/temp/lucene8index/AppUsers");
         Directory dir = FSDirectory.open(Paths.get( lucene_path+"customer/"+uuid));
         IndexReader reader = DirectoryReader.open(dir);
@@ -74,13 +75,18 @@ public class CustomerLuceneRepository implements CustomerLucene {
     }
 
     @Override
-    public TopDocs searchByCompanyNameRelative(IndexSearcher indexSearcher, String CompanyName) throws Exception {
+    public TopDocs CompanyNamePrefixQuery(IndexSearcher indexSearcher, String StringSearch) throws Exception {
 
         Sort sort = new Sort(new SortField("CompanyName", SortField.Type.STRING));
 
-        QueryParser qp = new QueryParser("CompanyName", new StandardAnalyzer());
+        /*QueryParser qp = new QueryParser("CompanyName", new StandardAnalyzer());
         Query firstNameQuery = 	qp.parse(CompanyName);
-        TopDocs hits = indexSearcher.search(firstNameQuery, 10, sort);
+        TopDocs hits = indexSearcher.search(firstNameQuery, 10, sort);*/
+
+        PrefixQuery tq = new PrefixQuery(new Term("CompanyName", StringSearch));
+
+        TopDocs hits = indexSearcher.search(tq, 10, sort);
+
         return hits;
     }
 }

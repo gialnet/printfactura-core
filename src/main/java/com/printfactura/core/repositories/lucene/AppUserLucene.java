@@ -9,7 +9,7 @@ import java.io.IOException;
 
 public interface AppUserLucene {
 
-    IndexSearcher CreateSearcher() throws IOException;
+    IndexSearcher OpenSearcher() throws IOException;
     TopDocs searchByIdUser(String IdUser, IndexSearcher indexSearcher) throws ParseException, IOException;
 
 }

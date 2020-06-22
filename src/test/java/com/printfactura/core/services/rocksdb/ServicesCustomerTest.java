@@ -29,8 +29,8 @@ class ServicesCustomerTest {
     @Autowired
     LuceneServiceCustomer luceneServiceCustomer;
 
-    private final String uuid="7ed01da9-5ea9-4f5e-9f77-fc8279cee7fd";
-    private final String email="c1@gmail.com";
+    private final String uuid="c743b099-b05e-479d-be21-d39577c09c77";
+    private final String email="d1@gmail.com";
 
     @Test
     void saveCustomer() throws IOException {
@@ -45,7 +45,7 @@ class ServicesCustomerTest {
                 i++;
         }
 
-        assertEquals(i, 4);
+        assertEquals(i, 12);
     }
 
     @Test
@@ -85,9 +85,9 @@ class ServicesCustomerTest {
     }
 
     @Test
-    public void searchByCompanyNameRelative() throws Exception {
+    public void CompanyNamePrefixQuery() throws Exception {
 
-        List<Customer> lc = luceneServiceCustomer.searchByCompanyNameRelative("CodeControl LTD",uuid);
+        List<Customer> lc = luceneServiceCustomer.CompanyNamePrefixQuery("Tr",uuid);
         System.out.println(lc.size());
         for (Customer cm: lc) {
             System.out.println(cm.getCompanyName());

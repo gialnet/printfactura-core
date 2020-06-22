@@ -29,7 +29,7 @@ public class AppUserLuceneRepository implements AppUserLucene {
     private String lucene_path;
 
     @Override
-    public IndexSearcher CreateSearcher() throws IOException {
+    public IndexSearcher OpenSearcher() throws IOException {
 
         //indexSearcher=createSearcher("c:/temp/lucene8index/AppUsers");
         Directory dir = FSDirectory.open(Paths.get( lucene_path+"AppUsers"));

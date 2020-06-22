@@ -80,7 +80,7 @@ class ServicesUsersTest {
     void registerUserNotExist() throws IOException {
 
         appUser = AppUser.builder().
-                IdUser("c1@gmail.com".toLowerCase()).
+                IdUser("d1@gmail.com".toLowerCase()).
                 Password("a1").
                 build();
 
