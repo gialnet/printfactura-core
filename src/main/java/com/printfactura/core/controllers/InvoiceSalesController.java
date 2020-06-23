@@ -22,6 +22,7 @@ public class InvoiceSalesController {
     private final ServicesInvoice servicesInvoice;
     private final LuceneServiceCustomer luceneServiceCustomer;
     private List<RowDetailInvoiceUI> rowsInvoice= new ArrayList<>();
+    private RowDetailInvoiceUI rowDetailInvoiceUI = new RowDetailInvoiceUI();
 
     List<InvoiceSalesUI> lisales = new ArrayList<>();
 
@@ -39,6 +40,8 @@ public class InvoiceSalesController {
 
 
 
+        model.addAttribute("rowlist", rowsInvoice );
+        model.addAttribute("invoice", rowDetailInvoiceUI);
         model.addAttribute("customer",
                 luceneServiceCustomer.CompanyNamePrefixQuery(name,(String) session.getAttribute("uuid")));
 
