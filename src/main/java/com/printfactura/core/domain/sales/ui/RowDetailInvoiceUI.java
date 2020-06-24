@@ -3,6 +3,8 @@ package com.printfactura.core.domain.sales.ui;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Builder
@@ -16,4 +18,11 @@ public class RowDetailInvoiceUI {
     private BigDecimal Unit;
     private BigDecimal Price;
     private BigDecimal Total;
+    @Builder.Default
+    private List<RowDetail> rowDetails= new ArrayList<>();
+
+    public void CalcTotal(){
+
+        Total=Unit.multiply(Price);
+    }
 }

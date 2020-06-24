@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -81,5 +82,31 @@ public class CustomerController {
             return "AlertMessage";
         }
         return "customer_success";
+    }
+
+    @GetMapping("/customer/search")
+    public String SearchCustomer(Model model,
+                                 Authentication a, HttpSession session){
+
+        String searchName="";
+        List<Customer> customers = new ArrayList<>();
+        model.addAttribute("SearchName", searchName);
+        model.addAttribute("Customer",customers);
+
+        return "searchbyname";
+    }
+
+    @PostMapping("/customer/search")
+    public String SearchCustomer(@ModelAttribute("Customer") Customer myCustomerform,
+                                 @ModelAttribute("searchName") String searchName,
+                                 Model model,
+                                 Authentication a, HttpSession session) throws Exception {
+
+
+         model.addAttribute("Customer", luceneServiceCustomer.
+                 CompanyNamePrefixQuery(searchName, (String) session.getAttribute("uuid")));
+
+        return "searchbyname";
+
     }
 }
