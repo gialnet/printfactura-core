@@ -1,10 +1,8 @@
 package com.printfactura.core.controllers;
 
 import com.printfactura.core.domain.customer.Customer;
-import com.printfactura.core.domain.sales.ui.InvoiceNumber;
-import com.printfactura.core.domain.sales.ui.InvoiceSalesUI;
-import com.printfactura.core.domain.sales.ui.RowDetail;
-import com.printfactura.core.domain.sales.ui.RowDetailInvoiceUI;
+import com.printfactura.core.domain.customer.FieldsForSearchCustomers;
+import com.printfactura.core.domain.sales.ui.*;
 import com.printfactura.core.services.lucene.LuceneServiceCustomer;
 import com.printfactura.core.services.rocksdb.ServicesInvoice;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +15,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
-import java.util.Hashtable;
 import java.util.List;
 
 @Slf4j
@@ -70,8 +67,38 @@ public class InvoiceSalesController {
         log.info("Invoice date '{}'",invoiceNumber.getInvoiceDate());
         log.info("Invoice number '{}'",invoiceNumber.getInvoiceNumber());
 
-        return "redirect:new";
+        return "redirect:customersearch";
     }
+
+    /* ******************* Customer *************************************** */
+
+    @GetMapping("/invoice/customersearch")
+    public String SearchCustomer(Model model,
+                                 Authentication a, HttpSession session){
+
+        FieldsForSearchCustomers searchName = FieldsForSearchCustomers.builder().build();
+        List<Customer> customers = new ArrayList<>();
+        model.addAttribute("SearchName", searchName);
+        model.addAttribute("Customer",customers);
+
+        return "invoice_searchcustomer";
+    }
+
+    @PostMapping("/invoice/customersearch")
+    public String SearchCustomer(@ModelAttribute("Customer") Customer myCustomerform,
+                                 @ModelAttribute("SearchName") FieldsForSearchCustomers searchName,
+                                 Model model,
+                                 Authentication a, HttpSession session) throws Exception {
+
+
+        model.addAttribute("Customer", luceneServiceCustomer.
+                CompanyNamePrefixQuery(searchName.getSearchName(), (String) session.getAttribute("uuid")));
+
+        return "invoice_searchcustomer";
+
+    }
+
+    /* **************************** Details invoice ***************************************** */
 
     @GetMapping("/invoice/new")
     private String InvoiceNew(Model model, Authentication a, HttpSession session) {
@@ -91,7 +118,7 @@ public class InvoiceSalesController {
         //model.addAttribute("rowlist", rowsInvoice );
         model.addAttribute("invoice", rowDetailInvoiceUI);
 
-        return "invoice";
+        return "invoice_details";
     }
 
     @PostMapping("/invoice/new")
@@ -123,9 +150,22 @@ public class InvoiceSalesController {
         model.addAttribute("invoice", rows);
         model.addAttribute("Customer", customer);
 
-        return "invoice";
+        return "invoice_details";
 
     }
+
+    /* invoice_final*/
+
+    @GetMapping("/invoice/final")
+    private String LastStep(Model model, Authentication a, HttpSession session){
+
+        InvoiceFinal invoiceFinal = InvoiceFinal.builder().build();
+        model.addAttribute("invoiceFinalStep", invoiceFinal);
+
+        return "invoice_final";
+    }
+
+
 
     @GetMapping("/invoice/grid")
     private String showForm(Model model) {

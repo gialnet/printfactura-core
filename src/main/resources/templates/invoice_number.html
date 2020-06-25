@@ -6,7 +6,7 @@
     <title>Invoice</title>
     <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body>
+<body onload="changeStyle(1)">
 
 
 <div class="text-center text-black-500 text-xs" th:insert="fragments/StepsBar.html :: stepbar"></div>
@@ -48,13 +48,56 @@
             Next Step
         </button>
         <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                type="button">
+                type="button" onclick="javascript:window.location='/menu';">
             Go to menu
         </button>
     </div>
 </form>
 
 </div>
+
+  <!--"w-10 h-10 mx-auto bg-white border-2 border-gray-200 rounded-full text-lg text-white flex items-center"-->
+
+    <script>
+        function changeStyle(step){
+
+            var iconon ="w-10 h-10 mx-auto bg-green-500 rounded-full text-lg text-white flex items-center";
+            var iconoff = "w-10 h-10 mx-auto bg-white border-2 border-gray-200 rounded-full text-lg text-white flex items-center";
+
+
+            switch (step) {
+                case 1:
+                    document.getElementById('bar1').style='width: 0%;';
+                    document.getElementById('bar2').style='width: 0%;';
+                    document.getElementById('bar3').style='width: 0%;';
+                    document.getElementById('ico2').className=iconoff;
+                    document.getElementById('ico3').className=iconoff;
+                    document.getElementById('ico4').className=iconoff;
+                    break;
+                case 2:
+                    document.getElementById('bar1').style='width: 100%;';
+                    document.getElementById('bar2').style='width: 0%;';
+                    document.getElementById('bar3').style='width: 0%;';
+                    document.getElementById('ico2').className=iconon;
+                    document.getElementById('ico3').className=iconoff;
+                    document.getElementById('ico4').className=iconoff;
+                    break;
+                case 3:
+                    day = "Wednesday";
+                    break;
+                case 4:
+                    day = "Thursday";
+                    break;
+                case 5:
+                    day = "Friday";
+                    break;
+                case 6:
+                    day = "Saturday";
+            }
+           // document.getElementById('ico4').className="w-10 h-10 mx-auto bg-green-500 rounded-full text-lg text-white flex items-center";
+
+        }
+    </script>
 
 </body>
 </html>

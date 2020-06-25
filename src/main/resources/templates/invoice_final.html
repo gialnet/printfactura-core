@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Invoice</title>
+    <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body onload="changeStyle(4)">
+
+
+<div class="text-center text-black-500 text-xs" th:insert="fragments/StepsBar.html :: stepbar"></div>
+
+<div class="container mx-auto md:flex md:justify-center mb-0 pt-0">
+<!--/*@thymesVar id="Customer" type="java"*/-->
+<form class="w-full max-w-lg" th:action="@{/invoice/final}" method="post" th:object="${invoiceFinalStep}">
+    <div class="flex flex-wrap -mx-3 mb-0" >
+        <div class="w-full px-3">
+            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-identification">
+                email
+            </label>
+            <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+                   id="grid-identification"
+                   type="text" th:field="*{email}"
+                   placeholder="email address to send the invoice">
+        </div>
+    </div>
+
+    <div class="flex items-center justify-between">
+        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                type="submit">
+            Preview
+        </button>
+        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                type="button" onclick="javascript:window.location='/menu';">
+            Send
+        </button>
+    </div>
+</form>
+
+</div>
+
+<!--"w-10 h-10 mx-auto bg-white border-2 border-gray-200 rounded-full text-lg text-white flex items-center"-->
+
+<script>
+    function changeStyle(step){
+
+        var iconon ="w-10 h-10 mx-auto bg-green-500 rounded-full text-lg text-white flex items-center";
+        var iconoff = "w-10 h-10 mx-auto bg-white border-2 border-gray-200 rounded-full text-lg text-white flex items-center";
+
+
+        switch (step) {
+            case 1:
+                document.getElementById('bar1').style='width: 0%;';
+                document.getElementById('bar2').style='width: 0%;';
+                document.getElementById('bar3').style='width: 0%;';
+                document.getElementById('ico2').className=iconoff;
+                document.getElementById('ico3').className=iconoff;
+                document.getElementById('ico4').className=iconoff;
+                break;
+            case 2:
+                document.getElementById('bar1').style='width: 100%;';
+                document.getElementById('bar2').style='width: 0%;';
+                document.getElementById('bar3').style='width: 0%;';
+                document.getElementById('ico2').className=iconon;
+                document.getElementById('ico3').className=iconoff;
+                document.getElementById('ico4').className=iconoff;
+                break;
+            case 3:
+                document.getElementById('bar1').style='width: 100%;';
+                document.getElementById('bar2').style='width: 100%;';
+                document.getElementById('bar3').style='width: 0%;';
+                document.getElementById('ico2').className=iconon;
+                document.getElementById('ico3').className=iconon;
+                document.getElementById('ico4').className=iconoff;
+                break;
+            case 4:
+                document.getElementById('bar1').style='width: 100%;';
+                document.getElementById('bar2').style='width: 100%;';
+                document.getElementById('bar3').style='width: 100%;';
+                document.getElementById('ico2').className=iconon;
+                document.getElementById('ico3').className=iconon;
+                document.getElementById('ico4').className=iconon;
+                break;
+
+        }
+        // document.getElementById('ico4').className="w-10 h-10 mx-auto bg-green-500 rounded-full text-lg text-white flex items-center";
+
+    }
+
+</script>
+
+</body>
+</html>

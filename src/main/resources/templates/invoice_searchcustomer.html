@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Seaarch by name</title>
+    <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body onload="changeStyle(2)">
+
+<div class="text-center text-black-500 text-xs" th:insert="fragments/StepsBar.html :: stepbar"></div>
+
+<div class="container mx-auto md:flex md:justify-center mb-0 pt-2">
+    <form class="w-full max-w-lg" th:action="@{/invoice/customersearch}" method="post" th:object="${SearchName}">
+        <div class="flex flex-wrap -mx-3 mb-0">
+            <div class="w-full px-3">
+                <label class="block tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-first-name">
+                    Name or <a href="/customer/new"
+                               class="text-indigo-600 hover:text-indigo-900">+{Add new customer}</a>
+                </label>
+                <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+                       id="grid-first-name" type="text" th:field="*{searchName}"
+                       placeholder="Select customer or create a new one">
+            </div>
+        </div>
+        <div class="flex items-center justify-between">
+            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                    type="submit">
+                Search
+            </button>
+            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                    type="button" onclick="javascript:window.location='/invoice/new';">
+                Go to next
+            </button>
+        </div>
+    </form>
+</div>
+<div class="flex flex-col">
+    <div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
+        <div class="align-middle inline-block min-w-full shadow overflow-hidden sm:rounded-lg border-b border-gray-200">
+            <!-- Table -->
+            <table class="min-w-full">
+                <!-- Table head -->
+                <thead>
+                <tr>
+                    <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                        Name
+                    </th>
+                    <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                        Address
+                    </th>
+                    <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                        City
+                    </th>
+                    <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                        Post Code
+                    </th>
+                    <th class="px-6 py-3 border-b border-gray-200 bg-gray-50">
+                        <!--<div class="ml-3">
+                            <p class="text-gray-900 whitespace-no-wrap">
+                                <a href="/customer/new" class="text-indigo-600 hover:text-indigo-900">Add Customer</a>
+                            </p>
+                        </div>-->
+
+        </th>
+        </tr>
+        </thead>
+
+        <!-- Table body -->
+
+        <tbody class="bg-white">
+        <!--/*@thymesVar id="customers" type="java"*/-->
+        <tr th:each="customer , stat : ${Customer}">
+
+            <!-- Primera fila, primera columna -->
+
+            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                <div class="flex items-center">
+                    <div class="ml-4">
+                        <div class="text-sm leading-5 font-medium text-gray-900">
+                            <span th:text="${customer.getCompanyName()}"></span>
+                        </div>
+                    </div>
+                </div>
+            </td>
+
+            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                <div class="text-sm leading-5 text-gray-900">
+                    <span th:text="${customer.getAddress()}"></span>
+                </div>
+            </td>
+
+            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+              <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                <span th:text="${customer.getCity()}"></span>
+              </span>
+            </td>
+
+            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500">
+                <span th:text="${customer.getPostCode()}"></span>
+            </td>
+
+            <td class="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium">
+                <a href="#" class="text-indigo-600 hover:text-indigo-900">Edit
+                </a>
+            </td>
+
+        </tr>
+
+
+        </tbody>
+        </table>
+    </div>
+</div>
+</div>
+
+<!--"w-10 h-10 mx-auto bg-white border-2 border-gray-200 rounded-full text-lg text-white flex items-center"-->
+
+<script>
+    function changeStyle(step){
+
+        var iconon ="w-10 h-10 mx-auto bg-green-500 rounded-full text-lg text-white flex items-center";
+        var iconoff = "w-10 h-10 mx-auto bg-white border-2 border-gray-200 rounded-full text-lg text-white flex items-center";
+
+
+        switch (step) {
+            case 1:
+                document.getElementById('bar1').style='width: 0%;';
+                document.getElementById('bar2').style='width: 0%;';
+                document.getElementById('bar3').style='width: 0%;';
+                document.getElementById('ico2').className=iconoff;
+                document.getElementById('ico3').className=iconoff;
+                document.getElementById('ico4').className=iconoff;
+                break;
+            case 2:
+                document.getElementById('bar1').style='width: 100%;';
+                document.getElementById('bar2').style='width: 0%;';
+                document.getElementById('bar3').style='width: 0%;';
+                document.getElementById('ico2').className=iconon;
+                document.getElementById('ico3').className=iconoff;
+                document.getElementById('ico4').className=iconoff;
+                break;
+            case 3:
+                day = "Wednesday";
+                break;
+            case 4:
+                day = "Thursday";
+                break;
+            case 5:
+                day = "Friday";
+                break;
+            case 6:
+                day = "Saturday";
+        }
+        // document.getElementById('ico4').className="w-10 h-10 mx-auto bg-green-500 rounded-full text-lg text-white flex items-center";
+
+    }
+</script>
+
+</body>
+</html>
