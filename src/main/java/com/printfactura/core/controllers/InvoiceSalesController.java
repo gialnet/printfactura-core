@@ -1,6 +1,7 @@
 package com.printfactura.core.controllers;
 
 import com.printfactura.core.domain.customer.Customer;
+import com.printfactura.core.domain.sales.ui.InvoiceNumber;
 import com.printfactura.core.domain.sales.ui.InvoiceSalesUI;
 import com.printfactura.core.domain.sales.ui.RowDetail;
 import com.printfactura.core.domain.sales.ui.RowDetailInvoiceUI;
@@ -25,7 +26,7 @@ public class InvoiceSalesController {
 
     private final ServicesInvoice servicesInvoice;
     private final LuceneServiceCustomer luceneServiceCustomer;
-    private Hashtable <String, List<RowDetail>> rowDetailMap = new Hashtable<>();
+    //private Hashtable <String, List<RowDetail>> rowDetailMap = new Hashtable<>();
 
 
     List<InvoiceSalesUI> lisales = new ArrayList<>();
@@ -53,6 +54,24 @@ public class InvoiceSalesController {
     }*/
 
 
+    @GetMapping("/invoice/number")
+    private String invoiceNumber(Model model, Authentication a, HttpSession session){
+
+        InvoiceNumber invoiceNumber = InvoiceNumber.builder().build();
+        model.addAttribute("invoiceAttr", invoiceNumber);
+
+        return "invoice_number";
+    }
+
+    @PostMapping("/invoice/number")
+    private String invoiceNumberCheck(@ModelAttribute("invoiceAttr") InvoiceNumber invoiceNumber,
+                                      Authentication a, HttpSession session){
+
+        log.info("Invoice date '{}'",invoiceNumber.getInvoiceDate());
+        log.info("Invoice number '{}'",invoiceNumber.getInvoiceNumber());
+
+        return "redirect:new";
+    }
 
     @GetMapping("/invoice/new")
     private String InvoiceNew(Model model, Authentication a, HttpSession session) {
@@ -61,7 +80,9 @@ public class InvoiceSalesController {
 
         RowDetailInvoiceUI rowDetailInvoiceUI = RowDetailInvoiceUI.builder().build();
 
-        rowDetailMap.put((String) session.getAttribute("uuid"), rowDetails);
+        //rowDetailMap.put((String) session.getAttribute("uuid"), rowDetails);
+
+        session.setAttribute("ListRows", rowDetails);
 
         Customer customer = Customer.builder().CompanyName("La mia").build();
         log.info("Invoice new '{}'",session.getAttribute("uuid"));
@@ -78,7 +99,9 @@ public class InvoiceSalesController {
                                Model model,
                                HttpSession session){
 
-       List<RowDetail> lrowDetail = rowDetailMap.get((String) session.getAttribute("uuid"));
+       //List<RowDetail> lrowDetail = rowDetailMap.get((String) session.getAttribute("uuid"));
+       List<RowDetail> lrowDetail = (List<RowDetail>) session.getAttribute("ListRows");
+
        log.info("uuid for HasTable '{}'", (String) session.getAttribute("uuid"));
 
         rows.CalcTotal();

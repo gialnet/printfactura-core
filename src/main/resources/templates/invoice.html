@@ -8,6 +8,9 @@
 </head>
 <body>
 
+
+<div class="text-center text-black-500 text-xs" th:insert="fragments/StepsBar.html :: stepbar"></div>
+
 <div class="container mx-auto md:flex md:justify-center mb-0 pt-2">
     <form class="w-full max-w-lg" th:action="@{/invoice/name}" method="post" th:object="${Customer}">
         <div class="flex flex-wrap -mx-3 mb-0">
@@ -64,6 +67,10 @@
                 //alert(field_unit);
                 document.getElementById('total').value=field_total;
                 //alert(field_total);
+            }
+
+            function changeStyle(){
+                document.getElementById('settings').style='width: 100%;';
             }
 
 

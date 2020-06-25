@@ -1,6 +1,7 @@
 package com.printfactura.core.controllers;
 
 import com.printfactura.core.domain.customer.Customer;
+import com.printfactura.core.domain.customer.FieldsForSearchCustomers;
 import com.printfactura.core.services.lucene.LuceneServiceCustomer;
 import com.printfactura.core.services.rocksdb.ServicesCustomer;
 import lombok.extern.slf4j.Slf4j;
@@ -88,7 +89,7 @@ public class CustomerController {
     public String SearchCustomer(Model model,
                                  Authentication a, HttpSession session){
 
-        String searchName="";
+        FieldsForSearchCustomers searchName = FieldsForSearchCustomers.builder().build();
         List<Customer> customers = new ArrayList<>();
         model.addAttribute("SearchName", searchName);
         model.addAttribute("Customer",customers);
@@ -98,13 +99,13 @@ public class CustomerController {
 
     @PostMapping("/customer/search")
     public String SearchCustomer(@ModelAttribute("Customer") Customer myCustomerform,
-                                 @ModelAttribute("searchName") String searchName,
+                                 @ModelAttribute("SearchName") FieldsForSearchCustomers searchName,
                                  Model model,
                                  Authentication a, HttpSession session) throws Exception {
 
 
          model.addAttribute("Customer", luceneServiceCustomer.
-                 CompanyNamePrefixQuery(searchName, (String) session.getAttribute("uuid")));
+                 CompanyNamePrefixQuery(searchName.getSearchName(), (String) session.getAttribute("uuid")));
 
         return "searchbyname";
 
