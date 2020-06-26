@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.servlet.http.HttpSession;
+import javax.websocket.server.PathParam;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,6 +67,7 @@ public class InvoiceSalesController {
 
         log.info("Invoice date '{}'",invoiceNumber.getInvoiceDate());
         log.info("Invoice number '{}'",invoiceNumber.getInvoiceNumber());
+        session.setAttribute("InvoiceNumber", invoiceNumber);
 
         return "redirect:customersearch";
     }
@@ -96,6 +98,28 @@ public class InvoiceSalesController {
 
         return "invoice_searchcustomer";
 
+    }
+
+    @GetMapping("/invoice/selected")
+    private String SelectFromGrid(@PathParam("id") int id,
+                                  @PathParam("name") String name,
+                                  Model model,
+                                  Authentication a, HttpSession session){
+
+        // get the record selected in the grid
+        log.info("id -> {} {}", id, name);
+
+
+        FieldsForSearchCustomers searchName = FieldsForSearchCustomers.builder().
+                searchName(name).id(id)
+                .build();
+
+        List<Customer> customers = new ArrayList<>();
+        model.addAttribute("SearchName", searchName);
+        model.addAttribute("Customer",customers);
+
+
+        return "invoice_searchcustomer";
     }
 
     /* **************************** Details invoice ***************************************** */
@@ -136,6 +160,7 @@ public class InvoiceSalesController {
                 Concept(rows.getConcept()).
                 Unit(rows.getUnit()).
                 Price(rows.getPrice()).
+                Total(rows.getTotal()).
                 build();
 
         log.info("Before Size of details '{}'", lrowDetail.size());

@@ -115,13 +115,25 @@ public class LuceneServiceCustomer {
      * @return
      * @throws Exception
      */
-    public List<Customer> CompanyNamePrefixQuery(String name, String uuid) throws Exception {
-        IndexSearcher searcher = customerSearch.OpenSearcher(uuid);
+    public List<Customer> CompanyNamePrefixQuery(String name, String uuid) {
+
         customers.clear();
 
-        return ListOfCustomer(customerSearch.
-                        CompanyNamePrefixQuery(searcher, name),
-                searcher);
+        try{
+
+            IndexSearcher searcher = customerSearch.OpenSearcher(uuid);
+
+            return ListOfCustomer(customerSearch.
+                            CompanyNamePrefixQuery(searcher, name),
+                    searcher);
+        }
+        catch (Exception e){
+
+            System.out.println("Exception occurred, Lucene index folder empty or not able to access");
+            return customers;
+        }
+
+
     }
 
     public List<Customer> searchByName(String name, String uuid) throws IOException, ParseException {

@@ -11,6 +11,6 @@ import lombok.*;
 public class FieldsForSearchCustomers {
 
     private String searchName;
-    private int occurrences;
+    private int id;
 
 }
