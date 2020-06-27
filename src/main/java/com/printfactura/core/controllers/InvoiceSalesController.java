@@ -1,11 +1,18 @@
 package com.printfactura.core.controllers;
 
+import com.lowagie.text.DocumentException;
 import com.printfactura.core.domain.customer.Customer;
 import com.printfactura.core.domain.customer.FieldsForSearchCustomers;
+import com.printfactura.core.domain.sales.SalesBill;
 import com.printfactura.core.domain.sales.ui.*;
+import com.printfactura.core.makePDFinvoice.CreatePDF;
 import com.printfactura.core.services.lucene.LuceneServiceCustomer;
 import com.printfactura.core.services.rocksdb.ServicesInvoice;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,10 +20,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import javax.naming.NamingException;
 import javax.servlet.http.HttpSession;
 import javax.websocket.server.PathParam;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.printfactura.core.domain.sales.SalesBill.SalesBillBuilder;
 
 @Slf4j
 @Controller
@@ -114,6 +127,8 @@ public class InvoiceSalesController {
                 searchName(name).id(id)
                 .build();
 
+        session.setAttribute("FieldsForSearchCustomers", searchName);
+
         List<Customer> customers = new ArrayList<>();
         model.addAttribute("SearchName", searchName);
         model.addAttribute("Customer",customers);
@@ -179,7 +194,7 @@ public class InvoiceSalesController {
 
     }
 
-    /* invoice_final*/
+    /* ******************* invoice_final ******************** */
 
     @GetMapping("/invoice/final")
     private String LastStep(Model model, Authentication a, HttpSession session){
@@ -190,7 +205,53 @@ public class InvoiceSalesController {
         return "invoice_final";
     }
 
+    @PostMapping("/invoice/final")
+    private String SaveDataCompileObjects(HttpSession session, Authentication a){
 
+        // Compile all objects and compose SalesBill object
+
+        // Date and invoice number
+        InvoiceNumber invoiceNumber = (InvoiceNumber) session.getAttribute("InvoiceNumber");
+
+        // id Customer and CompanyName
+        FieldsForSearchCustomers fields = (FieldsForSearchCustomers) session.getAttribute("FieldsForSearchCustomers");
+
+        // List the invoice concept
+        List<RowDetail> lrowDetail = (List<RowDetail>) session.getAttribute("ListRows");
+
+        // Compose SalesBill
+
+        // Save
+
+        // Send
+
+        return "success_invoice";
+    }
+
+    /*@RequestMapping(value = "/pdfreport", method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_PDF_VALUE)*/
+
+    @GetMapping(value="/invoice/pdf", produces = MediaType.APPLICATION_PDF_VALUE)
+    private ResponseEntity<InputStreamResource> CreatePDF() throws DocumentException, NamingException, IOException {
+
+        SalesBill salesBill = SalesBillBuilder();
+        CreatePDF createPDF = new CreatePDF(salesBill);
+        byte[] pdf = createPDF.doit();
+        ByteArrayInputStream  in = new ByteArrayInputStream(pdf);
+
+        var headers = new HttpHeaders();
+        headers.add("Content-Disposition", "inline; filename=invoice.pdf");
+
+        return ResponseEntity
+                .ok()
+                .headers(headers)
+                .contentType(MediaType.APPLICATION_PDF)
+                .contentLength(pdf.length)
+                .body(new InputStreamResource(in));
+
+    }
+
+    /* ***************   grid of invoices ************** */
 
     @GetMapping("/invoice/grid")
     private String showForm(Model model) {

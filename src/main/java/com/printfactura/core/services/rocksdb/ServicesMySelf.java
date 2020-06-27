@@ -53,7 +53,7 @@ public class ServicesMySelf {
         if (myselfdb.isPresent()){
 
             String js_myself = (String) myselfdb.get();
-            mySelf= gson.fromJson(js_myself, MySelf.class);
+            mySelf = gson.fromJson(js_myself, MySelf.class);
             //oms = Optional.ofNullable(mySelf);
         }
         else {

@@ -1,6 +1,7 @@
 package com.printfactura.core.services.rocksdb;
 
 import com.google.gson.Gson;
+import com.printfactura.core.domain.MySelf;
 import com.printfactura.core.domain.customer.Customer;
 import com.printfactura.core.repositories.lucene.LuceneWriteRepository;
 import com.printfactura.core.repositories.rocksdb.KVRepository;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -19,6 +21,7 @@ public class ServicesCustomer {
     private final LuceneWriteRepository luceneWriteRepository;
     private Gson gson = new Gson();
     private List<Customer> customers = new ArrayList<>();
+    private Customer customer;
 
     public ServicesCustomer(KVRepository<String, Object> repository, LuceneWriteRepository luceneWriteRepository) {
         this.repository = repository;
@@ -58,8 +61,32 @@ public class ServicesCustomer {
         return customers;
     }
 
-    public Customer Find(){
-        return null;
+    private Optional<Object> Find(String key){
+
+        return repository.find(key);
+    }
+
+    public Customer FindCustomerByID(String AppUserEmail, int CustomerID)
+    {
+
+       var myCustomer = Find("customer." +
+                AppUserEmail.toLowerCase() +
+                "."+CustomerID);
+
+        // found value
+        if (myCustomer.isPresent()){
+
+            String js_myCustomer = (String) myCustomer.get();
+            customer = gson.fromJson(js_myCustomer, Customer.class);
+
+        }
+        else {
+            customer = Customer.builder().IdCode(CustomerID).build();
+
+        }
+
+        return customer;
+
     }
 
     private int IncreaseOneSeqCustomer(String email)

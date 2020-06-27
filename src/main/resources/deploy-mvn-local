@@ -19,3 +19,5 @@ docker run -it --network localhost --rm redis redis-cli -h turedis
 diego uuid 2168839c-3d08-4411-8127-db678f89d055
 
 luis@gmail.com 4a236c52-ea42-40c2-ba5e-23a2bb9522ba
+
+mvn clean package spring-boot:repackage  -Dmaven.test.skip=true
