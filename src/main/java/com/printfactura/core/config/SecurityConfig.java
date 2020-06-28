@@ -1,7 +1,14 @@
 package com.printfactura.core.config;
 
 import com.printfactura.core.custom.CustomAuthenticationProvider;
+import org.apache.catalina.Context;
+import org.apache.catalina.connector.Connector;
+import org.apache.tomcat.util.descriptor.web.SecurityCollection;
+import org.apache.tomcat.util.descriptor.web.SecurityConstraint;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
+import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -20,6 +27,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         this.customAuthenticationProvider = customAuthenticationProvider;
     }
 
+
+    /*  good  */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -57,5 +66,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         auth.authenticationProvider(customAuthenticationProvider);
 
     }
+
 
 }

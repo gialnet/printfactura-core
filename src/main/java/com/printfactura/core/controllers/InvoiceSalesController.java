@@ -231,7 +231,7 @@ public class InvoiceSalesController {
         servicesInvoice.SaveSalesBill(salesBill, a.getName(), (String) session.getAttribute("uuid"));
 
         // Send
-        
+
 
         return "success_invoice";
     }

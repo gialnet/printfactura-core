@@ -21,3 +21,32 @@ diego uuid 2168839c-3d08-4411-8127-db678f89d055
 luis@gmail.com 4a236c52-ea42-40c2-ba5e-23a2bb9522ba
 
 mvn clean package spring-boot:repackage  -Dmaven.test.skip=true
+
+openssl rsa -in printfactura.com_private_key.key  -check
+
+openssl pkcs12 -export -in printfactura.com_private_key.key -out mykeystore.pkcs12 -name tomcat -noiter -nomaciter
+
+openssl pkcs12 -export \
+-in cert-chain.txt \
+-inkey <private_key_filename> \
+-name ‘tomcat’ \
+-out keystore.p12
+
+// this work
+keytool -import -alias tomcat -file printfactura.com_ssl_certificate.cer -keystore keystore.p12 -storepass password
+
+keytool -list -v -storetype pkcs12 -keystore keystore.p12
+
+
+************* this is the working way with both certificates
+openssl pkcs12 -export -in printfactura.com_ssl_certificate.cer -inkey printfactura.com_private_key.key -name tomcat -out keystore2.p12
+
+**** exec linux
+
+useradd vivaldi
+passwd vivaldi
+chown vivaldi:vivaldi core-0.0.1-SNAPSHOT.jar
+chmod 500 core-0.0.1-SNAPSHOT.jar
+
+ln -s /opt/vivaldi/core-0.0.1-SNAPSHOT.jar /etc/init.d/printfactura
+service printfactura start
