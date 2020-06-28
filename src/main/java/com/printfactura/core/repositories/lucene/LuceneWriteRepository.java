@@ -2,6 +2,7 @@ package com.printfactura.core.repositories.lucene;
 
 import com.printfactura.core.domain.appusers.AppUser;
 import com.printfactura.core.domain.customer.Customer;
+import com.printfactura.core.domain.sales.SalesBill;
 import com.printfactura.core.domain.sales.ui.InvoiceSalesUI;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
@@ -85,11 +86,11 @@ public class LuceneWriteRepository implements LuceneWriteDocuments {
 
 
     @Override
-    public boolean WriteInvoiceDocument(InvoiceSalesUI invoiceSalesUI, String suuid) throws IOException {
+    public boolean WriteInvoiceDocument(SalesBill salesBill, String suuid) throws IOException {
 
         IndexWriter writer = createWriter("invoice/" + suuid);
 
-        Document invoiceDoc = CreateInvoiceDocument(invoiceSalesUI);
+        Document invoiceDoc = CreateInvoiceDocument(salesBill);
 
         writer.addDocument(invoiceDoc);
 
@@ -102,16 +103,18 @@ public class LuceneWriteRepository implements LuceneWriteDocuments {
     }
 
 
-    private Document CreateInvoiceDocument(InvoiceSalesUI invoiceSalesUI){
+    private Document CreateInvoiceDocument(SalesBill salesBill){
 
         Document document = new Document();
 
-        document.add(new StringField("InvoiceID", invoiceSalesUI.getInvoiceID() , Field.Store.YES));
-        document.add(new TextField("Customer", invoiceSalesUI.getCustomer() , Field.Store.YES));
-        document.add(new StringField("DateInvoice", invoiceSalesUI.getDateInvoice() , Field.Store.YES));
-        document.add(new StringField("NumberInvoice", invoiceSalesUI.getNumberInvoice() , Field.Store.YES));
-        document.add(new StringField("TotalAmount", invoiceSalesUI.getTotalAmount() , Field.Store.YES));
-        document.add(new StringField("VAT", invoiceSalesUI.getVAT() , Field.Store.YES));
+        document.add(new IntPoint("InvoiceID", salesBill.getHeadSalesBill().getId()) );
+        document.add(new StoredField("InvoiceID", salesBill.getHeadSalesBill().getId()) );
+
+        document.add(new TextField("Customer", salesBill.getCustomer().getCompanyName() , Field.Store.YES));
+        document.add(new StringField("DateInvoice", salesBill.getHeadSalesBill().getDate() , Field.Store.YES));
+        document.add(new StringField("NumberInvoice", salesBill.getHeadSalesBill().getBillNumber() , Field.Store.YES));
+        document.add(new StringField("TotalAmount", salesBill.getHeadSalesBill().getTotal().toString() , Field.Store.YES));
+        document.add(new StringField("VAT", salesBill.getHeadSalesBill().getVat().toString() , Field.Store.YES));
 
         return document;
     }

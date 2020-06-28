@@ -7,6 +7,7 @@ import com.printfactura.core.domain.sales.SalesBill;
 import com.printfactura.core.domain.sales.ui.*;
 import com.printfactura.core.makePDFinvoice.CreatePDF;
 import com.printfactura.core.services.lucene.LuceneServiceCustomer;
+import com.printfactura.core.services.pdf.ServicesPDF;
 import com.printfactura.core.services.rocksdb.ServicesInvoice;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.InputStreamResource;
@@ -25,7 +26,6 @@ import javax.servlet.http.HttpSession;
 import javax.websocket.server.PathParam;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,14 +37,16 @@ public class InvoiceSalesController {
 
     private final ServicesInvoice servicesInvoice;
     private final LuceneServiceCustomer luceneServiceCustomer;
+    private final ServicesPDF servicesPDF;
     //private Hashtable <String, List<RowDetail>> rowDetailMap = new Hashtable<>();
 
 
     List<InvoiceSalesUI> lisales = new ArrayList<>();
 
-    public InvoiceSalesController(ServicesInvoice servicesInvoice, LuceneServiceCustomer luceneServiceCustomer) {
+    public InvoiceSalesController(ServicesInvoice servicesInvoice, LuceneServiceCustomer luceneServiceCustomer, ServicesPDF servicesPDF) {
         this.servicesInvoice = servicesInvoice;
         this.luceneServiceCustomer = luceneServiceCustomer;
+        this.servicesPDF = servicesPDF;
     }
 
 
@@ -206,7 +208,7 @@ public class InvoiceSalesController {
     }
 
     @PostMapping("/invoice/final")
-    private String SaveDataCompileObjects(HttpSession session, Authentication a){
+    private String SaveDataCompileObjects(HttpSession session, Authentication a) throws DocumentException, NamingException, IOException {
 
         // Compile all objects and compose SalesBill object
 
@@ -220,10 +222,16 @@ public class InvoiceSalesController {
         List<RowDetail> lrowDetail = (List<RowDetail>) session.getAttribute("ListRows");
 
         // Compose SalesBill
+        SalesBill salesBill = servicesPDF.ComposeSalesBill(invoiceNumber,
+                fields,
+                lrowDetail,
+                a.getName());
 
-        // Save
+        // Save SalesBill into RocksDB and Lucene index
+        servicesInvoice.SaveSalesBill(salesBill, a.getName(), (String) session.getAttribute("uuid"));
 
         // Send
+        
 
         return "success_invoice";
     }
@@ -232,11 +240,22 @@ public class InvoiceSalesController {
             produces = MediaType.APPLICATION_PDF_VALUE)*/
 
     @GetMapping(value="/invoice/pdf", produces = MediaType.APPLICATION_PDF_VALUE)
-    private ResponseEntity<InputStreamResource> CreatePDF() throws DocumentException, NamingException, IOException {
+    private ResponseEntity<InputStreamResource> CreatePDF(HttpSession session, Authentication a)
+            throws DocumentException, NamingException, IOException {
 
-        SalesBill salesBill = SalesBillBuilder();
-        CreatePDF createPDF = new CreatePDF(salesBill);
-        byte[] pdf = createPDF.doit();
+        // Date and invoice number
+        InvoiceNumber invoiceNumber = (InvoiceNumber) session.getAttribute("InvoiceNumber");
+
+        // id Customer and CompanyName
+        FieldsForSearchCustomers fields = (FieldsForSearchCustomers) session.getAttribute("FieldsForSearchCustomers");
+
+        // List the invoice concept
+        List<RowDetail> lrowDetail = (List<RowDetail>) session.getAttribute("ListRows");
+
+        // Compose SalesBill
+        SalesBill salesBill = servicesPDF.ComposeSalesBill(invoiceNumber, fields, lrowDetail, a.getName());
+        byte[] pdf = servicesPDF.GetInBytePDF(salesBill);
+
         ByteArrayInputStream  in = new ByteArrayInputStream(pdf);
 
         var headers = new HttpHeaders();

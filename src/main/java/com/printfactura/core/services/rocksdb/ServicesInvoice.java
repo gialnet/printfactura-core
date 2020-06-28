@@ -1,9 +1,14 @@
 package com.printfactura.core.services.rocksdb;
 
 import com.google.gson.Gson;
+import com.printfactura.core.domain.sales.HeadSalesBill;
+import com.printfactura.core.domain.sales.SalesBill;
 import com.printfactura.core.domain.sales.ui.InvoiceSalesUI;
+import com.printfactura.core.repositories.lucene.LuceneWriteRepository;
+import com.printfactura.core.repositories.rocksdb.KVRepository;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,8 +16,16 @@ import java.util.List;
 public class ServicesInvoice {
 
 
+    private final KVRepository<String, Object> repository;
+    private final LuceneWriteRepository luceneWriteRepository;
+
     private Gson gson = new Gson();
     private List<InvoiceSalesUI> invoiceSalesUIS = new ArrayList<>();
+
+    public ServicesInvoice(KVRepository<String, Object> repository, LuceneWriteRepository luceneWriteRepository) {
+        this.repository = repository;
+        this.luceneWriteRepository = luceneWriteRepository;
+    }
 
     public List<InvoiceSalesUI> MakeListSalesInvoice(){
 
@@ -36,6 +49,41 @@ public class ServicesInvoice {
                 build());
 
         return invoiceSalesUIS;
+    }
+
+    private int IncreaseOneSeqInvoice(String email)
+    {
+
+        // find sequence
+        var sequence = repository.find("sequence.invoice." + email);
+        int seq = (int) sequence.get();
+        // increment sequence
+        seq++;
+        // save sequence
+        repository.save("sequence.invoice." + email, seq);
+
+        return seq;
+    }
+
+    public boolean SaveSalesBill(SalesBill salesBill,  String AppUserEmail, String uuid) throws IOException {
+
+        boolean saveOK=false;
+
+        // RocksDB
+        // "sequence.invoice." +  AppUserEmail.toLowerCase()
+        int idInvoice = IncreaseOneSeqInvoice(AppUserEmail);
+
+        // save SalesBill object
+        HeadSalesBill headSalesBill = salesBill.getHeadSalesBill();
+        headSalesBill.setId(idInvoice);
+        salesBill.setHeadSalesBill(headSalesBill);
+
+        if (repository.save("sales."+AppUserEmail + salesBill.getHeadSalesBill().getId(),
+                gson.toJson(salesBill)) )
+
+            saveOK = luceneWriteRepository.WriteInvoiceDocument(salesBill, uuid);
+
+        return saveOK;
     }
 
 }

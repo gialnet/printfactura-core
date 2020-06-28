@@ -20,11 +20,18 @@ public class HeadSalesBill {
     private String Amount;
     private String Date;
     private String BillNumber;
-    private BigDecimal Global_dto;
-    private String State;
 
-    // Customer information
-    private Customer customer;
+    @Builder.Default
+    private BigDecimal Global_dto = BigDecimal.ZERO;
+    @Builder.Default
+    private BigDecimal base = BigDecimal.ZERO;
+    @Builder.Default
+    private BigDecimal vat = BigDecimal.ZERO;
+    @Builder.Default
+    private BigDecimal total = BigDecimal.ZERO;
+
+    @Builder.Default
+    private String State="pending";
 
     // Direct debit information (optional)
     private DirectDebits directDebits;

@@ -12,19 +12,28 @@ import java.math.BigDecimal;
 @Getter
 public class TotalSalesBill {
 
-    private  BigDecimal BaseEuros;
-    private  BigDecimal VATEuros;
-    private  BigDecimal TotalEuros;
+    @Builder.Default
+    private  BigDecimal BaseEuros=BigDecimal.ZERO;
+    @Builder.Default
+    private  BigDecimal VATEuros=BigDecimal.ZERO;
+    @Builder.Default
+    private  BigDecimal TotalEuros=BigDecimal.ZERO;
 
-    private  BigDecimal BasePound;
-    private  BigDecimal VATPound;
-    private  BigDecimal TotalPound;
+    @Builder.Default
+    private  BigDecimal BasePound=BigDecimal.ZERO;
+    @Builder.Default
+    private  BigDecimal VATPound=BigDecimal.ZERO;
+    @Builder.Default
+    private  BigDecimal TotalPound=BigDecimal.ZERO;
+
     // https://www.gov.uk/government/publications/hmrc-exchange-rates-for-2020-monthly
+    @Builder.Default
     private  BigDecimal HMRC_ExchangeRates = BigDecimal.ZERO;
     private int Month;
     private int Hours;
     private int PorVAT;
-    private BigDecimal PriceHour;
+    @Builder.Default
+    private BigDecimal PriceHour = BigDecimal.ZERO;
 
     public void Calculate(){
 
