@@ -10,7 +10,9 @@ import lombok.*;
 @Getter
 public class FieldsForSearchCustomers {
 
-    private String searchName;
-    private int id;
+    @Builder.Default
+    private String searchName="";
+    @Builder.Default
+    private int id=0;
 
 }

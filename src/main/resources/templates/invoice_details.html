@@ -165,6 +165,7 @@
                 document.getElementById('ico2').className=iconoff;
                 document.getElementById('ico3').className=iconoff;
                 document.getElementById('ico4').className=iconoff;
+                document.location.href='/invoice/number';
                 break;
             case 2:
                 document.getElementById('bar1').style='width: 100%;';
@@ -173,6 +174,7 @@
                 document.getElementById('ico2').className=iconon;
                 document.getElementById('ico3').className=iconoff;
                 document.getElementById('ico4').className=iconoff;
+                document.location.href='/invoice/customersearch';
                 break;
             case 3:
                 document.getElementById('bar1').style='width: 100%;';
@@ -181,15 +183,17 @@
                 document.getElementById('ico2').className=iconon;
                 document.getElementById('ico3').className=iconon;
                 document.getElementById('ico4').className=iconoff;
+
                 break;
             case 4:
-                day = "Thursday";
+                document.getElementById('bar1').style='width: 100%;';
+                document.getElementById('bar2').style='width: 100%;';
+                document.getElementById('bar3').style='width: 100%;';
+                document.getElementById('ico2').className=iconon;
+                document.getElementById('ico3').className=iconon;
+                document.getElementById('ico4').className=iconon;
+                document.location.href='/invoice/final';
                 break;
-            case 5:
-                day = "Friday";
-                break;
-            case 6:
-                day = "Saturday";
         }
         // document.getElementById('ico4').className="w-10 h-10 mx-auto bg-green-500 rounded-full text-lg text-white flex items-center";
 

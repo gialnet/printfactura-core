@@ -28,6 +28,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static com.printfactura.core.domain.sales.SalesBill.SalesBillBuilder;
 
@@ -48,23 +49,6 @@ public class InvoiceSalesController {
         this.luceneServiceCustomer = luceneServiceCustomer;
         this.servicesPDF = servicesPDF;
     }
-
-
-    // List<Customer> CompanyNamePrefixQuery(String name, String uuid)
-   /* @RequestMapping(value = "/invoice", method = RequestMethod.GET)
-    public String showStudentBySurname(@RequestParam(value = "name", required = false) String name,
-                                       Model model,
-                                       HttpSession session ) throws Exception {
-
-
-
-        model.addAttribute("rowlist", rowsInvoice );
-        model.addAttribute("invoice", rowDetailInvoiceUI);
-        model.addAttribute("customer",
-                luceneServiceCustomer.CompanyNamePrefixQuery(name,(String) session.getAttribute("uuid")));
-
-        return "invoice";
-    }*/
 
 
     @GetMapping("/invoice/number")
@@ -208,18 +192,33 @@ public class InvoiceSalesController {
     }
 
     @PostMapping("/invoice/final")
-    private String SaveDataCompileObjects(HttpSession session, Authentication a) throws DocumentException, NamingException, IOException {
+    private String SaveDataCompileObjects(Model model, HttpSession session, Authentication a) throws DocumentException, NamingException, IOException {
 
         // Compile all objects and compose SalesBill object
 
         // Date and invoice number
         InvoiceNumber invoiceNumber = (InvoiceNumber) session.getAttribute("InvoiceNumber");
+        Optional<InvoiceNumber> inv = Optional.ofNullable(invoiceNumber);
+        if (inv.isEmpty()){
+            model.addAttribute("message", "No invoice number and date");
+            return "miss_data_pdf";
+        }
 
         // id Customer and CompanyName
         FieldsForSearchCustomers fields = (FieldsForSearchCustomers) session.getAttribute("FieldsForSearchCustomers");
+        Optional<FieldsForSearchCustomers> ffse = Optional.ofNullable(fields);
+        if (ffse.isEmpty()){
+            model.addAttribute("message", "No customer define for this document, please select one");
+            return "miss_data_pdf";
+        }
 
         // List the invoice concept
         List<RowDetail> lrowDetail = (List<RowDetail>) session.getAttribute("ListRows");
+        Optional<List<RowDetail>> lrwd = Optional.ofNullable(lrowDetail);
+        if (lrwd.isEmpty() || lrwd.get().size()==0){
+            model.addAttribute("message", "No concept for the invoice");
+            return "miss_data_pdf";
+        }
 
         // Compose SalesBill
         SalesBill salesBill = servicesPDF.ComposeSalesBill(invoiceNumber,
@@ -234,6 +233,37 @@ public class InvoiceSalesController {
 
 
         return "success_invoice";
+    }
+
+    @GetMapping("/invoice/checkpdf")
+    private String CheckNecesasryInfoPDF(Model model, Authentication a, HttpSession session){
+
+        // Date and invoice number
+        Optional<InvoiceNumber> invoiceNumber = Optional.ofNullable((InvoiceNumber) session.getAttribute("InvoiceNumber"));
+
+        if (invoiceNumber.isEmpty()) {
+            model.addAttribute("message", "No invoice number and date");
+            return "miss_data_pdf";
+        }
+
+        // id Customer and CompanyName
+        Optional<FieldsForSearchCustomers> fields = Optional.ofNullable((FieldsForSearchCustomers) session.getAttribute("FieldsForSearchCustomers"));
+
+        if (fields.isEmpty()){
+            model.addAttribute("message", "No customer define for this document, please select one");
+            return "miss_data_pdf";
+        }
+
+        // List the invoice concept
+        Optional<List<RowDetail>> lrowDetail = Optional.ofNullable((List<RowDetail>) session.getAttribute("ListRows"));
+
+        if (lrowDetail.isEmpty() || lrowDetail.get().size()==0){
+            model.addAttribute("message", "No concept for the invoice");
+            return "miss_data_pdf";
+        }
+
+
+        return "redirect:pdf";
     }
 
     /*@RequestMapping(value = "/pdfreport", method = RequestMethod.GET,

@@ -30,7 +30,7 @@ public class MySelfController {
     @GetMapping("/")
     public String root(HttpSession session) {
 
-        log.info("index '{}'", session.getAttribute("id"));
+        log.info("index uuid {}", session.getAttribute("uuid"));
         return "index";
     }
 

@@ -71,7 +71,7 @@
 
         <tbody class="bg-white">
         <!--/*@thymesVar id="customers" type="java"*/-->
-        <tr th:each="customer , stat : ${Customer}">
+        <tr th:each="customer , stat : ${Customer}" class="hover:bg-yellow-500">
 
             <!-- Primera fila, primera columna -->
 
@@ -79,7 +79,9 @@
                 <div class="flex items-center">
                     <div class="ml-4">
                         <div class="text-sm leading-5 font-medium text-gray-900">
+                            <a href="/invoice/selected" th:href="'/invoice/selected?id='+${customer.getIdCode()}+'&name='+${customer.getCompanyName()}" class="text-indigo-600 hover:text-indigo-900">
                             <span th:text="${customer.getCompanyName()}"></span>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -87,18 +89,22 @@
 
             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
                 <div class="text-sm leading-5 text-gray-900">
+                    <a href="/invoice/selected" th:href="'/invoice/selected?id='+${customer.getIdCode()}+'&name='+${customer.getCompanyName()}" class="text-indigo-600 hover:text-indigo-900">
                     <span th:text="${customer.getAddress()}"></span>
+                    </a>
                 </div>
             </td>
 
             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-              <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                  <a href="/invoice/selected" th:href="'/invoice/selected?id='+${customer.getIdCode()}+'&name='+${customer.getCompanyName()}" class="text-indigo-600 hover:text-indigo-900">
                 <span th:text="${customer.getCity()}"></span>
-              </span>
+                </a>
             </td>
 
             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 text-gray-500">
+                <a href="/invoice/selected" th:href="'/invoice/selected?id='+${customer.getIdCode()}+'&name='+${customer.getCompanyName()}" class="text-indigo-600 hover:text-indigo-900">
                 <span th:text="${customer.getPostCode()}"></span>
+                </a>
             </td>
 
             <td class="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium">
@@ -122,11 +128,6 @@
 
 <script>
 
-    function FunctionSelect() {
-        var selectedrow= document.getElementById('')
-
-    }
-
     function changeStyle(step){
 
         var iconon ="w-10 h-10 mx-auto bg-green-500 rounded-full text-lg text-white flex items-center";
@@ -141,6 +142,7 @@
                 document.getElementById('ico2').className=iconoff;
                 document.getElementById('ico3').className=iconoff;
                 document.getElementById('ico4').className=iconoff;
+                document.location.href='/invoice/number';
                 break;
             case 2:
                 document.getElementById('bar1').style='width: 100%;';
@@ -149,18 +151,26 @@
                 document.getElementById('ico2').className=iconon;
                 document.getElementById('ico3').className=iconoff;
                 document.getElementById('ico4').className=iconoff;
+
                 break;
             case 3:
-                day = "Wednesday";
+                document.getElementById('bar1').style='width: 100%;';
+                document.getElementById('bar2').style='width: 100%;';
+                document.getElementById('bar3').style='width: 0%;';
+                document.getElementById('ico2').className=iconon;
+                document.getElementById('ico3').className=iconon;
+                document.getElementById('ico4').className=iconoff;
+                document.location.href='/invoice/new';
                 break;
             case 4:
-                day = "Thursday";
+                document.getElementById('bar1').style='width: 100%;';
+                document.getElementById('bar2').style='width: 100%;';
+                document.getElementById('bar3').style='width: 100%;';
+                document.getElementById('ico2').className=iconon;
+                document.getElementById('ico3').className=iconon;
+                document.getElementById('ico4').className=iconon;
+                document.location.href='/invoice/final';
                 break;
-            case 5:
-                day = "Friday";
-                break;
-            case 6:
-                day = "Saturday";
         }
         // document.getElementById('ico4').className="w-10 h-10 mx-auto bg-green-500 rounded-full text-lg text-white flex items-center";
 

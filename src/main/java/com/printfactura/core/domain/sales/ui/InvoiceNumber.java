@@ -10,7 +10,10 @@ import lombok.*;
 @Getter
 public class InvoiceNumber {
 
-    private String invoiceNumber;
-    private String invoiceDate;
+
+    @Builder.Default
+    private String invoiceNumber="";
+    @Builder.Default
+    private String invoiceDate="";
 
 }

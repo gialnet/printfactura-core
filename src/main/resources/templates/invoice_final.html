@@ -28,7 +28,7 @@
 
     <div class="flex items-center justify-between">
         <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                type="button" onclick="javascript:window.location='/invoice/pdf';">
+                type="button" onclick="javascript:window.location='/invoice/checkpdf';">
             Preview PDF
         </button>
         <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
@@ -58,6 +58,7 @@
                 document.getElementById('ico2').className=iconoff;
                 document.getElementById('ico3').className=iconoff;
                 document.getElementById('ico4').className=iconoff;
+                document.location.href='/invoice/number';
                 break;
             case 2:
                 document.getElementById('bar1').style='width: 100%;';
@@ -66,6 +67,7 @@
                 document.getElementById('ico2').className=iconon;
                 document.getElementById('ico3').className=iconoff;
                 document.getElementById('ico4').className=iconoff;
+                document.location.href='/invoice/customersearch';
                 break;
             case 3:
                 document.getElementById('bar1').style='width: 100%;';
@@ -74,6 +76,7 @@
                 document.getElementById('ico2').className=iconon;
                 document.getElementById('ico3').className=iconon;
                 document.getElementById('ico4').className=iconoff;
+                document.location.href='/invoice/new';
                 break;
             case 4:
                 document.getElementById('bar1').style='width: 100%;';
