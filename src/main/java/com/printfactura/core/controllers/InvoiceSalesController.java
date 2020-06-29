@@ -231,6 +231,8 @@ public class InvoiceSalesController {
 
         // Send
 
+        model.addAttribute("idInvoice",salesBill.getHeadSalesBill().getId());
+        model.addAttribute("TotalInvoice",salesBill.getHeadSalesBill().getTotal());
 
         return "success_invoice";
     }

@@ -50,3 +50,6 @@ chmod 500 core-0.0.1-SNAPSHOT.jar
 
 ln -s /opt/vivaldi/core-0.0.1-SNAPSHOT.jar /etc/init.d/printfactura
 service printfactura start
+
+*******
+nohup java -jar core-0.0.1-SNAPSHOT.jar &
