@@ -15,11 +15,21 @@ import java.util.UUID;
 public class AppUser {
 
     private String IdUser; // email address
+
     @Builder.Default
     private String UserUUID = UUID.randomUUID().toString(); // it is assigned when is create a new user
+
     private String Password;
+
     @Builder.Default
     private Date SignDate = new Date();
+
     @Builder.Default
     private String Status = "active";
+
+    @Builder.Default
+    private String CountryISO3166 = "UK";
+
+    @Builder.Default
+    private String LanguageISO3166 = "UK";
 }

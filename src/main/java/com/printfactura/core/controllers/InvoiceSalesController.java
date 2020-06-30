@@ -161,6 +161,7 @@ public class InvoiceSalesController {
                 Concept(rows.getConcept()).
                 Unit(rows.getUnit()).
                 Price(rows.getPrice()).
+                VAT(rows.getVAT()).
                 Total(rows.getTotal()).
                 build();
 

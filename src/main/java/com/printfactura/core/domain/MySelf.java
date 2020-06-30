@@ -26,6 +26,9 @@ public class MySelf {
     private String PostCode ="";
     private String Country ="";
 
+    @Builder.Default
+    private String CountryISO3166 = "UK";
+
     private String TaxPeriod="";
 
     @Builder.Default

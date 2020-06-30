@@ -17,6 +17,7 @@ public class RowDetailInvoiceUI {
     private String Concept;
     private BigDecimal Unit;
     private BigDecimal Price;
+    private BigDecimal VAT;
     private BigDecimal Total;
     @Builder.Default
     private List<RowDetail> rowDetails= new ArrayList<>();

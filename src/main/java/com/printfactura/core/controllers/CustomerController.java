@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.servlet.http.HttpSession;
+import javax.websocket.server.PathParam;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,8 +32,21 @@ public class CustomerController {
         this.luceneServiceCustomer = luceneServiceCustomer;
     }
 
+   /* @GetMapping("/customer/update")
+    private String CustomerUpdate(Model model, HttpSession session) throws IOException, ParseException {
+
+        List<Customer> lc = luceneServiceCustomer.
+                CustomerByPages(1,5,(String)session.getAttribute("uuid"));
+
+        //log.info("company name '{}'",lc.get(0).getCompanyName());
+        log.info("number of records '{}'",lc.size());
+        model.addAttribute("customers", lc);
+
+        return "customergrid";
+    }*/
+
     @GetMapping("/customer/grid")
-    public String showForm(Model model, HttpSession session) throws IOException, ParseException {
+    private String showForm(Model model, HttpSession session) throws IOException, ParseException {
 
         List<Customer> lc = luceneServiceCustomer.
                 CustomerByPages(1,5,(String)session.getAttribute("uuid"));
@@ -44,25 +58,29 @@ public class CustomerController {
         return "customergrid";
     }
 
-    @GetMapping("/customer/new")
-    public String UpdateCustomer(Model model, Authentication a, HttpSession session){
+    @GetMapping("/customer/update")
+    private String UpdateCustomer(@PathParam("id") int id, Model model, Authentication a, HttpSession session){
 
-        if (a!=null) {
-            log.info(" /customer/new -> authenticate user '{}'", a.getName());
-            customer = Customer.builder().build();
+            // find the customer
+           customer = servicesCustomer.FindCustomerByID(a.getName(), id);
+           model.addAttribute("Customer", customer);
 
-            log.info("/customer/new GET object Customer '{}'", customer);
-
-            model.addAttribute("Customer", customer);
-        }
-        else return "/login";
-
-        return "customer";
+           return "customer_update";
 
     }
 
+    @PostMapping("/customer/update")
+    private String UpdateCustomerAction(@ModelAttribute("Customer") Customer upd_customer, Authentication a, HttpSession session){
+
+        // TODO update customer RocksDB and Lucene
+
+        return "redirect:search";
+
+    }
+
+
     @PostMapping("/customer/new")
-    public String SaveCustomer(@ModelAttribute("Customer") Customer myCustomerform,
+    private String SaveCustomer(@ModelAttribute("Customer") Customer myCustomerform,
                                Authentication a, HttpSession session) throws IOException {
 
         log.info("Post /customer/new");
@@ -72,7 +90,7 @@ public class CustomerController {
         //session.getAttribute("uuid")
 
         if (myCustomerform==null)
-            return "customer";
+            return "customer_add";
 
         if (servicesCustomer.SaveCustomer(myCustomerform, a.getName(), (String) session.getAttribute("uuid") ))
         {
@@ -86,7 +104,7 @@ public class CustomerController {
     }
 
     @GetMapping("/customer/search")
-    public String SearchCustomer(Model model,
+    private String SearchCustomer(Model model,
                                  Authentication a, HttpSession session){
 
         FieldsForSearchCustomers searchName = FieldsForSearchCustomers.builder().build();
@@ -94,11 +112,11 @@ public class CustomerController {
         model.addAttribute("SearchName", searchName);
         model.addAttribute("Customer",customers);
 
-        return "searchbyname";
+        return "customer_grid_searchbyname";
     }
 
     @PostMapping("/customer/search")
-    public String SearchCustomer(@ModelAttribute("Customer") Customer myCustomerform,
+    private String SearchCustomer(@ModelAttribute("Customer") Customer myCustomerform,
                                  @ModelAttribute("SearchName") FieldsForSearchCustomers searchName,
                                  Model model,
                                  Authentication a, HttpSession session) throws Exception {
@@ -107,7 +125,7 @@ public class CustomerController {
          model.addAttribute("Customer", luceneServiceCustomer.
                  CompanyNamePrefixQuery(searchName.getSearchName(), (String) session.getAttribute("uuid")));
 
-        return "searchbyname";
+        return "customer_grid_searchbyname";
 
     }
 }

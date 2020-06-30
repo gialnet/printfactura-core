@@ -63,12 +63,12 @@ public class ServicesPDF {
                     DetailSalesBill.builder().Concept(rd.getConcept()).
                             Unit(rd.getUnit()).
                             Price(rd.getPrice()).
-                            PorVAT(oMysf.getVat()).
+                            PorVAT(rd.getVAT()).
                             build());
 
             // sum all the rows
              base = rd.getUnit().multiply(rd.getPrice());
-             vat = base.multiply(oMysf.getVat()).divide(BigDecimal.valueOf(100));
+             vat = base.multiply(rd.getVAT()).divide(BigDecimal.valueOf(100));
              totalBase= totalBase.add(base);
              totalVat= totalVat.add(vat);
         }

@@ -1,4 +1,4 @@
-package com.printfactura.core;
+package com.printfactura.core.services.pdf;
 
 import com.lowagie.text.DocumentException;
 import com.printfactura.core.makePDFinvoice.CreatePDF;

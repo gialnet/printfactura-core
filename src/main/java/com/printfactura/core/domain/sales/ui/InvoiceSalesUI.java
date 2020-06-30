@@ -10,10 +10,11 @@ import lombok.*;
 @Getter
 public class InvoiceSalesUI {
 
-    private String InvoiceID;
+    private int InvoiceID;
     private String Customer;
     private String DateInvoice;
     private String NumberInvoice;
     private String TotalAmount;
     private String VAT;
+    private String State;
 }

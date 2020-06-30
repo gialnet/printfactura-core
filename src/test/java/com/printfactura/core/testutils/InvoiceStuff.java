@@ -1,13 +1,15 @@
-package com.printfactura.core.domain;
+package com.printfactura.core.testutils;
 
-import com.google.gson.Gson;
+import com.printfactura.core.domain.MySelf;
 import com.printfactura.core.domain.customer.Customer;
 import com.printfactura.core.domain.customer.CustomerElectronicAddress;
+import com.printfactura.core.domain.customer.FieldsForSearchCustomers;
 import com.printfactura.core.domain.sales.DetailSalesBill;
 import com.printfactura.core.domain.sales.HeadSalesBill;
 import com.printfactura.core.domain.sales.SalesBill;
 import com.printfactura.core.domain.sales.TotalSalesBill;
-import org.junit.jupiter.api.Test;
+import com.printfactura.core.domain.sales.ui.InvoiceNumber;
+import com.printfactura.core.domain.sales.ui.RowDetail;
 
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
@@ -15,24 +17,34 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+public class InvoiceStuff {
 
-public class SalesBillTest {
+    public static SalesBill FromInvoiceBlocks(){
 
-    private Gson gson = new Gson();
 
-    @Test
-    public void SalesBillBuilderTest(){
+        InvoiceNumber invoiceNumber = InvoiceNumber.builder().
+                invoiceDate("2020/06/30").
+                invoiceNumber("2020/154").
+                build();
 
-        var mySalesBill = SalesBillBuilder();
+        FieldsForSearchCustomers fieldsForSearchCustomers = FieldsForSearchCustomers.builder().
+                searchName("Customer 1").
+                id(1).
+                build();
 
-        //System.err.println(mySalesBill.getClass().getName());
-        assertEquals(mySalesBill.getClass().getName(),"com.printfactura.core.domain.sales.SalesBill");
-        //System.err.println(gson.toJson(mySalesBill));
+        List<RowDetail> lrowDetail = new ArrayList<>();
+
+        lrowDetail.add(RowDetail.builder().
+                Unit(BigDecimal.valueOf(160)).
+                Price(BigDecimal.valueOf(60)).
+                VAT(BigDecimal.valueOf(20)).
+                Concept("Hours Work in month of May").
+                build());
+
+        return null;
     }
 
-    public static SalesBill SalesBillBuilder(){
-
+    public static SalesBill createSalesBill(){
         List<DetailSalesBill> detailSalesBills = new ArrayList<>();
         detailSalesBills.add(
                 DetailSalesBill.builder().Concept("160 hours work").
@@ -75,7 +87,7 @@ public class SalesBillTest {
                         Country("United Kingdom").
                         Identification("VAT Registration Number 928465196").
                         //customerElectronicAddresses(customerElectronicAddresses).
-                        build()).
+                                build()).
                 headSalesBill(HeadSalesBill.builder().
                         BillNumber("2020/03/01").
                         Date(ZonedDateTime.now().format(DateTimeFormatter.RFC_1123_DATE_TIME)).
@@ -91,5 +103,6 @@ public class SalesBillTest {
                         TotalPound(BigDecimal.valueOf(11520/1.1162)).
                         build()).
                 build();
+
     }
 }

@@ -9,8 +9,14 @@ import java.math.BigDecimal;
 @Builder
 public class RowDetail {
 
-    private String Concept;
-    private BigDecimal Unit;
-    private BigDecimal Price;
-    private BigDecimal Total;
+    @Builder.Default
+    private String Concept = "";
+    @Builder.Default
+    private BigDecimal Unit = BigDecimal.ZERO;
+    @Builder.Default
+    private BigDecimal Price = BigDecimal.ZERO;
+    @Builder.Default
+    private BigDecimal Total = BigDecimal.ZERO;
+    @Builder.Default
+    private BigDecimal VAT = BigDecimal.ZERO;
 }

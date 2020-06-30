@@ -23,7 +23,6 @@ import java.nio.file.Paths;
 @Repository
 public class LuceneWriteRepository implements LuceneWriteDocuments {
 
-    private final String INDEX_DIR = "c:/temp/lucene8index/";
     @Value("${lucene-path}")
     private String lucene_path;
 
@@ -115,6 +114,7 @@ public class LuceneWriteRepository implements LuceneWriteDocuments {
         document.add(new StringField("NumberInvoice", salesBill.getHeadSalesBill().getBillNumber() , Field.Store.YES));
         document.add(new StringField("TotalAmount", salesBill.getHeadSalesBill().getTotal().toString() , Field.Store.YES));
         document.add(new StringField("VAT", salesBill.getHeadSalesBill().getVat().toString() , Field.Store.YES));
+        document.add(new StringField("State", salesBill.getHeadSalesBill().getState() , Field.Store.YES));
 
         return document;
     }

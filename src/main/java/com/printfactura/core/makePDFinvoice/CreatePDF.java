@@ -397,7 +397,7 @@ public class CreatePDF {
         pie.setBackgroundColor(GRAY);
         table.addCell(pie);
 
-        pie = new PdfPCell(new Paragraph("HRMC exchange rates "+
+       /* pie = new PdfPCell(new Paragraph("HRMC exchange rates "+
                 salesBill.getTotalSalesBill().getHMRC_ExchangeRates()+
                 " Base "+
                 NumberFormat.getCurrencyInstance(Locale.UK).format(salesBill.getTotalSalesBill().getBasePound())+
@@ -409,7 +409,10 @@ public class CreatePDF {
         //pie.setGrayFill(0.7f);
         pie.setHorizontalAlignment(Element.ALIGN_RIGHT);
         pie.setBorder(Rectangle.NO_BORDER);
-        table.addCell(pie);
+        table.addCell(pie);*/
+
+
+
             // base imponible
            /* p = new Paragraph(dataOneSellBill.getTupleTotalBill().getStBase(),FUENTE_CUERPO);
             p.setAlignment(Element.ALIGN_RIGHT);
@@ -452,7 +455,7 @@ public class CreatePDF {
         table.addCell(pie2);*/
 
         p = new Paragraph(
-                "VAT "+NumberFormat.getCurrencyInstance(Locale.UK).format(salesBill.getTotalSalesBill().getVATPound())+
+                "VAT "+NumberFormat.getCurrencyInstance(Locale.GERMANY).format(salesBill.getTotalSalesBill().getVATEuros())+
                 "   Total bill " + NumberFormat.getCurrencyInstance(Locale.GERMANY).format(TotalAPagar), FUENTE_PIE_TABLA);
         p.setAlignment(Element.ALIGN_RIGHT);
         cell = new PdfPCell();
