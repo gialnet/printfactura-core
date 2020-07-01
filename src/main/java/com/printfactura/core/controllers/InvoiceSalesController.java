@@ -5,11 +5,12 @@ import com.printfactura.core.domain.customer.Customer;
 import com.printfactura.core.domain.customer.FieldsForSearchCustomers;
 import com.printfactura.core.domain.sales.SalesBill;
 import com.printfactura.core.domain.sales.ui.*;
-import com.printfactura.core.makePDFinvoice.CreatePDF;
 import com.printfactura.core.services.lucene.LuceneServiceCustomer;
+import com.printfactura.core.services.lucene.LuceneServiceSalesInvoice;
 import com.printfactura.core.services.pdf.ServicesPDF;
 import com.printfactura.core.services.rocksdb.ServicesInvoice;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.lucene.queryparser.classic.ParseException;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -38,15 +39,17 @@ public class InvoiceSalesController {
 
     private final ServicesInvoice servicesInvoice;
     private final LuceneServiceCustomer luceneServiceCustomer;
+    private final LuceneServiceSalesInvoice luceneServiceSalesInvoice;
     private final ServicesPDF servicesPDF;
     //private Hashtable <String, List<RowDetail>> rowDetailMap = new Hashtable<>();
 
 
     List<InvoiceSalesUI> lisales = new ArrayList<>();
 
-    public InvoiceSalesController(ServicesInvoice servicesInvoice, LuceneServiceCustomer luceneServiceCustomer, ServicesPDF servicesPDF) {
+    public InvoiceSalesController(ServicesInvoice servicesInvoice, LuceneServiceCustomer luceneServiceCustomer, LuceneServiceSalesInvoice luceneServiceSalesInvoice, ServicesPDF servicesPDF) {
         this.servicesInvoice = servicesInvoice;
         this.luceneServiceCustomer = luceneServiceCustomer;
+        this.luceneServiceSalesInvoice = luceneServiceSalesInvoice;
         this.servicesPDF = servicesPDF;
     }
 
@@ -306,13 +309,18 @@ public class InvoiceSalesController {
     /* ***************   grid of invoices ************** */
 
     @GetMapping("/invoice/grid")
-    private String showForm(Model model) {
+    private String SearchInvoiceGrid(Model model,
+                                     HttpSession session, Authentication a) throws IOException, ParseException {
 
-        lisales = servicesInvoice.MakeListSalesInvoice();
+        InvoiceNumber invoiceNumber = InvoiceNumber.builder().build();
+
+        lisales.clear();
+        lisales = luceneServiceSalesInvoice.InvoiceByPage(1,5, (String) session.getAttribute("uuid"));
         log.info("List of sales '{}'",lisales.get(0).getCustomer());
         model.addAttribute("invoices", lisales);
+        model.addAttribute("InvoiceNumber", invoiceNumber);
 
-        return "invoicegrid";
+        return "invoice_grid_search";
     }
 
 

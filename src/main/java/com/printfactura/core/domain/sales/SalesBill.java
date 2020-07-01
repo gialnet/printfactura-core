@@ -1,8 +1,8 @@
 package com.printfactura.core.domain.sales;
 
-import com.printfactura.core.domain.*;
 import com.printfactura.core.domain.customer.Customer;
 import com.printfactura.core.domain.customer.CustomerElectronicAddress;
+import com.printfactura.core.domain.myself.MySelf;
 import lombok.*;
 
 import java.math.BigDecimal;

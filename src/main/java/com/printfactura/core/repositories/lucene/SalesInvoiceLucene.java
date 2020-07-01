@@ -15,4 +15,7 @@ public interface SalesInvoiceLucene {
 
     TopDocs orderByIdCodeFromTo(IndexSearcher indexSearcher, int FromInvoiceID, int ToInvoiceID)
             throws ParseException, IOException;
+
+    TopDocs orderByIdCodeFromTo(IndexSearcher indexSearcher, int FromInvoiceID, int ToInvoiceID, boolean reverse)
+            throws ParseException, IOException;
 }

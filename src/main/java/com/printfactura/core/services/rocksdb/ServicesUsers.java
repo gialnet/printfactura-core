@@ -2,6 +2,7 @@ package com.printfactura.core.services.rocksdb;
 
 import com.google.gson.Gson;
 import com.printfactura.core.domain.appusers.AppUser;
+import com.printfactura.core.domain.myself.MyselfSequences;
 import com.printfactura.core.repositories.lucene.LuceneWriteRepository;
 import com.printfactura.core.repositories.rocksdb.KVRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -52,6 +53,27 @@ public class ServicesUsers {
         // save IdUser usually email address antonio@gmial.com
         return repository.save(appUser.getIdUser().toLowerCase(), gson.toJson(appUser));
 
+    }
+
+    public MyselfSequences GetSequences(String email){
+
+        var objSeq = FindKey("sequence.customer." + email);
+        int sc = 0;
+        int si = 0;
+
+        if (objSeq.isPresent()){
+            sc = (int) objSeq.get();
+        }
+
+        objSeq = FindKey("sequence.invoice." + email);
+        if (objSeq.isPresent()){
+            si = (int) objSeq.get();
+        }
+
+        return  MyselfSequences.builder().
+                SeqCustomer(sc).
+                SeqInvoice(si).
+                build();
     }
 
     /**

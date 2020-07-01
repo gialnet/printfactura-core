@@ -1,6 +1,6 @@
 package com.printfactura.core.controllers;
 
-import com.printfactura.core.domain.MySelf;
+import com.printfactura.core.domain.myself.MySelf;
 import com.printfactura.core.services.rocksdb.ServicesMySelf;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.ObjectFactory;

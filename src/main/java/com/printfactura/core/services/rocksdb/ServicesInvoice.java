@@ -51,6 +51,23 @@ public class ServicesInvoice {
         return invoiceSalesUIS;
     }
 
+
+
+    /**
+     * Get the last number of invoice useful for know in the user interface the inverse order
+     *
+     * @param email
+     * @return
+     */
+    public int GetSeqInvoice(String email)
+    {
+
+        // find sequence
+        var sequence = repository.find("sequence.invoice." + email);
+
+        return (int) sequence.get();
+    }
+
     private int IncreaseOneSeqInvoice(String email)
     {
 

@@ -13,6 +13,7 @@ import org.apache.lucene.index.memory.MemoryIndex;
 import org.apache.lucene.store.FSDirectory;
 
 import org.apache.lucene.util.BytesRef;
+import org.apache.lucene.util.NumericUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
@@ -65,6 +66,7 @@ public class LuceneWriteRepository implements LuceneWriteDocuments {
         //document.add(new StringField("IdCode", customer.getIdCode() , Field.Store.YES));
         document.add(new IntPoint("IdCode", customer.getIdCode()));
         document.add(new StoredField("IdCode", customer.getIdCode()) );
+        document.add(new SortedNumericDocValuesField("IdCode", customer.getIdCode()) );
 
 
         document.add(new TextField("Identification", customer.getIdentification() , Field.Store.YES));
@@ -108,6 +110,7 @@ public class LuceneWriteRepository implements LuceneWriteDocuments {
 
         document.add(new IntPoint("InvoiceID", salesBill.getHeadSalesBill().getId()) );
         document.add(new StoredField("InvoiceID", salesBill.getHeadSalesBill().getId()) );
+        document.add(new SortedNumericDocValuesField("InvoiceID", salesBill.getHeadSalesBill().getId()) );
 
         document.add(new TextField("Customer", salesBill.getCustomer().getCompanyName() , Field.Store.YES));
         document.add(new StringField("DateInvoice", salesBill.getHeadSalesBill().getDate() , Field.Store.YES));

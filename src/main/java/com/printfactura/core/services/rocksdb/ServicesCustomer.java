@@ -1,7 +1,6 @@
 package com.printfactura.core.services.rocksdb;
 
 import com.google.gson.Gson;
-import com.printfactura.core.domain.MySelf;
 import com.printfactura.core.domain.customer.Customer;
 import com.printfactura.core.repositories.lucene.LuceneWriteRepository;
 import com.printfactura.core.repositories.rocksdb.KVRepository;

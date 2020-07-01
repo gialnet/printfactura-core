@@ -3,10 +3,7 @@ package com.printfactura.core.repositories.lucene;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.queryparser.classic.ParseException;
-import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.Query;
-import org.apache.lucene.search.Sort;
-import org.apache.lucene.search.TopDocs;
+import org.apache.lucene.search.*;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.springframework.beans.factory.annotation.Value;
@@ -47,8 +44,22 @@ public class SalesInvoiceRepository implements SalesInvoiceLucene {
     public TopDocs orderByIdCodeFromTo(IndexSearcher indexSearcher, int FromInvoiceID, int ToInvoiceID)
             throws ParseException, IOException {
 
+        Sort sort = new Sort(new SortedNumericSortField("InvoiceID", SortField.Type.INT, true));
+
         Query idQuery = newRangeQuery("InvoiceID",FromInvoiceID, ToInvoiceID);
-        TopDocs hits = indexSearcher.search(idQuery, 10, Sort.INDEXORDER, true);
+        TopDocs hits = indexSearcher.search(idQuery, 10, sort, true);
+
+        return hits;
+    }
+
+    @Override
+    public TopDocs orderByIdCodeFromTo(IndexSearcher indexSearcher, int FromInvoiceID, int ToInvoiceID, boolean reverse)
+            throws ParseException, IOException {
+
+        Sort sort = new Sort(new SortedNumericSortField("InvoiceID", SortField.Type.INT, reverse));
+
+        Query idQuery = newRangeQuery("InvoiceID",FromInvoiceID, ToInvoiceID);
+        TopDocs hits = indexSearcher.search(idQuery, 10, sort, true);
 
         return hits;
     }

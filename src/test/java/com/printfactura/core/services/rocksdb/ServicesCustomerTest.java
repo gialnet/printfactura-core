@@ -18,8 +18,8 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@TestPropertySource(locations="classpath:application-test.properties")
-@EnableConfigurationProperties
+/*@TestPropertySource(locations="classpath:application-test.properties")
+@EnableConfigurationProperties*/
 @SpringBootTest
 class ServicesCustomerTest {
 
@@ -29,8 +29,8 @@ class ServicesCustomerTest {
     @Autowired
     LuceneServiceCustomer luceneServiceCustomer;
 
-    private final String uuid="c743b099-b05e-479d-be21-d39577c09c77";
-    private final String email="d1@gmail.com";
+    private final String uuid="6bfeb78f-3301-4985-9f73-8dab2f64194a";
+    private final String email="e1";
 
     @Test
     void saveCustomer() throws IOException {
@@ -59,7 +59,7 @@ class ServicesCustomerTest {
                 build();
 
 
-        TopDocs topDocs = luceneServiceCustomer.orderByIdCodeFromTo(19,20,uuid);
+        TopDocs topDocs = luceneServiceCustomer.orderByIdCodeFromTo(1,12,uuid);
 
         System.out.println(topDocs.totalHits);
 

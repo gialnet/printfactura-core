@@ -1,9 +1,8 @@
 package com.printfactura.core.services.pdf;
 
 import com.lowagie.text.DocumentException;
-import com.printfactura.core.domain.MySelf;
+import com.printfactura.core.domain.myself.MySelf;
 import com.printfactura.core.domain.customer.Customer;
-import com.printfactura.core.domain.customer.CustomerElectronicAddress;
 import com.printfactura.core.domain.customer.FieldsForSearchCustomers;
 import com.printfactura.core.domain.sales.DetailSalesBill;
 import com.printfactura.core.domain.sales.HeadSalesBill;

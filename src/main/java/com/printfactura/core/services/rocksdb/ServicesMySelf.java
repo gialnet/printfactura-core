@@ -1,7 +1,7 @@
 package com.printfactura.core.services.rocksdb;
 
 import com.google.gson.Gson;
-import com.printfactura.core.domain.MySelf;
+import com.printfactura.core.domain.myself.MySelf;
 import com.printfactura.core.repositories.rocksdb.KVRepository;
 import org.springframework.stereotype.Service;
 

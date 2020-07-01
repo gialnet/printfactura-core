@@ -31,7 +31,7 @@ public class LuceneServiceSalesInvoice {
         return invoiceRepository.orderByIdCodeFromTo(searcher, FromInvoiceID, ToInvoiceID);
     }
 
-    public List<InvoiceSalesUI> CustomerByPages(int page, int size, String uuid) throws IOException, ParseException {
+    public List<InvoiceSalesUI> InvoiceByPage(int page, int size, String uuid) throws IOException, ParseException {
 
         IndexSearcher searcher = invoiceRepository.OpenSearcher(uuid);
 
@@ -39,7 +39,7 @@ public class LuceneServiceSalesInvoice {
         int to = page * size;
         return ListOfInvoices(invoiceRepository.
                         orderByIdCodeFromTo(searcher, from, to),
-                searcher);
+                        searcher);
     }
 
     public List<InvoiceSalesUI> ListOfInvoices(TopDocs hits, IndexSearcher searcher) throws IOException {

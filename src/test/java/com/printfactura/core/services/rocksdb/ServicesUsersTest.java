@@ -27,11 +27,13 @@ class ServicesUsersTest {
 
     AppUser appUser;
 
+    String email ="e1";
+
     @Test
     void saveUser() throws IOException {
 
         appUser = AppUser.builder().
-                IdUser("antonio@gmail.com".toLowerCase()).
+                IdUser("e1".toLowerCase()).
                 Password("a1").
                 build();
 
@@ -39,9 +41,19 @@ class ServicesUsersTest {
     }
 
     @Test
+    public void GetSequences(){
+
+       var seqObj = servicesUsers.GetSequences(email);
+       System.out.println(seqObj.getSeqCustomer());
+       System.out.println(seqObj.getSeqInvoice());
+
+       assertNotNull(seqObj);
+    }
+
+    @Test
     void findUser() {
 
-       var user = servicesUsers.FindUser("antonio@gmail.com");
+       var user = servicesUsers.FindUser("e1");
 
        if (user.isPresent()){
            System.err.println(user.toString());
