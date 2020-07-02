@@ -5,6 +5,7 @@ import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.TopDocs;
 
 import java.io.IOException;
+import java.util.Date;
 
 public interface SalesInvoiceLucene {
 
@@ -18,4 +19,7 @@ public interface SalesInvoiceLucene {
 
     TopDocs orderByIdCodeFromTo(IndexSearcher indexSearcher, int FromInvoiceID, int ToInvoiceID, boolean reverse)
             throws ParseException, IOException;
+
+    TopDocs BetweenDates(IndexSearcher indexSearcher, String FromDate, String ToDate, boolean reverse)
+            throws ParseException, IOException, java.text.ParseException;
 }

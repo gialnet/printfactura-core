@@ -1,5 +1,7 @@
 package com.printfactura.core.repositories.lucene;
 
+import org.apache.lucene.document.DateTools;
+import org.apache.lucene.document.LongPoint;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.queryparser.classic.ParseException;
@@ -11,7 +13,9 @@ import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.Date;
 
+import static org.apache.lucene.document.DateTools.*;
 import static org.apache.lucene.document.IntPoint.newExactQuery;
 import static org.apache.lucene.document.IntPoint.newRangeQuery;
 
@@ -62,5 +66,23 @@ public class SalesInvoiceRepository implements SalesInvoiceLucene {
         TopDocs hits = indexSearcher.search(idQuery, 10, sort, true);
 
         return hits;
+    }
+
+    @Override
+    public TopDocs BetweenDates(IndexSearcher indexSearcher, String FromDate, String ToDate, boolean reverse) throws ParseException, IOException, java.text.ParseException {
+
+        Sort sort = new Sort(new SortedNumericSortField("DateInvoice", SortField.Type.LONG, reverse));
+
+        // https://lucene.apache.org/core/8_5_2/core/index.html?org/apache/lucene/document/DateTools.html
+        /*
+            You can have half-open ranges (which are in fact </≤ or >/≥ queries)
+            by setting lowerValue = Long.MIN_VALUE or upperValue = Long.MAX_VALUE.
+            Ranges are inclusive. For exclusive ranges, pass Math.addExact(lowerValue, 1) or Math.addExact(upperValue, -1).
+         */
+
+        Query dateQuery = LongPoint.newRangeQuery("DateInvoice",
+                DateTools.stringToTime(FromDate), DateTools.stringToTime(ToDate));
+
+        return indexSearcher.search( dateQuery, 10);
     }
 }

@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import javax.naming.NamingException;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -91,7 +92,7 @@ public class ServicesPDF {
                 customer(customer).
                 headSalesBill(HeadSalesBill.builder().
                         BillNumber(invoiceNumber.getInvoiceNumber()).
-                        Date(invoiceNumber.getInvoiceDate()).
+                        date(LocalDate.parse(invoiceNumber.getInvoiceDate())).
                         total(totalBase.add(totalVat)).
                         base(totalBase).
                         vat(totalVat).

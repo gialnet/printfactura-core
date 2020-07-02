@@ -27,13 +27,13 @@ class ServicesUsersTest {
 
     AppUser appUser;
 
-    String email ="e1";
+    String email ="l1";
 
     @Test
     void saveUser() throws IOException {
 
         appUser = AppUser.builder().
-                IdUser("e1".toLowerCase()).
+                IdUser(email.toLowerCase()).
                 Password("a1").
                 build();
 
@@ -53,7 +53,7 @@ class ServicesUsersTest {
     @Test
     void findUser() {
 
-       var user = servicesUsers.FindUser("e1");
+       var user = servicesUsers.FindUser(email);
 
        if (user.isPresent()){
            System.err.println(user.toString());

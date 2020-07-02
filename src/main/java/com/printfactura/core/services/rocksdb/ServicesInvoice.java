@@ -9,6 +9,7 @@ import com.printfactura.core.repositories.rocksdb.KVRepository;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -82,7 +83,7 @@ public class ServicesInvoice {
         return seq;
     }
 
-    public boolean SaveSalesBill(SalesBill salesBill,  String AppUserEmail, String uuid) throws IOException {
+    public boolean SaveSalesBill(SalesBill salesBill,  String AppUserEmail, String uuid) throws IOException, ParseException {
 
         boolean saveOK=false;
 

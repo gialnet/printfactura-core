@@ -11,6 +11,7 @@ import com.printfactura.core.domain.sales.TotalSalesBill;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -79,7 +80,7 @@ public class SalesBillTest {
                         build()).
                 headSalesBill(HeadSalesBill.builder().
                         BillNumber("2020/03/01").
-                        Date(ZonedDateTime.now().format(DateTimeFormatter.RFC_1123_DATE_TIME)).
+                        date(LocalDate.now()).
                         build()).
                 detailSalesBill(detailSalesBills).
                 totalSalesBill(TotalSalesBill.builder().

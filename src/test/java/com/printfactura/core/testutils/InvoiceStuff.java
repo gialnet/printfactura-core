@@ -2,7 +2,6 @@ package com.printfactura.core.testutils;
 
 import com.printfactura.core.domain.myself.MySelf;
 import com.printfactura.core.domain.customer.Customer;
-import com.printfactura.core.domain.customer.CustomerElectronicAddress;
 import com.printfactura.core.domain.customer.FieldsForSearchCustomers;
 import com.printfactura.core.domain.sales.DetailSalesBill;
 import com.printfactura.core.domain.sales.HeadSalesBill;
@@ -12,6 +11,7 @@ import com.printfactura.core.domain.sales.ui.InvoiceNumber;
 import com.printfactura.core.domain.sales.ui.RowDetail;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -77,7 +77,7 @@ public class InvoiceStuff {
                                 build()).
                 headSalesBill(HeadSalesBill.builder().
                         BillNumber("2020/03/01").
-                        Date(ZonedDateTime.now().format(DateTimeFormatter.RFC_1123_DATE_TIME)).
+                        date(LocalDate.now().minusMonths(6)).
                         build()).
                 detailSalesBill(detailSalesBills).
                 totalSalesBill(TotalSalesBill.builder().
@@ -127,7 +127,7 @@ public class InvoiceStuff {
                                 build()).
                 headSalesBill(HeadSalesBill.builder().
                         BillNumber("2020/04/31").
-                        Date(ZonedDateTime.now().format(DateTimeFormatter.RFC_1123_DATE_TIME)).
+                        date(LocalDate.now().minusMonths(5)).
                         build()).
                 detailSalesBill(detailSalesBills).
                 totalSalesBill(TotalSalesBill.builder().
@@ -177,7 +177,7 @@ public class InvoiceStuff {
                                 build()).
                 headSalesBill(HeadSalesBill.builder().
                         BillNumber("2020/04/101").
-                        Date(ZonedDateTime.now().format(DateTimeFormatter.RFC_1123_DATE_TIME)).
+                        date(LocalDate.now().minusMonths(4)).
                         build()).
                 detailSalesBill(detailSalesBills).
                 totalSalesBill(TotalSalesBill.builder().
@@ -227,7 +227,7 @@ public class InvoiceStuff {
                                 build()).
                 headSalesBill(HeadSalesBill.builder().
                         BillNumber("2020/05/551").
-                        Date(ZonedDateTime.now().format(DateTimeFormatter.RFC_1123_DATE_TIME)).
+                        date(LocalDate.now().minusMonths(3)).
                         build()).
                 detailSalesBill(detailSalesBills).
                 totalSalesBill(TotalSalesBill.builder().
@@ -276,7 +276,7 @@ public class InvoiceStuff {
                                 build()).
                 headSalesBill(HeadSalesBill.builder().
                         BillNumber("2020/07/07").
-                        Date(ZonedDateTime.now().format(DateTimeFormatter.RFC_1123_DATE_TIME)).
+                        date(LocalDate.now().minusMonths(1)).
                         build()).
                 detailSalesBill(detailSalesBills).
                 totalSalesBill(TotalSalesBill.builder().

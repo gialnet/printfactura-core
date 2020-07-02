@@ -196,7 +196,7 @@ public class InvoiceSalesController {
     }
 
     @PostMapping("/invoice/final")
-    private String SaveDataCompileObjects(Model model, HttpSession session, Authentication a) throws DocumentException, NamingException, IOException {
+    private String SaveDataCompileObjects(Model model, HttpSession session, Authentication a) throws DocumentException, NamingException, IOException, java.text.ParseException {
 
         // Compile all objects and compose SalesBill object
 

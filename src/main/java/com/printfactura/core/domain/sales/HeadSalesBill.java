@@ -5,6 +5,8 @@ import com.printfactura.core.domain.customer.Customer;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.Date;
 
 @Data
 @Builder
@@ -18,7 +20,7 @@ public class HeadSalesBill {
     private int IdCustomer;
     private int IdCustomerType;
     private String Amount;
-    private String Date;
+    private LocalDate date;
     private String BillNumber;
 
     @Builder.Default

@@ -7,10 +7,12 @@ import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
+import org.apache.lucene.search.TopFieldDocs;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -64,5 +66,58 @@ public class LuceneServiceSalesInvoice {
 
         return invoiceSalesUI;
 
+    }
+
+    public TopDocs BetweenDates(String FromDate, String ToDate, String uuid, boolean reverse) throws IOException, ParseException, java.text.ParseException {
+
+        IndexSearcher searcher = invoiceRepository.OpenSearcher(uuid);
+
+        TopDocs topDocs = invoiceRepository.BetweenDates(searcher, FromDate, ToDate, reverse);
+
+        return topDocs;
+    }
+
+    public List<InvoiceSalesUI> SalesBetweenDates(String FromDate, String ToDate, String uuid, boolean reverse) throws IOException, ParseException, java.text.ParseException {
+
+        invoiceSalesUI.clear();
+
+        IndexSearcher searcher = invoiceRepository.OpenSearcher(uuid);
+
+        TopDocs topDocs = invoiceRepository.BetweenDates(searcher, FromDate, ToDate, reverse);
+
+        for (ScoreDoc sd : topDocs.scoreDocs) {
+            Document d = searcher.doc(sd.doc);
+            invoiceSalesUI.add(InvoiceSalesUI.builder().
+                    InvoiceID(Integer.parseInt(d.get("InvoiceID"))).
+                    Customer(d.get("Customer")).
+                    DateInvoice(d.get("DateInvoiceString")).
+                    NumberInvoice(d.get("NumberInvoice")).
+                    TotalAmount(d.get("TotalAmount")).
+                    VAT(d.get("VAT")).
+                    State(d.get("State")).
+                    build());
+        }
+
+        return invoiceSalesUI;
+    }
+
+    public List<InvoiceSalesUI> SalesBetweenDates(TopDocs topDocs, IndexSearcher searcher) throws IOException {
+
+        invoiceSalesUI.clear();
+
+        for (ScoreDoc sd : topDocs.scoreDocs) {
+            Document d = searcher.doc(sd.doc);
+            invoiceSalesUI.add(InvoiceSalesUI.builder().
+                    InvoiceID(Integer.parseInt(d.get("InvoiceID"))).
+                    Customer(d.get("Customer")).
+                    DateInvoice(d.get("DateInvoice")).
+                    NumberInvoice(d.get("NumberInvoice")).
+                    TotalAmount(d.get("TotalAmount")).
+                    VAT(d.get("VAT")).
+                    State(d.get("State")).
+                    build());
+        }
+
+        return invoiceSalesUI;
     }
 }
