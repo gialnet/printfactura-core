@@ -17,6 +17,7 @@ import org.springframework.stereotype.Repository;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.text.ParseException;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 @Slf4j
@@ -114,16 +115,17 @@ public class LuceneWriteRepository implements LuceneWriteDocuments {
         document.add(new TextField("Customer", salesBill.getCustomer().getCompanyName() , Field.Store.YES));
 
         // Date are store like Long values fro fast search and order
-        document.add(new LongPoint("DateInvoice", DateTools.round(salesBill.getHeadSalesBill().getDate().toEpochDay(), DateTools.Resolution.DAY) ));
-        document.add(new StoredField("DateInvoiceString", salesBill.getHeadSalesBill().getDate().format(DateTimeFormatter.ISO_LOCAL_DATE)));
-        document.add(new StoredField("DateInvoice", DateTools.round(salesBill.getHeadSalesBill().getDate().toEpochDay(), DateTools.Resolution.DAY) ));
+        LocalDate localDate = LocalDate.parse(salesBill.getHeadSalesBill().getDate());
+        document.add(new LongPoint("DateInvoice", localDate.toEpochDay() ));
+        document.add(new StoredField("DateInvoiceString", salesBill.getHeadSalesBill().getDate() ));
+        document.add(new StoredField("DateInvoice", localDate.toEpochDay() ));
 
 
         // https://lucene.apache.org/core/8_5_2/core/index.html?org/apache/lucene/document/DateTools.html
         // Another approach is LongPoint, which indexes the values in sorted order. For indexing a Date or Calendar, just
         // get the unix timestamp as long using Date.getTime() or Calendar.getTimeInMillis() and index this as a numeric value
         // with LongPoint and use PointRangeQuery to query it.
-        document.add(new SortedNumericDocValuesField("DateInvoice", DateTools.round(salesBill.getHeadSalesBill().getDate().toEpochDay(), DateTools.Resolution.DAY) ));
+        document.add(new SortedNumericDocValuesField("DateInvoice",localDate.toEpochDay() ));
 
         document.add(new StringField("NumberInvoice", salesBill.getHeadSalesBill().getBillNumber() , Field.Store.YES));
         document.add(new StringField("TotalAmount", salesBill.getHeadSalesBill().getTotal().toString() , Field.Store.YES));

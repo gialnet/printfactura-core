@@ -28,31 +28,6 @@ public class ServicesInvoice {
         this.luceneWriteRepository = luceneWriteRepository;
     }
 
-    public List<InvoiceSalesUI> MakeListSalesInvoice(){
-
-
-        invoiceSalesUIS.clear();
-
-        invoiceSalesUIS.add(InvoiceSalesUI.builder().
-                Customer("Trilateral IT").
-                DateInvoice("20 May 2020").
-                NumberInvoice("2020/05/06").
-                VAT("1.600€").
-                TotalAmount("9.600€").
-                build());
-
-        invoiceSalesUIS.add(InvoiceSalesUI.builder().
-                Customer("MBC Consulting").
-                DateInvoice("20 May 2019").
-                NumberInvoice("2019/08/30").
-                VAT("1.200€").
-                TotalAmount("8.900€").
-                build());
-
-        return invoiceSalesUIS;
-    }
-
-
 
     /**
      * Get the last number of invoice useful for know in the user interface the inverse order

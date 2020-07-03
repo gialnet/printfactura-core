@@ -110,7 +110,7 @@ public class LuceneServiceSalesInvoice {
             invoiceSalesUI.add(InvoiceSalesUI.builder().
                     InvoiceID(Integer.parseInt(d.get("InvoiceID"))).
                     Customer(d.get("Customer")).
-                    DateInvoice(d.get("DateInvoice")).
+                    DateInvoice(d.get("DateInvoiceString")).
                     NumberInvoice(d.get("NumberInvoice")).
                     TotalAmount(d.get("TotalAmount")).
                     VAT(d.get("VAT")).

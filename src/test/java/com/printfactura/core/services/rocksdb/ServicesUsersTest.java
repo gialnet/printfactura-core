@@ -27,7 +27,7 @@ class ServicesUsersTest {
 
     AppUser appUser;
 
-    String email ="l1";
+    String email ="m1";
 
     @Test
     void saveUser() throws IOException {

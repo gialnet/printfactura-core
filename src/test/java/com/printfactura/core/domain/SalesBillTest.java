@@ -12,8 +12,6 @@ import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -80,7 +78,7 @@ public class SalesBillTest {
                         build()).
                 headSalesBill(HeadSalesBill.builder().
                         BillNumber("2020/03/01").
-                        date(LocalDate.now()).
+                        Date(LocalDate.now().toString()).
                         build()).
                 detailSalesBill(detailSalesBills).
                 totalSalesBill(TotalSalesBill.builder().

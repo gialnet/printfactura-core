@@ -92,7 +92,7 @@ public class ServicesPDF {
                 customer(customer).
                 headSalesBill(HeadSalesBill.builder().
                         BillNumber(invoiceNumber.getInvoiceNumber()).
-                        date(LocalDate.parse(invoiceNumber.getInvoiceDate())).
+                        Date(invoiceNumber.getInvoiceDate()).
                         total(totalBase.add(totalVat)).
                         base(totalBase).
                         vat(totalVat).

@@ -20,7 +20,7 @@ public class HeadSalesBill {
     private int IdCustomer;
     private int IdCustomerType;
     private String Amount;
-    private LocalDate date;
+    private String Date;
     private String BillNumber;
 
     @Builder.Default

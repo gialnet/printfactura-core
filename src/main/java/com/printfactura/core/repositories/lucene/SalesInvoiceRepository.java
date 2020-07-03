@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.util.Date;
 
 import static org.apache.lucene.document.DateTools.*;
@@ -81,8 +82,10 @@ public class SalesInvoiceRepository implements SalesInvoiceLucene {
          */
 
         Query dateQuery = LongPoint.newRangeQuery("DateInvoice",
-                DateTools.stringToTime(FromDate), DateTools.stringToTime(ToDate));
+                LocalDate.parse(FromDate).toEpochDay(),
+                LocalDate.parse(ToDate).toEpochDay()
+        );
 
-        return indexSearcher.search( dateQuery, 10);
+        return indexSearcher.search( dateQuery, 10, sort, true);
     }
 }

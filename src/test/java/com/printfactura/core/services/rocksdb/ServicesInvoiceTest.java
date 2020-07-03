@@ -26,8 +26,8 @@ class ServicesInvoiceTest {
     @Autowired
     LuceneServiceSalesInvoice luceneServiceSalesInvoice;
 
-    private final String uuid="5b88ca6d-7f71-4cd9-a5fc-0771c84d972b";
-    private final String email="l1";
+    private final String uuid="b463b875-cc23-46ff-ba2a-fbe7c5497ade";
+    private final String email="m1";
 
     @Test
     void getSeqInvoice() {
@@ -71,7 +71,7 @@ class ServicesInvoiceTest {
         var ToDate =  new SimpleDateFormat("yyyy-MM-dd").parse("2020-03-02");
 
         List<InvoiceSalesUI> invoiceSalesUIList = luceneServiceSalesInvoice.
-                SalesBetweenDates("2020-01-02", "2020-06-02", uuid, false);
+                SalesBetweenDates("2020-01-01", "2020-03-30", uuid, false);
 
         for (InvoiceSalesUI is: invoiceSalesUIList){
 
