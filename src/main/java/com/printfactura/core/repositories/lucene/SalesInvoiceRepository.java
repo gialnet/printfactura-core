@@ -4,6 +4,7 @@ import org.apache.lucene.document.DateTools;
 import org.apache.lucene.document.LongPoint;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
+import org.apache.lucene.index.Term;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.search.*;
 import org.apache.lucene.store.Directory;
@@ -87,5 +88,17 @@ public class SalesInvoiceRepository implements SalesInvoiceLucene {
         );
 
         return indexSearcher.search( dateQuery, 10, sort, true);
+    }
+
+    @Override
+    public TopDocs CompanyNamePrefixQuery(IndexSearcher indexSearcher, String StringSearch) throws Exception {
+
+        Sort sort = new Sort(new SortField("Customer", SortField.Type.STRING));
+
+        PrefixQuery tq = new PrefixQuery(new Term("Customer", StringSearch));
+
+        TopDocs hits = indexSearcher.search(tq, 10, sort);
+
+        return hits;
     }
 }

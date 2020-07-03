@@ -9,47 +9,116 @@
 <body>
 
 <!---->
-<ul class="flex border-b">
-    <li class="-mb-px mr-1">
-        <a class="bg-white inline-block border-l border-t border-r rounded-t py-2 px-4 text-blue-700 font-semibold" href="#">Active</a>
-    </li>
-    <li class="mr-1">
-        <a class="bg-white inline-block py-2 px-4 text-blue-500 hover:text-blue-800 font-semibold" href="#">Tab</a>
-    </li>
-    <li class="mr-1">
-        <a class="bg-white inline-block py-2 px-4 text-blue-500 hover:text-blue-800 font-semibold" href="#">Tab</a>
-    </li>
-    <li class="mr-1">
-        <a class="bg-white inline-block py-2 px-4 text-gray-400 font-semibold" href="#">Tab</a>
-    </li>
-</ul>
+
+<!---->
+<div x-data="{ openTab: 1 }" class="p-6">
+    <ul class="flex border-b md:justify-center">
+        <li @click="openTab = 1" :class="{ '-mb-px': openTab === 1 }" class="-mb-px mr-1">
+            <a :class="openTab === 1 ? 'border-l border-t border-r rounded-t text-blue-700' : 'text-blue-500 hover:text-blue-800'" class="bg-white inline-block py-2 px-4 font-semibold"
+               href="#">
+                ID Invoice
+            </a>
+        </li>
+        <li @click="openTab = 2" :class="{ '-mb-px': openTab === 2 }" class="mr-1">
+            <a :class="openTab === 2 ? 'border-l border-t border-r rounded-t text-blue-700' : 'text-blue-500 hover:text-blue-800'" class="bg-white inline-block py-2 px-4 font-semibold"
+               href="#">Customer name</a>
+        </li>
+        <li @click="openTab = 3" :class="{ '-mb-px': openTab === 3 }" class="mr-1">
+            <a :class="openTab === 3 ? 'border-l border-t border-r rounded-t text-blue-700' : 'text-blue-500 hover:text-blue-800'" class="bg-white inline-block py-2 px-4 font-semibold"
+               href="#">Between dates</a>
+        </li>
+    </ul>
+    <div class="w-full pt-4">
+        <div x-show="openTab === 1">
+            <div><div class="container mx-auto md:flex md:justify-center mb-0 pt-2">
+                <form class="w-full max-w-lg" th:action="@{/invoice/grid_byid}" method="post" th:object="${InvoiceSearch}">
+                    <div class="flex flex-wrap -mx-3 mb-0">
+                        <div class="w-full px-3">
+                            <label class="block tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-invoice-id">
+                                Invoice ID
+                            </label>
+                            <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+                                   id="grid-invoice-id" type="text" th:field="*{invoiceNumber}"
+                                   placeholder="Select customer or create a new one">
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                                type="submit">
+                            Search
+                        </button>
+                        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                                type="button" onclick="javascript:window.location='/menu';">
+                            Go to menu
+                        </button>
+                    </div>
+                </form>
+            </div></div>
+        </div>
+        <div x-show="openTab === 2">
+            <div><div class="container mx-auto md:flex md:justify-center mb-0 pt-2">
+                <form class="w-full max-w-lg" th:action="@{/invoice/grid_customer_name}" method="post" th:object="${InvoiceSearch}">
+                    <div class="flex flex-wrap -mx-3 mb-0">
+                        <div class="w-full px-3">
+                            <label class="block tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-first-name">
+                                Customer Name
+                            </label>
+                            <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+                                   id="grid-first-name" type="text" th:field="*{customerName}"
+                                   placeholder="Select customer or create a new one">
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                                type="submit">
+                            Search
+                        </button>
+                        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                                type="button" onclick="javascript:window.location='/menu';">
+                            Go to menu
+                        </button>
+                    </div>
+                </form>
+            </div></div>
+        </div>
+        <div x-show="openTab === 3">
+            <div><div class="container mx-auto md:flex md:justify-center mb-0 pt-2">
+                <form class="w-full max-w-lg" th:action="@{/invoice/grid_between_dates}" method="post" th:object="${InvoiceSearch}">
+                    <div class="flex flex-wrap -mx-3 mb-0">
+                        <div class="flex flex-wrap -mx-3 mb-2">
+                            <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+                            <label class="block tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-between-dates">
+                                From date
+                            </label>
+                            <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+                                   id="grid-between-dates" type="date" th:field="*{FromDate}">
+                            </div>
+                            <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+                            <label class="block tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-between-datesTo">
+                                From To
+                            </label>
+                            <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+                                   id="grid-between-datesTo" type="date" th:field="*{ToDate}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                                type="submit">
+                            Search
+                        </button>
+                        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                                type="button" onclick="javascript:window.location='/menu';">
+                            Go to menu
+                        </button>
+                    </div>
+                </form>
+            </div></div>
+        </div>
+    </div>
+</div>
 <!---->
 
-<div class="container mx-auto md:flex md:justify-center mb-0 pt-2">
-    <form class="w-full max-w-lg" th:action="@{/invoice/grid}" method="post" th:object="${InvoiceNumber}">
-        <div class="flex flex-wrap -mx-3 mb-0">
-            <div class="w-full px-3">
-                <label class="block tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-first-name">
-                    Name or <a href="/customer/new"
-                               class="text-indigo-600 hover:text-indigo-900">+{Add new customer}</a>
-                </label>
-                <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
-                       id="grid-first-name" type="text" th:field="*{invoiceNumber}"
-                       placeholder="Select customer or create a new one">
-            </div>
-        </div>
-        <div class="flex items-center justify-between">
-            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                    type="submit">
-                Search
-            </button>
-            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                    type="button" onclick="javascript:window.location='/menu';">
-                Go to menu
-            </button>
-        </div>
-    </form>
-</div>
 
 <div class="flex flex-col mt-2">
     <div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
@@ -131,6 +200,7 @@
     </div>
 </div>
 
-
+<!-- Alpine.js -->
+<script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
 </body>
 </html>

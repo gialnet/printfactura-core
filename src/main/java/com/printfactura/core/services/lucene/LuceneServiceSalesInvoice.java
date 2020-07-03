@@ -56,7 +56,7 @@ public class LuceneServiceSalesInvoice {
             invoiceSalesUI.add(InvoiceSalesUI.builder().
                     InvoiceID((Integer) d.getField("InvoiceID").numericValue()).
                     Customer(d.get("Customer")).    // name of customer
-                    DateInvoice(d.get("DateInvoice")).
+                    DateInvoice(d.get("DateInvoiceString")).
                     NumberInvoice(d.get("NumberInvoice")).
                     TotalAmount(d.get("TotalAmount")).
                     VAT(d.get("VAT")).
@@ -119,5 +119,25 @@ public class LuceneServiceSalesInvoice {
         }
 
         return invoiceSalesUI;
+    }
+
+    public List<InvoiceSalesUI> CompanyNamePrefixQuery(String name, String uuid)
+            throws Exception {
+
+
+        try{
+
+            IndexSearcher searcher = invoiceRepository.OpenSearcher(uuid);
+
+            return ListOfInvoices(invoiceRepository.
+                            CompanyNamePrefixQuery(searcher, name),
+                            searcher);
+        }
+        catch (Exception e){
+
+            System.out.println("Exception occurred, Lucene index folder empty or not able to access");
+            return invoiceSalesUI;
+        }
+
     }
 }

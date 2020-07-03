@@ -113,6 +113,7 @@ public class LuceneWriteRepository implements LuceneWriteDocuments {
         document.add(new SortedNumericDocValuesField("InvoiceID", salesBill.getHeadSalesBill().getId()) );
 
         document.add(new TextField("Customer", salesBill.getCustomer().getCompanyName() , Field.Store.YES));
+        document.add(new SortedDocValuesField("Customer", new BytesRef(salesBill.getCustomer().getCompanyName()) ));
 
         // Date are store like Long values fro fast search and order
         LocalDate localDate = LocalDate.parse(salesBill.getHeadSalesBill().getDate());

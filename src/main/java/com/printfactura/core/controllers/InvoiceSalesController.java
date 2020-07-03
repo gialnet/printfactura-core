@@ -318,10 +318,56 @@ public class InvoiceSalesController {
         lisales = luceneServiceSalesInvoice.InvoiceByPage(1,5, (String) session.getAttribute("uuid"));
         log.info("List of sales '{}'",lisales.get(0).getCustomer());
         model.addAttribute("invoices", lisales);
-        model.addAttribute("InvoiceNumber", invoiceNumber);
+        model.addAttribute("InvoiceSearch", invoiceNumber);
 
         return "invoice_grid_search";
     }
 
+    @PostMapping("/invoice/grid_byid")
+    private String SearchById(@ModelAttribute("InvoiceSearch") InvoiceNumber invoiceNumber){
 
+        // search by id
+
+        return "invoice_grid_search";
+    }
+
+    @PostMapping("/invoice/grid_customer_name")
+    private String SearchByCustomerName(@ModelAttribute("InvoiceSearch") InvoiceNumber invoiceNumber,
+                                        Model model,
+                                        HttpSession session) throws Exception {
+
+        // TODO check this options and test
+
+        // search by name
+        lisales.clear();
+        log.info("name {}", invoiceNumber.getCustomerName());
+        lisales = luceneServiceSalesInvoice.CompanyNamePrefixQuery(
+                invoiceNumber.getCustomerName(),
+                (String) session.getAttribute("uuid")
+        );
+
+        model.addAttribute("invoices", lisales);
+        model.addAttribute("InvoiceSearch", invoiceNumber);
+
+        return "invoice_grid_search";
+    }
+
+    @PostMapping("/invoice/grid_between_dates")
+    private String SearchBetweenDates(@ModelAttribute("InvoiceSearch") InvoiceNumber invoiceNumber,
+                                      Model model,
+                                      HttpSession session, Authentication a) throws ParseException, java.text.ParseException, IOException {
+
+        //search between dates
+        lisales.clear();
+        lisales = luceneServiceSalesInvoice.SalesBetweenDates(
+                invoiceNumber.getFromDate(),
+                invoiceNumber.getToDate(),
+                (String) session.getAttribute("uuid"),
+                false
+        );
+        model.addAttribute("invoices", lisales);
+        model.addAttribute("InvoiceSearch", invoiceNumber);
+
+        return "invoice_grid_search";
+    }
 }

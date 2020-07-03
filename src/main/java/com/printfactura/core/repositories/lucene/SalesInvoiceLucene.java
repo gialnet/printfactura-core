@@ -22,4 +22,6 @@ public interface SalesInvoiceLucene {
 
     TopDocs BetweenDates(IndexSearcher indexSearcher, String FromDate, String ToDate, boolean reverse)
             throws ParseException, IOException, java.text.ParseException;
+
+    TopDocs CompanyNamePrefixQuery(IndexSearcher indexSearcher, String StringSearch) throws Exception;
 }

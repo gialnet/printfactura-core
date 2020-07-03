@@ -76,6 +76,7 @@ public class InvoiceStuff {
                 headSalesBill(HeadSalesBill.builder().
                         BillNumber("2020/03/01").
                         Date(LocalDate.parse("2020-01-15").toString()).
+                        total(BigDecimal.valueOf(1500)).
                         build()).
                 detailSalesBill(detailSalesBills).
                 totalSalesBill(TotalSalesBill.builder().
@@ -126,6 +127,7 @@ public class InvoiceStuff {
                 headSalesBill(HeadSalesBill.builder().
                         BillNumber("2020/04/31").
                         Date(LocalDate.parse("2020-02-26").toString()).
+                        total(BigDecimal.valueOf(2400)).
                         build()).
                 detailSalesBill(detailSalesBills).
                 totalSalesBill(TotalSalesBill.builder().
@@ -176,6 +178,7 @@ public class InvoiceStuff {
                 headSalesBill(HeadSalesBill.builder().
                         BillNumber("2020/04/101").
                         Date(LocalDate.parse("2020-03-30").toString()).
+                        total(BigDecimal.valueOf(19600)).
                         build()).
                 detailSalesBill(detailSalesBills).
                 totalSalesBill(TotalSalesBill.builder().
@@ -226,6 +229,7 @@ public class InvoiceStuff {
                 headSalesBill(HeadSalesBill.builder().
                         BillNumber("2020/05/551").
                         Date(LocalDate.parse("2020-04-30").toString()).
+                        total(BigDecimal.valueOf(22500)).
                         build()).
                 detailSalesBill(detailSalesBills).
                 totalSalesBill(TotalSalesBill.builder().
@@ -275,6 +279,7 @@ public class InvoiceStuff {
                 headSalesBill(HeadSalesBill.builder().
                         BillNumber("2020/07/07").
                         Date(LocalDate.parse("2020-05-26").toString()).
+                        total(BigDecimal.valueOf(8820)).
                         build()).
                 detailSalesBill(detailSalesBills).
                 totalSalesBill(TotalSalesBill.builder().

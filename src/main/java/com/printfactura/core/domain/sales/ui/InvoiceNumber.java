@@ -15,5 +15,11 @@ public class InvoiceNumber {
     private String invoiceNumber="";
     @Builder.Default
     private String invoiceDate="";
+    @Builder.Default
+    private String customerName="";
+    @Builder.Default
+    private String FromDate="";
+    @Builder.Default
+    private String ToDate="";
 
 }

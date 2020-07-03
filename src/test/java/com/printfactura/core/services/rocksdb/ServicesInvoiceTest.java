@@ -67,8 +67,6 @@ class ServicesInvoiceTest {
     @Test
     void betweenDates() throws java.text.ParseException, IOException, ParseException {
 
-        var FromDate =  new SimpleDateFormat("yyyy-MM-dd").parse("2020-01-02");
-        var ToDate =  new SimpleDateFormat("yyyy-MM-dd").parse("2020-03-02");
 
         List<InvoiceSalesUI> invoiceSalesUIList = luceneServiceSalesInvoice.
                 SalesBetweenDates("2020-01-01", "2020-03-30", uuid, false);
@@ -76,8 +74,6 @@ class ServicesInvoiceTest {
         for (InvoiceSalesUI is: invoiceSalesUIList){
 
             System.out.println(is.getInvoiceID()+" "+is.getCustomer()+" "+is.getDateInvoice());
-            /*System.out.print(" "+is.getCustomer());
-            System.out.print(" "+is.getDateInvoice());*/
 
         }
 
