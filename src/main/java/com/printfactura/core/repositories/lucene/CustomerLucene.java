@@ -15,4 +15,5 @@ public interface CustomerLucene {
     TopDocs searchByCompanyName(IndexSearcher indexSearcher, String CompanyName) throws Exception;
     TopDocs CompanyNamePrefixQuery(IndexSearcher indexSearcher, String StringSearch) throws Exception;
 
+
 }

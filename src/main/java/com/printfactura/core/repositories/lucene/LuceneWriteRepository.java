@@ -20,6 +20,8 @@ import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+import static org.apache.lucene.document.LongPoint.newExactQuery;
+
 @Slf4j
 @Repository
 public class LuceneWriteRepository implements LuceneWriteDocuments {
@@ -38,6 +40,32 @@ public class LuceneWriteRepository implements LuceneWriteDocuments {
         // MemoryIndex index = new MemoryIndex();
         IndexWriter writer = new IndexWriter(dir, config);
         return writer;
+    }
+
+    /**
+     *
+     * @param customer
+     * @param suuid
+     * @return
+     * @throws IOException
+     */
+    public boolean UpdateCustomer(Customer customer, String suuid) throws IOException {
+
+        IndexWriter writer = createWriter("customer/" + suuid);
+
+        // first delete and then insert new values
+        writer.deleteDocuments(
+                IntPoint.newExactQuery("IdCode",
+                        customer.getIdCode()) );
+
+        Document customerDoc = CreateCustomerDocument(customer);
+
+        writer.addDocument(customerDoc);
+
+        writer.commit();
+        writer.close();
+
+        return true;
     }
 
     @Override

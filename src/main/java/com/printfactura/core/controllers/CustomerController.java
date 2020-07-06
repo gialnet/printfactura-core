@@ -74,6 +74,7 @@ public class CustomerController {
 
         // TODO update customer RocksDB and Lucene
 
+
         return "redirect:search";
 
     }
