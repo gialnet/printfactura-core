@@ -26,7 +26,6 @@ public class LuceneServiceCustomer {
         this.customerSearch = customerSearch;
     }
 
-
     public TopDocs orderByIdCodeFromTo(int FromIdCode, int ToIdCode, String uuid) throws IOException, ParseException {
 
         IndexSearcher searcher = customerSearch.OpenSearcher(uuid);

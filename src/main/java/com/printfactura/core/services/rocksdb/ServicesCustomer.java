@@ -119,4 +119,19 @@ public class ServicesCustomer {
         return saveOK;
     }
 
+    public boolean UpdateCustomer(Customer customer, String email, String uuid) throws IOException {
+
+        // luceneWriteRepository.UpdateCustomer
+        log.info("SaveCustomer-> customer object '{}'",customer);
+        boolean saveOK=false;
+
+
+        if (repository.save("customer." +
+                email.toLowerCase() +
+                "."+
+                customer.getIdCode(), gson.toJson(customer)) )
+            saveOK = luceneWriteRepository.UpdateCustomer(customer,uuid);
+
+        return saveOK;
+    }
 }
