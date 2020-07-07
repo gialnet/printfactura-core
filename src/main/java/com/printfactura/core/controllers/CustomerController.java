@@ -72,9 +72,22 @@ public class CustomerController {
     }
 
 
+    @GetMapping("/customer/new")
+    private String ShowCustomerForm(Model model,
+                               Authentication a, HttpSession session) throws IOException {
+
+        customer = Customer.builder().build();
+        /*log.info("Post /customer/new");
+        log.info("/customer/new-> Authentication user '{}'",a.getName());*/
+
+        model.addAttribute("Customer", customer);
+
+        return "customer_add";
+    }
+
     @PostMapping("/customer/new")
     private String SaveCustomer(@ModelAttribute("Customer") Customer myCustomerform,
-                               Authentication a, HttpSession session) throws IOException {
+                                Authentication a, HttpSession session) throws IOException {
 
         log.info("Post /customer/new");
         log.info("/customer/new-> Authentication user '{}'",a.getName());

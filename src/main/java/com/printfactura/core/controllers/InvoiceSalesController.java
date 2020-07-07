@@ -316,7 +316,7 @@ public class InvoiceSalesController {
 
         lisales.clear();
         lisales = luceneServiceSalesInvoice.InvoiceByPage(1,5, (String) session.getAttribute("uuid"));
-        log.info("List of sales '{}'",lisales.get(0).getCustomer());
+        //log.info("List of sales '{}'",lisales.get(0).getCustomer());
         model.addAttribute("invoices", lisales);
         model.addAttribute("InvoiceSearch", invoiceNumber);
 
@@ -333,10 +333,13 @@ public class InvoiceSalesController {
         log.info("name-> {}", invoiceNumber.getCustomerName());
         log.info("uuid-> {}", session.getAttribute("uuid"));
 
-        lisales = luceneServiceSalesInvoice.InvoiceByID(
+        if (invoiceNumber.getInvoiceNumber().trim().equals(""))
+            log.info("search size-> {}", lisales.size());
+        else
+            lisales = luceneServiceSalesInvoice.InvoiceByID(
                 Integer.parseInt(invoiceNumber.getInvoiceNumber()),
                 (String) session.getAttribute("uuid")
-        );
+            );
 
         log.info("search size-> {}", lisales.size());
 

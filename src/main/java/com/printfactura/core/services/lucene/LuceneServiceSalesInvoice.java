@@ -2,7 +2,9 @@ package com.printfactura.core.services.lucene;
 
 import com.printfactura.core.domain.sales.ui.InvoiceSalesUI;
 import com.printfactura.core.repositories.lucene.SalesInvoiceRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.lucene.document.Document;
+import org.apache.lucene.index.IndexNotFoundException;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.ScoreDoc;
@@ -15,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+@Slf4j
 @Service
 public class LuceneServiceSalesInvoice {
 
@@ -35,22 +38,45 @@ public class LuceneServiceSalesInvoice {
 
     public List<InvoiceSalesUI> InvoiceByID(int id, String uuid) throws IOException, ParseException {
 
-        IndexSearcher searcher = invoiceRepository.OpenSearcher(uuid);
+        try {
 
-        return ListOfInvoices(invoiceRepository.
-                        searchByIdCode(searcher, id),
-                searcher);
+            IndexSearcher searcher = invoiceRepository.OpenSearcher(uuid);
+
+            return ListOfInvoices(invoiceRepository.
+                            searchByIdCode(searcher, id),
+                    searcher);
+        }
+        catch (Exception e){
+
+            log.info(" LuceneServicesSalesInvoice InvoiceByIdCode error {}", e.getMessage());
+
+        }
+
+        invoiceSalesUI.clear();
+
+        return invoiceSalesUI;
+
     }
 
     public List<InvoiceSalesUI> InvoiceByPage(int page, int size, String uuid) throws IOException, ParseException {
 
-        IndexSearcher searcher = invoiceRepository.OpenSearcher(uuid);
+        try {
+            IndexSearcher searcher = invoiceRepository.OpenSearcher(uuid);
 
-        int from = size * (page -1) + page;
-        int to = page * size;
-        return ListOfInvoices(invoiceRepository.
-                        orderByIdCodeFromTo(searcher, from, to),
-                        searcher);
+            int from = size * (page -1) + page;
+            int to = page * size;
+            return ListOfInvoices(invoiceRepository.
+                            orderByIdCodeFromTo(searcher, from, to),
+                    searcher);
+        }
+        catch (IndexNotFoundException e){
+            log.info("{}", e.getMessage());
+        }
+
+        invoiceSalesUI.clear();
+
+        return invoiceSalesUI;
+
     }
 
     public List<InvoiceSalesUI> ListOfInvoices(TopDocs hits, IndexSearcher searcher) throws IOException {
@@ -90,21 +116,27 @@ public class LuceneServiceSalesInvoice {
 
         invoiceSalesUI.clear();
 
-        IndexSearcher searcher = invoiceRepository.OpenSearcher(uuid);
+        try {
 
-        TopDocs topDocs = invoiceRepository.BetweenDates(searcher, FromDate, ToDate, reverse);
+            IndexSearcher searcher = invoiceRepository.OpenSearcher(uuid);
 
-        for (ScoreDoc sd : topDocs.scoreDocs) {
-            Document d = searcher.doc(sd.doc);
-            invoiceSalesUI.add(InvoiceSalesUI.builder().
-                    InvoiceID(Integer.parseInt(d.get("InvoiceID"))).
-                    Customer(d.get("Customer")).
-                    DateInvoice(d.get("DateInvoiceString")).
-                    NumberInvoice(d.get("NumberInvoice")).
-                    TotalAmount(d.get("TotalAmount")).
-                    VAT(d.get("VAT")).
-                    State(d.get("State")).
-                    build());
+            TopDocs topDocs = invoiceRepository.BetweenDates(searcher, FromDate, ToDate, reverse);
+
+            for (ScoreDoc sd : topDocs.scoreDocs) {
+                Document d = searcher.doc(sd.doc);
+                invoiceSalesUI.add(InvoiceSalesUI.builder().
+                        InvoiceID(Integer.parseInt(d.get("InvoiceID"))).
+                        Customer(d.get("Customer")).
+                        DateInvoice(d.get("DateInvoiceString")).
+                        NumberInvoice(d.get("NumberInvoice")).
+                        TotalAmount(d.get("TotalAmount")).
+                        VAT(d.get("VAT")).
+                        State(d.get("State")).
+                        build());
+            }
+        }
+        catch (Exception e){
+            log.info("{}", e.getMessage());
         }
 
         return invoiceSalesUI;
