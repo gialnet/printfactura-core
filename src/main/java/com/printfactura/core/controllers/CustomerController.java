@@ -32,18 +32,6 @@ public class CustomerController {
         this.luceneServiceCustomer = luceneServiceCustomer;
     }
 
-   /* @GetMapping("/customer/update")
-    private String CustomerUpdate(Model model, HttpSession session) throws IOException, ParseException {
-
-        List<Customer> lc = luceneServiceCustomer.
-                CustomerByPages(1,5,(String)session.getAttribute("uuid"));
-
-        //log.info("company name '{}'",lc.get(0).getCompanyName());
-        log.info("number of records '{}'",lc.size());
-        model.addAttribute("customers", lc);
-
-        return "customergrid";
-    }*/
 
     @GetMapping("/customer/grid")
     private String showForm(Model model, HttpSession session) throws IOException, ParseException {
@@ -63,6 +51,8 @@ public class CustomerController {
 
             // find the customer
            customer = servicesCustomer.FindCustomerByID(a.getName(), id);
+           log.info("GET Customer id ->{}", customer.getIdCode());
+           customer.setIdCode(id);
            model.addAttribute("Customer", customer);
 
            return "customer_update";
@@ -70,10 +60,12 @@ public class CustomerController {
     }
 
     @PostMapping("/customer/update")
-    private String UpdateCustomerAction(@ModelAttribute("Customer") Customer upd_customer, Authentication a, HttpSession session){
+    private String UpdateCustomerAction(@ModelAttribute("Customer") Customer upd_customer,
+                                        Authentication a, HttpSession session) throws IOException {
 
-        // TODO update customer RocksDB and Lucene
+        log.info("POST Customer id ->{}", upd_customer.getIdCode());
 
+        servicesCustomer.UpdateCustomer(upd_customer, a.getName(), (String)session.getAttribute("uuid"));
 
         return "redirect:search";
 
@@ -87,8 +79,6 @@ public class CustomerController {
         log.info("Post /customer/new");
         log.info("/customer/new-> Authentication user '{}'",a.getName());
         log.info("V-> myCustomerform object user '{}'", myCustomerform);
-        //log.info("mySelfController object user '{}'", mySelfController);
-        //session.getAttribute("uuid")
 
         if (myCustomerform==null)
             return "customer_add";
