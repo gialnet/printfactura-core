@@ -29,8 +29,8 @@ class ServicesCustomerTest {
     @Autowired
     LuceneServiceCustomer luceneServiceCustomer;
 
-    private final String uuid="b463b875-cc23-46ff-ba2a-fbe7c5497ade";
-    private final String email="m1";
+    private final String uuid="8fe7fca8-49b7-49b4-8eea-e69ee77cea7b";
+    private final String email="l1";
 
     @Test
     void saveCustomer() throws IOException {

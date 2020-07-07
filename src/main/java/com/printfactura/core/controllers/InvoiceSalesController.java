@@ -324,9 +324,25 @@ public class InvoiceSalesController {
     }
 
     @PostMapping("/invoice/grid_byid")
-    private String SearchById(@ModelAttribute("InvoiceSearch") InvoiceNumber invoiceNumber){
+    private String SearchById(@ModelAttribute("InvoiceSearch") InvoiceNumber invoiceNumber,
+                              Model model,
+                              HttpSession session) throws IOException, ParseException {
 
         // search by id
+        lisales.clear();
+        log.info("name-> {}", invoiceNumber.getCustomerName());
+        log.info("uuid-> {}", session.getAttribute("uuid"));
+
+        lisales = luceneServiceSalesInvoice.InvoiceByID(
+                Integer.parseInt(invoiceNumber.getInvoiceNumber()),
+                (String) session.getAttribute("uuid")
+        );
+
+        log.info("search size-> {}", lisales.size());
+
+        model.addAttribute("invoices", lisales);
+        model.addAttribute("InvoiceSearch", invoiceNumber);
+
 
         return "invoice_grid_search";
     }
@@ -336,15 +352,17 @@ public class InvoiceSalesController {
                                         Model model,
                                         HttpSession session) throws Exception {
 
-        // TODO check this options and test
-
         // search by name
         lisales.clear();
-        log.info("name {}", invoiceNumber.getCustomerName());
+        log.info("name-> {}", invoiceNumber.getCustomerName());
+        log.info("uuid-> {}", session.getAttribute("uuid"));
+
         lisales = luceneServiceSalesInvoice.CompanyNamePrefixQuery(
                 invoiceNumber.getCustomerName(),
                 (String) session.getAttribute("uuid")
         );
+
+        log.info("search size-> {}", lisales.size());
 
         model.addAttribute("invoices", lisales);
         model.addAttribute("InvoiceSearch", invoiceNumber);

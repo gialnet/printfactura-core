@@ -33,6 +33,15 @@ public class LuceneServiceSalesInvoice {
         return invoiceRepository.orderByIdCodeFromTo(searcher, FromInvoiceID, ToInvoiceID);
     }
 
+    public List<InvoiceSalesUI> InvoiceByID(int id, String uuid) throws IOException, ParseException {
+
+        IndexSearcher searcher = invoiceRepository.OpenSearcher(uuid);
+
+        return ListOfInvoices(invoiceRepository.
+                        searchByIdCode(searcher, id),
+                searcher);
+    }
+
     public List<InvoiceSalesUI> InvoiceByPage(int page, int size, String uuid) throws IOException, ParseException {
 
         IndexSearcher searcher = invoiceRepository.OpenSearcher(uuid);
