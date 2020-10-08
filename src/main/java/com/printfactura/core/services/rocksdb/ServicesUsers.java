@@ -27,7 +27,7 @@ public class ServicesUsers {
     }
 
     /**
-     *  Save IdUser usually email address antonio@gmial.com
+     *  Save IdUser usually email address antonio@gmail.com
      *  the value the object AppUser in JSON
      *
      *  Create two fields for customer sequence and invoice sequence

@@ -105,7 +105,7 @@ public class UserController {
         log.info("AppUser for register new user '{}'", appUser);
 
         // check if appUser.getIdUser() exist
-        int resultRUNAE =servicesUsers.RegisterUserIfNotAlreadyExist(appUser);
+        int resultRUNAE = servicesUsers.RegisterUserIfNotAlreadyExist(appUser);
         if (resultRUNAE==0)
             return "register_success";
         else{

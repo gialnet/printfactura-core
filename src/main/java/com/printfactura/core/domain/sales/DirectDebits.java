@@ -14,7 +14,7 @@ public class DirectDebits {
 
     private int Id_Consignment;
 
-    // concepto remesa para las domiciliaciones
+    // remittance concept for direct debits
     private String ConceptConsignment;
 
     private String PaymentDueDate;
