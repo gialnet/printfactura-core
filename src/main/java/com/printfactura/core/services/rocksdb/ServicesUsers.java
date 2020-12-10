@@ -1,6 +1,7 @@
 package com.printfactura.core.services.rocksdb;
 
 import com.google.gson.Gson;
+import com.printfactura.core.custom.exception.UserNotFoundException;
 import com.printfactura.core.domain.appusers.AppUser;
 import com.printfactura.core.domain.myself.MyselfSequences;
 import com.printfactura.core.repositories.lucene.LuceneWriteRepository;
@@ -112,6 +113,7 @@ public class ServicesUsers {
         if (userdata.isEmpty()){
 
             log.info("User doesn't exist");
+            //throw new UserNotFoundException(user);
             return false;
         }
         else {
