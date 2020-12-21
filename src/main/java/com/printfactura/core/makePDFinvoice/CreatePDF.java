@@ -455,7 +455,7 @@ public class CreatePDF {
         table.addCell(pie2);*/
 
         p = new Paragraph(
-                "VAT "+NumberFormat.getCurrencyInstance(Locale.GERMANY).format(salesBill.getTotalSalesBill().getVATEuros())+
+                "VAT "+NumberFormat.getCurrencyInstance(new Locale("sv","SE")).format(salesBill.getTotalSalesBill().getVATEuros())+
                 "   Total bill " + NumberFormat.getCurrencyInstance(Locale.GERMANY).format(TotalAPagar), FUENTE_PIE_TABLA);
         p.setAlignment(Element.ALIGN_RIGHT);
         cell = new PdfPCell();
