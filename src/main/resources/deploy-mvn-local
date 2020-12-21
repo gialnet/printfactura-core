@@ -53,3 +53,5 @@ service printfactura start
 
 *******
 nohup java -jar core-0.0.1-SNAPSHOT.jar &
+
+mvn clean install -DskipTests
