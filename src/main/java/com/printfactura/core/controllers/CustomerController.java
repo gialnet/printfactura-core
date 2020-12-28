@@ -1,5 +1,6 @@
 package com.printfactura.core.controllers;
 
+import com.printfactura.core.domain.SupportedCurrencies;
 import com.printfactura.core.domain.customer.Customer;
 import com.printfactura.core.domain.customer.FieldsForSearchCustomers;
 import com.printfactura.core.services.lucene.LuceneServiceCustomer;
@@ -18,6 +19,8 @@ import javax.websocket.server.PathParam;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.printfactura.core.domain.SupportedCurrencies.LIST_OF_CURRENCIES;
 
 @Slf4j
 @Controller
@@ -54,6 +57,7 @@ public class CustomerController {
            log.info("GET Customer id ->{}", customer.getIdCode());
            customer.setIdCode(id);
            model.addAttribute("Customer", customer);
+           model.addAttribute("ListOfCurrencies", LIST_OF_CURRENCIES);
 
            return "customer_update";
 
@@ -61,9 +65,11 @@ public class CustomerController {
 
     @PostMapping("/customer/update")
     private String UpdateCustomerAction(@ModelAttribute("Customer") Customer upd_customer,
+                                        @ModelAttribute("ListOfCurrencies") String SelectedCurrency,
                                         Authentication a, HttpSession session) throws IOException {
 
         log.info("POST Customer id ->{}", upd_customer.getIdCode());
+        log.info("POST Selected Currency: ->{}", SelectedCurrency);
 
         servicesCustomer.UpdateCustomer(upd_customer, a.getName(), (String)session.getAttribute("uuid"));
 
@@ -81,6 +87,7 @@ public class CustomerController {
         log.info("/customer/new-> Authentication user '{}'",a.getName());*/
 
         model.addAttribute("Customer", customer);
+        model.addAttribute("ListOfCurrencies", LIST_OF_CURRENCIES);
 
         return "customer_add";
     }

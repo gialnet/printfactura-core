@@ -1,4 +1,4 @@
-package com.printfactura.core.makePDFinvoice;
+package com.printfactura.core.domain;
 
 import java.util.Locale;
 
@@ -11,6 +11,7 @@ public enum SupportedCurrencies {
 
 
     private final Locale locale;
+    public static final SupportedCurrencies[] LIST_OF_CURRENCIES = SupportedCurrencies.values();
 
     SupportedCurrencies(Locale locale) {
         this.locale = locale;
