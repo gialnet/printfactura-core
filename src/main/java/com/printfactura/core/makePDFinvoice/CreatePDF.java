@@ -6,6 +6,7 @@ import com.lowagie.text.*;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
+import com.printfactura.core.domain.SupportedCurrencies;
 import com.printfactura.core.domain.sales.DetailSalesBill;
 import com.printfactura.core.domain.sales.SalesBill;
 
@@ -40,10 +41,16 @@ public class CreatePDF {
     private PdfPCell cell;
     private Paragraph p;
 
+    // get Locale from Customer
+    private final SupportedCurrencies spc;
+    private final Locale locale;
     private final SalesBill salesBill;
 
     public CreatePDF(SalesBill salesBill) {
         this.salesBill = salesBill;
+        // get Locale from Customer
+        this.spc = salesBill.getCustomer().getCurrencies();
+        this.locale = spc.getLocale(spc);
     }
 
 
@@ -384,11 +391,13 @@ public class CreatePDF {
         BigDecimal TotalAPagar = BigDecimal.ZERO;
         Color azul_oscuro = new Color(39, 83, 146);
 
+
+
         // añadir los totales
         PdfPCell pie = new PdfPCell(new Paragraph("Base  "+
-                NumberFormat.getCurrencyInstance(Locale.GERMANY).format(salesBill.getTotalSalesBill().getBaseEuros())+
-                " VAT 20% "+ NumberFormat.getCurrencyInstance(Locale.GERMANY).format(salesBill.getTotalSalesBill().getVATEuros())+
-                " Total "+NumberFormat.getCurrencyInstance(Locale.GERMANY).format(salesBill.getTotalSalesBill().getTotalEuros())
+                NumberFormat.getCurrencyInstance(locale).format(salesBill.getTotalSalesBill().getBaseEuros())+
+                " VAT "+salesBill.getCustomer().getVat()+"% "+ NumberFormat.getCurrencyInstance(locale).format(salesBill.getTotalSalesBill().getVATEuros())+
+                " Total "+NumberFormat.getCurrencyInstance(locale).format(salesBill.getTotalSalesBill().getTotalEuros())
                 ,FUENTE_TITULO));
         pie.setColspan(4);
         //pie.setGrayFill(0.7f);
@@ -455,8 +464,8 @@ public class CreatePDF {
         table.addCell(pie2);*/
 
         p = new Paragraph(
-                "VAT "+NumberFormat.getCurrencyInstance(new Locale("sv","SE")).format(salesBill.getTotalSalesBill().getVATEuros())+
-                "   Total bill " + NumberFormat.getCurrencyInstance(Locale.GERMANY).format(TotalAPagar), FUENTE_PIE_TABLA);
+                "VAT "+NumberFormat.getCurrencyInstance(locale).format(salesBill.getTotalSalesBill().getVATEuros())+
+                "   Total bill " + NumberFormat.getCurrencyInstance(locale).format(TotalAPagar), FUENTE_PIE_TABLA);
         p.setAlignment(Element.ALIGN_RIGHT);
         cell = new PdfPCell();
         cell.setColspan(4);
