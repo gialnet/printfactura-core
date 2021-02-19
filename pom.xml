@@ -15,7 +15,7 @@
     <description>Print factura corer</description>
 
     <properties>
-        <java.version>14</java.version>
+        <java.version>11</java.version>
         <lucene.version>8.5.2</lucene.version>
         <spring-cloud.version>2020.0.0</spring-cloud.version>
     </properties>
@@ -227,6 +227,22 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <image>
+                        <name>docker.io/redmoon/${project.artifactId}:v1</name>
+                    </image>
+                </configuration>
+            </plugin>
+            <!-- https://mvnrepository.com/artifact/com.google.cloud.tools/jib-maven-plugin -->
+            <plugin>
+                <groupId>com.google.cloud.tools</groupId>
+                <artifactId>jib-maven-plugin</artifactId>
+                <version>2.7.1</version>
+                <configuration>
+                    <to>
+                        <image>docker.io/redmoon/${project.artifactId}:v1</image>
+                    </to>
+                </configuration>
             </plugin>
         </plugins>
     </build>
